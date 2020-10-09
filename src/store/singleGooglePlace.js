@@ -16,7 +16,7 @@ export const setGooglePlace = place => {
 export const fetchGooglePlace = () => async dispatch => {
   try {
     //need to work on seting up Google Places API
-    const res = await axios.get('GOOGLE PLACES API')
+    const res = await axios.get('https://maps.googleapis.com/maps/api/place/details/jsonplace_id=${thisSubway.placesID}')
     const singlePlace = res.data
     dispatch(setGooglePlace(singlePlace))
   } catch (err) {
@@ -24,15 +24,22 @@ export const fetchGooglePlace = () => async dispatch => {
   }
 }
 
+
+
+
+
+
+
+
 //----------- initial state ----------//
-const singlePlace = {}
+const singlePlace = {"restaurant": "blablabla"}
 
 //---------- reducer ----------//
 export default function singleGooglePlaceReducer(state = singlePlace, action) {
   switch (action.type) {
     case GET_SINGLE_PLACE:
       //need to work on filtering
-      return
+      return action.singlePlace
     default:
       return state
   }
