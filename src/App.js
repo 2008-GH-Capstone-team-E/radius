@@ -1,16 +1,28 @@
-import React from 'react';
-import './css/style.css';
 
-function App() {
+import React from 'react';
+import Routes from './routes'
+import './css/style.css';
+import SingleProperty from './components/SingleProperty';
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-         Our New Project
-        </p>
-      </header>
+    <div>
+      <SingleProperty/>
+      <Routes />
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
+
+// function App() {
+//   return (
+//     <div className="App">
+//       <header className="App-header">
+//         <p>
+//          Our New Project
+//         </p>
+//       </header>
+//     </div>
+//   );
+// }
