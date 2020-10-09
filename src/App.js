@@ -3,26 +3,18 @@ import React from 'react';
 import Routes from './routes'
 import './css/style.css';
 import SingleProperty from './components/SingleProperty';
+import { Provider } from "react-redux";
+import store from "./store"
+import AllProperties from "./components/AllProperties"
 
 const App = () => {
   return (
-    <div>
-      <SingleProperty/>
-      <Routes />
-    </div>
+      <Provider store={store}>
+        <SingleProperty/>
+        <AllProperties />
+    </Provider>
   )
 }
 
 export default App
 
-// function App() {
-//   return (
-//     <div className="App">
-//       <header className="App-header">
-//         <p>
-//          Our New Project
-//         </p>
-//       </header>
-//     </div>
-//   );
-// }

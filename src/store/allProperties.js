@@ -17,8 +17,24 @@ export const getProperties = properties => {
 export const fetchProperties = () => async dispatch => {
   try {
     //need to get resposne from Real Estate API
-    const res = await axios.get('REAL ESTATE API')
-    const properties = res.data
+    const res = await axios({
+      "method":"GET",
+      "url":"https://realtor.p.rapidapi.com/properties/v2/list-for-rent",
+      "headers":{
+      "content-type":"application/octet-stream",
+      "x-rapidapi-host":"realtor.p.rapidapi.com",
+      "x-rapidapi-key":process.env.REACT_APP_REALTOR_API_KEY,
+      "useQueryString":true
+      },"params":{
+      "sort":"relevance",
+      "city":"New York City",
+      "state_code":"NY",
+      "limit":"20",
+      "offset":"0"
+      }
+      })
+      // console.log(res.data)
+    const properties = res.data.properties
     dispatch(getProperties(properties))
   } catch (err) {
     console.log(err)

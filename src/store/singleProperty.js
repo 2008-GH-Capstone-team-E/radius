@@ -35,9 +35,6 @@ export const fetchProperty = (propertyId) => {
   }
 }
 
-
-
-
 //----------- initial state ----------//
 const property = {}
 
