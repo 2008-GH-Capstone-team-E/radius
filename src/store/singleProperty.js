@@ -12,17 +12,17 @@ export const getPropery = property => {
 }
 
 //---------- thunk creators ----------//
-export const fetchProperty = propertyId => {
-  return async dispatch => {
-    try {
-      //need to get this info from real estate API
-      const res = await axios.get(`REAL ESTATE API`)
-      dispatch(getProperty(propertyId))
-    } catch (err) {
-      console.log(err)
-    }
-  }
-}
+// export const fetchProperty = propertyId => {
+//   return async dispatch => {
+//     try {
+//       //need to get this info from real estate API
+//       const res = await axios.get(`REAL ESTATE API`)
+//       dispatch(getProperty(propertyId))
+//     } catch (err) {
+//       console.log(err)
+//     }
+//   }
+// }
 
 //----------- initial state ----------//
 const property = {}
