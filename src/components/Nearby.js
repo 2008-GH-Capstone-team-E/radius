@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import mapStyle from './mapStyle'
+import Map from './Map'
 
 const API_KEY =`${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`;
 
@@ -9,14 +10,17 @@ let infowindow;
 let service;
 
 class Nearby extends Component {
-
-  state = {
-    placesDetails: [],
-    sortedPlacesDetails: [],
-    lat: 40.748817,
-    lng: -73.985428,
-    zoom: 14
+  constructor(props){
+    super(props)
+      this.state = {
+        placesDetails: [],
+        sortedPlacesDetails: [],
+        lat: 40.748817,
+        lng: -73.985428,
+        zoom: 14
+    }
   }
+
 
   componentDidMount() {
     this.renderMap();
@@ -120,6 +124,7 @@ class Nearby extends Component {
   }
 
   render() {
+console.log("this is props", this.props)
     return (
       <div
         id="map"

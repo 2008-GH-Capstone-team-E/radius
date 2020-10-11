@@ -1,19 +1,17 @@
 import React from 'react';
 import './css/style.css';
 import { Provider } from "react-redux";
+import { BrowserRouter } from "react-router-dom"
 import store from "./store"
-import AllProperties from "./components/AllProperties"
-import Nearby from './components/Nearby'
+import Routes from './routes'
 
 function App() {
   return (
-     <Provider store={store}>
-        <Nearby />
-        {/* <AllProperties /> */}
-    </Provider>
+    <BrowserRouter>
+      <Provider store={store}>
+        <Routes />
+      </Provider>
+    </BrowserRouter>
   );
 }
-
-
-
 export default App;
