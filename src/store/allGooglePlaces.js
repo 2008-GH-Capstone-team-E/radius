@@ -19,13 +19,13 @@ export const fetchGooglePlaces = (lat, lng) => /*async*/ dispatch => {
     //need to work on seting up Google Places API
     // const output =
     // const parameters =
-    // const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=1500&type=restaurant&key=AIzaSyAodlqJbUbT6KFaJMNK7pY3NyW8Ki-9sGc`
+    // const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=1500&type=restaurant&key=GOOGLE_MAP_API`
     // axios.get(url)
     // .then(response => {
     //   console.log("response", response.results)
     //   dispatch(setGooglePlaces(response.results))
     // })
-    // const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=1500&type=restaurant&key=AIzaSyAodlqJbUbT6KFaJMNK7pY3NyW8Ki-9sGc`;
+    // const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=1500&type=restaurant&key=GOOGLE_MAP_API`;
     // fetch(url)
     // .then(res => {
     //   console.log("res.json()", res.json())
