@@ -7,7 +7,9 @@ import {
 } from "@react-google-maps/api";
 import mapStyles from '../css/mapStyles'
 import { useDispatch, useSelector } from "react-redux";
-import {fetchProperties} from '../store/allProperties'
+import {fetchProperties} from '../store/allProperties';
+// import {fetchGooglePlaces} from '../store/allGooglePlaces';
+
 
 const libraries = ["places"];
 const mapContainerStyle = {
@@ -36,8 +38,12 @@ export default function Map(props) {
   const dispatch = useDispatch();
   console.log("properties", properties)
 
+  const googlePlaces = useSelector(state => state.allGooglePlaces);
+  console.log("googlePlaces", googlePlaces)
+
   useEffect(() => {
     dispatch(fetchProperties())
+    // dispatch(fetchGooglePlaces(40.712776, -74.005974))
     return () => {
     };
   }, [])
@@ -46,7 +52,7 @@ export default function Map(props) {
   if (!isLoaded) return "Loading...";
 
   return (
-  <div>
+  <div id='map'>
     <GoogleMap mapContainerStyle={mapContainerStyle} zoom={11} center={center} options={options}>
       {properties.map((property) => <Marker key={property.property_id} position={{lat: property.address.lat, lng: property.address.lon }}/>)}
 
