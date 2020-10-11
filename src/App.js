@@ -3,16 +3,13 @@ import './css/style.css';
 import { Provider } from "react-redux";
 import store from "./store"
 import AllProperties from "./components/AllProperties"
+import Nearby from './components/Nearby'
 
 function App() {
   return (
      <Provider store={store}>
-      <div className="App">
-        <header className="App-header">
-        
-        <AllProperties />
-      </header>
-    </div>
+        <Nearby />
+        {/* <AllProperties /> */}
     </Provider>
   );
 }
