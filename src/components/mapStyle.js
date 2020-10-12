@@ -210,18 +210,6 @@ export default [
         ]
     },
     {
-        "featureType": "administrative.country",
-        "elementType": "geometry.fill",
-        "stylers": [
-            {
-                "visibility": "off"
-            },
-            {
-                "color": "#8fb8f2"
-            }
-        ]
-    },
-    {
         "featureType": "landscape",
         "elementType": "all",
         "stylers": [
@@ -362,4 +350,4 @@ export default [
             }
         ]
     }
-  ]
+]

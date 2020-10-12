@@ -5,7 +5,7 @@ import {
  
 
 } from "@react-google-maps/api";
-import mapStyles from './mapStyle'
+import mapStyle from './mapStyle'
 import { connect, useDispatch, useSelector } from "react-redux";
 import propertiesReducer, {fetchProperties} from '../store/allProperties';
 import Nearby from './Nearby'
@@ -22,7 +22,7 @@ const mapContainerStyle = {
   width: "100vw",
 };
 const options = {
-  styles: mapStyles,
+  styles: mapStyle,
   disableDefaultUI: true,
   zoomControl: true,
 };
