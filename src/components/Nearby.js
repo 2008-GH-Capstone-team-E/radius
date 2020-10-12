@@ -147,6 +147,12 @@ class Nearby extends Component {
 
     marker.addListener('click', function() {
 
+      map.setZoom(16);
+      map.setCenter({
+        lat:property.address.lat,
+        lng:property.address.lon
+      });
+
       // var request = {
       //     reference: place.reference
       // }
@@ -160,6 +166,8 @@ class Nearby extends Component {
       infowindow.open(map, marker);
 
     })
+
+
   }
 
   render() {
