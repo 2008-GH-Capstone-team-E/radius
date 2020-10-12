@@ -6,6 +6,7 @@ export const GET_PROPERTIES = 'GET_PROPERTIES'
 
 //----------- action creators -----------//
 export const getProperties = properties => {
+  // console.log("from action creator",properties)
   return {
     type: GET_PROPERTIES,
     properties: properties
@@ -33,7 +34,7 @@ export const fetchProperties = () => async dispatch => {
       "offset":"0"
       }
       })
-      // console.log(res.data)
+      // console.log("in thunk creator")
     const properties = res.data.properties
     dispatch(getProperties(properties))
   } catch (err) {
