@@ -4,6 +4,8 @@ import Map from './Map'
 import {connect} from "react-redux"
 import {fetchProperties} from "../store/allProperties"
 import { fetchGooglePlaces } from '../store/allGooglePlaces';
+import subwayPic from "../css/subwayLogo.png"
+import restaurantPic from "../css/restaurantLogo.png"
 
 const API_KEY =`${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`;
 
@@ -23,7 +25,7 @@ class Nearby extends Component {
         lng: -73.985428,
         zoom: 14,
         selectedProperty:null,
-        subwayNearby: [{name: "CENTER STATION", position: {lat: 42.040910, lon: -87.776360}}]
+        subwayNearby: []
     }
     this.createMarker = this.createMarker.bind(this)
     // this.createPlacesMarker = this.createPlacesMarker.bind(this)
@@ -54,7 +56,7 @@ class Nearby extends Component {
     // Initialize Map
     map = new window.google.maps.Map(document.getElementById('map'), {
         center: location,
-        zoom: 14,
+        zoom: 12,
         styles: mapStyle
     });
 
@@ -64,31 +66,6 @@ class Nearby extends Component {
   }
 
 
-  // createPlacesMarker = (places, map) => {
-    // const bounds = new google.maps.LatLngBounds();
-    // const placesList = document.getElementById("places");
-
-    // for (let i = 0, place; (place = places[i]); i++) {
-    //   const image = {
-    //     url: place.icon,
-    //     size: new window.google.maps.Size(71, 71),
-    //     origin: new window.google.maps.Point(0, 0),
-    //     anchor: new window.google.maps.Point(17, 34),
-    //     scaledSize: new window.google.maps.Size(25, 25),
-    //   };
-    //   new window.google.maps.Marker({
-    //     map,
-    //     icon: image,
-    //     title: place.name,
-    //     position: place.geometry.location,
-    //   });
-      // const li = document.createElement("li");
-      // li.textContent = place.name;
-      // placesList.appendChild(li);
-      // bounds.extend(place.geometry.location);
-    // }
-    // map.fitBounds(bounds);
-  // }
 
   createMarker = (property) => {
     // console.log("in createMarker func",property)
@@ -101,24 +78,72 @@ class Nearby extends Component {
         }
     });
 
-    const testArray = this.state.subwayNearby
-    const createPlaceMarker = (station) => {
 
+
+    
+    const createPlaceMarker = (station) => {
       console.log("station", station)
       // console.log("in createMarker func",property)
       var marker = new window.google.maps.Marker({
           map: map,
+          icon:{
+            url:subwayPic,
+            scaledSize:new window.google.maps.Size(20, 20)
+          },
           title: station.name,
           position: {
-            lat: station.position.lat,
-            lng: station.position.lon
-          }
+            lat: station.geometry.viewport.Ya.i,
+            lng: station.geometry.viewport.Sa.i
+          },
+          
       });
+
+
+      marker.addListener('mouseover',function(){
+        let content = `
+        <h2>${station.name}</h2>
+      `;
+      infowindow.setContent(content);
+      infowindow.open(map, marker);
+      })
+
+    
     }
+
+    const createRestaurantMarker = (restaurant) => {
+      console.log("restaurant", restaurant)
+      // console.log("in createMarker func",property)
+      var marker = new window.google.maps.Marker({
+          map: map,
+          icon:{
+            url:restaurantPic,
+            scaledSize:new window.google.maps.Size(20, 20)
+          },
+          title: restaurant.name,
+          position: {
+            lat: restaurant.geometry.viewport.Ya.i,
+            lng: restaurant.geometry.viewport.Sa.i
+          },
+          
+      });
+
+
+      marker.addListener('mouseover',function(){
+        let content = `
+        <h2>${restaurant.name}</h2>
+      `;
+      infowindow.setContent(content);
+      infowindow.open(map, marker);
+      })
+
+    
+    }
+
+  
 
     marker.addListener('click', function() {
 
-      map.setZoom(16);
+      map.setZoom(15);
       map.setCenter({
         lat:property.address.lat,
         lng:property.address.lon
@@ -130,35 +155,57 @@ class Nearby extends Component {
       infowindow.setContent(content);
       infowindow.open(map, marker);
 
-      testArray.map(station => createPlaceMarker(station))
 
 
-      // this.props.getAllPlacesInReact(property.address.lat,property.address.lon);
-      // console.log("THIS", this.props)
+      const subwayRequest = {
+        // query: "restaurant",
+        type: ['subway_station'],
+        // radius: '10000',
+        // fields: ["name", "geometry"],
+        location: new window.google.maps.LatLng(property.address.lat,property.address.lon),
+        radius: 1000,
+        // keyword: 'restaurant'
+      };
 
-      // const request = {
-      //   // query: "restaurant",
-      //   type: ['subway_station'],
-      //   // radius: '10000',
-      //   // fields: ["name", "geometry"],
-      //   location: new window.google.maps.LatLng(property.address.lat,property.address.lon),
-      //   radius: 1000,
-      //   // keyword: 'restaurant'
-      // };
+      service = new window.google.maps.places.PlacesService(map);
 
-      // service = new window.google.maps.places.PlacesService(map);
+      service.nearbySearch(subwayRequest, (results, status) => {
+        if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+          for (let i = 0; i < results.length; i++) {
+            // console.log("results[i]",results[i])
+            createPlaceMarker(results[i])
+           
+          }
+        }
+      });
 
-      // service.nearbySearch(request, (results, status) => {
-      //   if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-      //     for (let i = 0; i < results.length; i++) {
-      //       console.log("results[i]",results[i])
-      //       this.createPlacesMarker(results[i]);
-      //     }
-      //     // map.setCenter(results[0].geometry.location);
-      //   }
-      // });
+
+
+      const restaurantRequest = {
+        // query: "restaurant",
+        type: ['restaurant'],
+        // radius: '10000',
+        // fields: ["name", "geometry"],
+        location: new window.google.maps.LatLng(property.address.lat,property.address.lon),
+        radius: 1000,
+        // keyword: 'restaurant'
+      };
+
+      service = new window.google.maps.places.PlacesService(map);
+
+      service.nearbySearch(restaurantRequest, (results, status) => {
+        if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+          for (let i = 0; i < results.length; i++) {
+            // console.log("results[i]",results[i])
+            createRestaurantMarker(results[i])
+           
+          }
+        }
+      });
+
 
     })
+
 
 
   }
