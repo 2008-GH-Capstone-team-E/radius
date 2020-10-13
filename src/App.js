@@ -5,6 +5,7 @@ import { BrowserRouter } from "react-router-dom"
 import store from "./store"
 import Routes from './routes'
 import NearBy from "./components/Nearby"
+import  SignUp from './components/SignUp'
 import { Header } from './components/NavBar'
 
 function App() {
@@ -12,6 +13,7 @@ function App() {
     <BrowserRouter>
       <Provider store={store}>
         <Header/>
+        <SignUp/>
         <NearBy />
       </Provider>
     </BrowserRouter>
