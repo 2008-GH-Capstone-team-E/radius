@@ -71,9 +71,34 @@ code {
   padding-left: 1em ;
 }
 
-.propertyDetailContainer {
+.propertyinfoBoxContainer {
   display: flex;
-  width: 20%;
+  height: 200px;
   flex-direction: column;
-  
+  border-color:rgb(30, 52, 69);
+  border-width: 1px;
+  border-radius: 10;
+  padding: 2em;
 }
+
+.propertyInfoBoxTextContainer {
+  display: flex;
+  width: 80%;
+  flex-direction: column;
+  font-size: x-small;
+  justify-content: space-around;
+
+}
+
+.imageInPropertyInfoBox {
+  width: 14em;
+  align-self: center;
+  margin: 1em;
+}
+
+.imageInCarouselContainer{
+  width: 400px;
+  height: 400px;
+}
+
+

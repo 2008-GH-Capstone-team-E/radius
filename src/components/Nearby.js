@@ -224,6 +224,7 @@ const properties = this.props.propertiesInReact
         style={{width: "80%", height: "80vh"}} >
         {properties&&properties.length>0&&properties.map(property=>this.createMarker(property))}
       </div>
+    
     );
   }
 }
