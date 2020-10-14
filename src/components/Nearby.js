@@ -35,9 +35,9 @@ class Nearby extends Component {
   async componentDidMount() {
     await this.renderMap();
 
-    await this.props.getAllPropertiesInReact();
+    //await this.props.getAllPropertiesInReact();
     console.log("THIS>PROPS", this.props)
-    
+
 
 
   }
@@ -82,7 +82,7 @@ class Nearby extends Component {
 
 
 
-    
+
     const createPlaceMarker = (station) => {
       console.log("station", station)
       // console.log("in createMarker func",property)
@@ -97,7 +97,7 @@ class Nearby extends Component {
             lat: station.geometry.viewport.Ya.i,
             lng: station.geometry.viewport.Sa.i
           },
-          
+
       });
 
 
@@ -109,7 +109,7 @@ class Nearby extends Component {
       infowindow.open(map, marker);
       })
 
-    
+
     }
 
     const createRestaurantMarker = (restaurant) => {
@@ -126,7 +126,7 @@ class Nearby extends Component {
             lat: restaurant.geometry.viewport.Ya.i,
             lng: restaurant.geometry.viewport.Sa.i
           },
-          
+
       });
 
 
@@ -138,10 +138,10 @@ class Nearby extends Component {
       infowindow.open(map, marker);
       })
 
-    
+
     }
 
-  
+
 
     marker.addListener('click', function() {
 
@@ -176,7 +176,7 @@ class Nearby extends Component {
           for (let i = 0; i < results.length; i++) {
             // console.log("results[i]",results[i])
             createPlaceMarker(results[i])
-           
+
           }
         }
       });
@@ -200,7 +200,7 @@ class Nearby extends Component {
           for (let i = 0; i < results.length; i++) {
             // console.log("results[i]",results[i])
             createRestaurantMarker(results[i])
-           
+
           }
         }
       });
