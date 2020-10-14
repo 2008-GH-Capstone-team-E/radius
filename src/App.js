@@ -12,9 +12,10 @@ function App() {
   return (
     <BrowserRouter>
       <Provider store={store}>
-        <Header/>
-        <SignUp/>
-        <NearBy />
+        {/* <Header/> */}
+        <Routes/>
+        {/* <SignUp/>
+        <NearBy /> */}
       </Provider>
     </BrowserRouter>
   );

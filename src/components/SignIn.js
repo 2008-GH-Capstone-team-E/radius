@@ -1,33 +1,20 @@
 import React, { Component } from "react";
 import { Form, Button, Container } from "react-bootstrap";
 import { auth } from "./firebase";
-import "../css/style.css";
 
-
-class Signup extends Component {
+class Login extends Component {
   constructor() {
     super();
     this.state = {
-      email: null,
-      password: null,
+      email: "",
+      password: "",
       error: "",
+      user: auth().currentUser,
     };
-    this.signUpWithGoogle = this.signUpWithGoogle.bind(this);
+    this.signIn = this.signIn.bind(this);
+    this.signInWithGoogle = this.signInWithGoogle.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.signUp = this.signUp.bind(this)
-  }
-
-  async signUpWithGoogle() {
-    try {
-      console.log('Fired signUpGOOGLE')
-      const provider = await new auth.GoogleAuthProvider();
-      const result = await auth().signInWithPopup(provider);
-      console.log(result)
-      return result;
-    } catch (err) {
-      console.log(err);
-    }
   }
 
   handleChange(e) {
@@ -36,35 +23,47 @@ class Signup extends Component {
     });
   }
 
-  handleSubmit(e) {
+  async handleSubmit(e) {
     e.preventDefault();
     try {
-      this.signUp(this.state.email, this.state.password);
-      this.setState({
-        email: null,
-        password: null
-      })
+      await this.signIn(this.state.email, this.state.password);
     } catch (err) {
-      this.setState({ error: err.message });
-      console.log(this.state.error)
+      console.log(err.message);
+      this.setState({ error: "Please register before login" });
     }
   }
 
-  signUp(email, password) {
-    return auth().createUserWithEmailAndPassword(email, password);
+  signIn(email, password) {
+    return auth().signInWithEmailAndPassword(email, password);
   }
+
+  async signInWithGoogle() {
+    try {
+      const provider = await new auth.GoogleAuthProvider();
+      const result = await auth().signInWithPopup(provider);
+      return result;
+    } catch (err) {
+      // this.setState({ error: err.message });
+      console.log(err);
+    }
+  }
+
   render() {
     return (
       <div>
+        {this.state.user ? <h1>{this.state.user.email}</h1> : ""}
         <Container style={{ marginTop: "30px" }}>
           <Form onSubmit={this.handleSubmit}>
             <Form.Group controlId="formBasicEmail">
               <Form.Label>Email address</Form.Label>
+              {this.state.error ? (
+                <p className="text-danger">{this.state.error}</p>
+              ) : null}
               <Form.Control
+                name="email"
                 type="email"
                 placeholder="Enter email"
                 onChange={this.handleChange}
-                name="email"
               />
             </Form.Group>
 
@@ -83,18 +82,19 @@ class Signup extends Component {
               type="submit"
               disabled={!this.state.email || !this.state.password}
             >
-              Sign up
+              Login
             </Button>
           </Form>
           <br />
           <h4>or</h4>
           <br />
+
           <Button
             variant="danger"
             type="submit"
-            onClick={this.signUpWithGoogle}
+            onClick={this.signInWithGoogle}
           >
-            Sign in with Google
+            Login with Google
           </Button>
         </Container>
       </div>
@@ -102,4 +102,4 @@ class Signup extends Component {
   }
 }
 
-export default Signup;
+export default Login;

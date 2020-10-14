@@ -33,8 +33,9 @@ class Nearby extends Component {
 
 
   async componentDidMount() {
-    await this.renderMap();
+    await this.renderMap(); 
     await this.props.getAllPropertiesInReact();
+
   }
 
   renderMap = () => {
@@ -76,9 +77,6 @@ class Nearby extends Component {
     });
 
 
-   
-    
-
     const createPlaceMarker = (station) => {
         var marker = new window.google.maps.Marker({
           map: map,
@@ -90,7 +88,7 @@ class Nearby extends Component {
           position: {
             lat: station.geometry.viewport.Ya.i,
             lng: station.geometry.viewport.Sa.i
-          },   
+          },  
       });
       this.setState({
         markers:[...this.state.markers,marker]
@@ -110,7 +108,7 @@ class Nearby extends Component {
       infowindow.open(map, marker);
       })
 
-    
+
     }
 
    
@@ -145,7 +143,7 @@ class Nearby extends Component {
       infowindow.open(map, marker);
       })
 
-    
+
     }
    
 
@@ -154,7 +152,6 @@ class Nearby extends Component {
       this.setState({
         property_Id:property.property_id
       })
-
 
       console.log(this.state.markers)
       if(this.state.markers.length){
@@ -197,7 +194,6 @@ class Nearby extends Component {
           }
         }
       });
-
 
 
       //maybe filter to grab more accurate result, from query?
