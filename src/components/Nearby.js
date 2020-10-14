@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import mapStyle from './mapStyle'
-import Map from './Map'
+// import Map from './Map'
 import {connect} from "react-redux"
 import {fetchProperties} from "../store/allProperties"
 import { fetchGooglePlaces } from '../store/allGooglePlaces';
@@ -33,7 +33,7 @@ class Nearby extends Component {
 
 
   async componentDidMount() {
-    await this.renderMap(); 
+    await this.renderMap();
     await this.props.getAllPropertiesInReact();
 
   }
@@ -64,7 +64,7 @@ class Nearby extends Component {
     });
   }
 
-  
+
 
   createMarker = (property) => {
     var marker = new window.google.maps.Marker({
@@ -88,13 +88,13 @@ class Nearby extends Component {
           position: {
             lat: station.geometry.viewport.Ya.i,
             lng: station.geometry.viewport.Sa.i
-          },  
+          },
       });
       this.setState({
         markers:[...this.state.markers,marker]
       })
-      
-      
+
+
 
 
       marker.addListener('click',function(){
@@ -111,7 +111,7 @@ class Nearby extends Component {
 
     }
 
-   
+
     const createRestaurantMarker = (restaurant) => {
       var marker = new window.google.maps.Marker({
           map: map,
@@ -123,7 +123,7 @@ class Nearby extends Component {
           position: {
             lat: restaurant.geometry.viewport.Ya.i,
             lng: restaurant.geometry.viewport.Sa.i
-          }, 
+          },
       });
 
       this.setState({
@@ -145,7 +145,7 @@ class Nearby extends Component {
 
 
     }
-   
+
 
     //property marker
     marker.addListener('click', ()=>{
@@ -161,9 +161,9 @@ class Nearby extends Component {
           markers:[]
         })
       }
- 
-     
-      
+
+
+
 
       map.setZoom(16);
       map.setCenter({
@@ -202,7 +202,7 @@ class Nearby extends Component {
         type: ['restaurant'],
         location: new window.google.maps.LatLng(property.address.lat,property.address.lon),
         radius: 500,
-       
+
       };
 
       service = new window.google.maps.places.PlacesService(map);
@@ -231,7 +231,7 @@ class Nearby extends Component {
       </div>
       <div>for single property info box, property id can be accessed from this.state.property_Id</div>
       </div>
-      
+
     );
   }
 }
