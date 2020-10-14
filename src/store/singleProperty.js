@@ -15,7 +15,7 @@ export const gotProperty = property => {
 export const fetchProperty = (propertyId) => {
   return async dispatch => {
     try {
-      // eslint-disable-next-line 
+      // eslint-disable-next-line
       const singlePropertyRes = await axios({
         method: "GET",
         url: `https://realtor.p.rapidapi.com/properties/v2/detail?property_id=${propertyId}`,

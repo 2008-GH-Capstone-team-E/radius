@@ -24,7 +24,7 @@ export const fetchProperties = () => async dispatch => {
       "headers":{
       "content-type":"application/octet-stream",
       "x-rapidapi-host":"realtor.p.rapidapi.com",
-      "x-rapidapi-key":process.env.REACT_APP_REALTOR_API_KEY,
+      "x-rapidapi-key":"",
       "useQueryString":true
       },"params":{
       "sort":"relevance",
@@ -34,7 +34,6 @@ export const fetchProperties = () => async dispatch => {
       "offset":"0"
       }
       })
-      // console.log("in thunk creator")
     const properties = res.data.properties
     dispatch(getProperties(properties))
   } catch (err) {
