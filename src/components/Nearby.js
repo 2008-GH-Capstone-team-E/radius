@@ -25,20 +25,16 @@ class Nearby extends Component {
         lng: -73.985428,
         zoom: 14,
         selectedProperty:null,
-        subwayNearby: []
+        property_Id:null,
+        markers:[]
     }
     this.createMarker = this.createMarker.bind(this)
-    // this.createPlacesMarker = this.createPlacesMarker.bind(this)
   }
 
 
   async componentDidMount() {
-    await this.renderMap();
-
-    //await this.props.getAllPropertiesInReact();
-    console.log("THIS>PROPS", this.props)
-
-
+    await this.renderMap(); 
+    await this.props.getAllPropertiesInReact();
 
   }
 
@@ -62,15 +58,15 @@ class Nearby extends Component {
         styles: mapStyle
     });
 
-    infowindow = new window.google.maps.InfoWindow();
-    // service = new window.google.maps.places.PlacesService(map);
-    // service.nearbySearch(request, this.callback);
+    infowindow = new window.google.maps.InfoWindow({
+      maxWidth:300,
+      maxHeight:225
+    });
   }
 
-
+  
 
   createMarker = (property) => {
-    // console.log("in createMarker func",property)
     var marker = new window.google.maps.Marker({
         map: map,
         title: property.address.line,
@@ -81,12 +77,8 @@ class Nearby extends Component {
     });
 
 
-
-
     const createPlaceMarker = (station) => {
-      console.log("station", station)
-      // console.log("in createMarker func",property)
-      var marker = new window.google.maps.Marker({
+        var marker = new window.google.maps.Marker({
           map: map,
           icon:{
             url:subwayPic,
@@ -96,14 +88,21 @@ class Nearby extends Component {
           position: {
             lat: station.geometry.viewport.Ya.i,
             lng: station.geometry.viewport.Sa.i
-          },
-
+          },  
       });
+      this.setState({
+        markers:[...this.state.markers,marker]
+      })
+      
+      
 
 
-      marker.addListener('mouseover',function(){
+      marker.addListener('click',function(){
+        let pic = station.photos[0].getUrl({"maxWidth": 400, "maxHeight": 256})
         let content = `
+        <h1>Subway</h1>
         <h2>${station.name}</h2>
+        <img src="${pic}" alt="subway image" />
       `;
       infowindow.setContent(content);
       infowindow.open(map, marker);
@@ -112,9 +111,8 @@ class Nearby extends Component {
 
     }
 
+   
     const createRestaurantMarker = (restaurant) => {
-      console.log("restaurant", restaurant)
-      // console.log("in createMarker func",property)
       var marker = new window.google.maps.Marker({
           map: map,
           icon:{
@@ -125,14 +123,21 @@ class Nearby extends Component {
           position: {
             lat: restaurant.geometry.viewport.Ya.i,
             lng: restaurant.geometry.viewport.Sa.i
-          },
-
+          }, 
       });
 
+      this.setState({
+        markers:[...this.state.markers,marker]
+      })
 
-      marker.addListener('mouseover',function(){
+      marker.addListener('click',function(){
+        let pic = restaurant.photos[0].getUrl({"maxWidth": 400, "maxHeight": 256})
         let content = `
-        <h2>${restaurant.name}</h2>
+        <h3>Restaurant</h3>
+        <h4>${restaurant.name}</h4>
+        <img src="${pic}" alt="restaurant image" />
+        <h5>Address: ${restaurant.vicinity}</h5>
+        <h6>Rating: ${restaurant.rating}/5 from ${restaurant.user_ratings_total} customers</h6>
       `;
       infowindow.setContent(content);
       infowindow.open(map, marker);
@@ -140,12 +145,27 @@ class Nearby extends Component {
 
 
     }
+   
 
+    //property marker
+    marker.addListener('click', ()=>{
+      this.setState({
+        property_Id:property.property_id
+      })
 
+      console.log(this.state.markers)
+      if(this.state.markers.length){
+        this.state.markers.forEach(marker=>marker.setMap(null));
+        //only push subway & restaurant marker to this array
+        this.setState({
+          markers:[]
+        })
+      }
+ 
+     
+      
 
-    marker.addListener('click', function() {
-
-      map.setZoom(15);
+      map.setZoom(16);
       map.setCenter({
         lat:property.address.lat,
         lng:property.address.lon
@@ -160,13 +180,9 @@ class Nearby extends Component {
 
 
       const subwayRequest = {
-        // query: "restaurant",
         type: ['subway_station'],
-        // radius: '10000',
-        // fields: ["name", "geometry"],
         location: new window.google.maps.LatLng(property.address.lat,property.address.lon),
-        radius: 1000,
-        // keyword: 'restaurant'
+        radius: 500,
       };
 
       service = new window.google.maps.places.PlacesService(map);
@@ -174,23 +190,19 @@ class Nearby extends Component {
       service.nearbySearch(subwayRequest, (results, status) => {
         if (status === window.google.maps.places.PlacesServiceStatus.OK) {
           for (let i = 0; i < results.length; i++) {
-            // console.log("results[i]",results[i])
             createPlaceMarker(results[i])
-
           }
         }
       });
 
 
-
+      //maybe filter to grab more accurate result, from query?
+      //since google limit 20 each call
       const restaurantRequest = {
-        // query: "restaurant",
         type: ['restaurant'],
-        // radius: '10000',
-        // fields: ["name", "geometry"],
         location: new window.google.maps.LatLng(property.address.lat,property.address.lon),
-        radius: 1000,
-        // keyword: 'restaurant'
+        radius: 500,
+       
       };
 
       service = new window.google.maps.places.PlacesService(map);
@@ -198,32 +210,28 @@ class Nearby extends Component {
       service.nearbySearch(restaurantRequest, (results, status) => {
         if (status === window.google.maps.places.PlacesServiceStatus.OK) {
           for (let i = 0; i < results.length; i++) {
-            // console.log("results[i]",results[i])
             createRestaurantMarker(results[i])
-
           }
         }
       });
-
-
     })
-
-
 
   }
 
   render() {
-// console.log("this is props", this.props)
 
-const properties = this.props.propertiesInReact
-// console.log("properties?",properties)
-// console.log("property in Nearby", properties)
+
+  const properties = this.props.propertiesInReact
     return (
+      <div>
       <div
         id="map"
         style={{width: "80%", height: "80vh"}} >
         {properties&&properties.length>0&&properties.map(property=>this.createMarker(property))}
       </div>
+      <div>for single property info box, property id can be accessed from this.state.property_Id</div>
+      </div>
+      
     );
   }
 }
@@ -249,12 +257,9 @@ const mapDispatch = dispatch => {
       dispatch(fetchProperties())
     },
     getAllPlacesInReact: (lat, lon)=> {
-      console.log("getAllPlacesInReact");
       dispatch(fetchGooglePlaces(lat, lon))
     }
   }
 }
 
-export default connect(mapState,mapDispatch)(Nearby)
-// export default Nearby;
-//
+export default connect(mapState,mapDispatch)(Nearby);
