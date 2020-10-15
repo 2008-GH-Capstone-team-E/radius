@@ -34,7 +34,6 @@ class Nearby extends Component {
 
   async componentDidMount() {
     await this.renderMap();
-
     await this.props.getAllPropertiesInReact();
     console.log("THIS>PROPS", this.props)
     
