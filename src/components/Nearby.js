@@ -231,7 +231,6 @@ class Nearby extends Component {
       </div>
       <div>for single property info box, property id can be accessed from this.state.property_Id</div>
       </div>
-
     );
   }
 }

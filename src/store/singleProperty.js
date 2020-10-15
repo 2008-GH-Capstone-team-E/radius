@@ -22,7 +22,7 @@ export const fetchProperty = (propertyId) => {
         headers: {
           "content-type": "application/octet-stream",
           "x-rapidapi-host": "realtor.p.rapidapi.com",
-          "x-rapidapi-key": process.env.REACT_APP_RAPID_API_KEY,
+          "x-rapidapi-key": "41751bdc5fmsh330034ce7ee3c9fp141dfbjsn6264e6956810",
           useQueryString: true,
         }})
         .then((singlePropertyRes) => {
