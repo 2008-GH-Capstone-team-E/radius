@@ -24,7 +24,7 @@ export const fetchProperties = () => async dispatch => {
       "headers":{
       "content-type":"application/octet-stream",
       "x-rapidapi-host":"realtor.p.rapidapi.com",
-      "x-rapidapi-key":"",
+      "x-rapidapi-key":process.env.REACT_APP_REALTOR_API_KEY,
       "useQueryString":true
       },"params":{
       "sort":"relevance",
