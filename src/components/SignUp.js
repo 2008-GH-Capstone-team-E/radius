@@ -5,11 +5,11 @@ import "../css/style.css";
 
 
 class Signup extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      email: null,
-      password: null,
+      email: "",
+      password: "",
       error: "",
     };
     this.signUpWithGoogle = this.signUpWithGoogle.bind(this);
@@ -20,10 +20,8 @@ class Signup extends Component {
 
   async signUpWithGoogle() {
     try {
-      console.log('Fired signUpGOOGLE')
       const provider = await new auth.GoogleAuthProvider();
       const result = await auth().signInWithPopup(provider);
-      console.log(result)
       return result;
     } catch (err) {
       console.log(err);
@@ -38,18 +36,23 @@ class Signup extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    try {
-      this.signUp(this.state.email, this.state.password);
-      this.setState({
-        email: null,
-        password: null
-      })
-    } catch (err) {
-      this.setState({ error: err.message });
-      console.log(this.state.error)
+    if(this.state.password.length >= 6){
+      try {
+        this.signUp(this.state.email, this.state.password);
+        this.props.history.push("/");
+        this.setState({
+          email: "",
+          password: ""
+        })
+      } catch (err) {
+        this.setState({ error: err.message });
+        console.log(this.state.error)
+      }
+    }else{
+        alert("Please enter 6 digit password")
+        window.location.reload();
     }
   }
-
   signUp(email, password) {
     return auth().createUserWithEmailAndPassword(email, password);
   }
@@ -77,7 +80,8 @@ class Signup extends Component {
                 onChange={this.handleChange}
               />
             </Form.Group>
-
+            <h6>Minimum 6 characters long</h6>
+            <br/>
             <Button
               variant="primary"
               type="submit"
@@ -94,7 +98,7 @@ class Signup extends Component {
             type="submit"
             onClick={this.signUpWithGoogle}
           >
-            Sign in with Google
+            Sign up with Google
           </Button>
         </Container>
       </div>

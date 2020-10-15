@@ -3,8 +3,8 @@ import { Form, Button, Container } from "react-bootstrap";
 import { auth } from "./firebase";
 
 class Login extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       email: "",
       password: "",
@@ -27,6 +27,7 @@ class Login extends Component {
     e.preventDefault();
     try {
       await this.signIn(this.state.email, this.state.password);
+      this.props.history.push("/");
     } catch (err) {
       console.log(err.message);
       this.setState({ error: "Please register before login" });
@@ -43,7 +44,6 @@ class Login extends Component {
       const result = await auth().signInWithPopup(provider);
       return result;
     } catch (err) {
-      // this.setState({ error: err.message });
       console.log(err);
     }
   }
@@ -51,7 +51,6 @@ class Login extends Component {
   render() {
     return (
       <div>
-        {this.state.user ? <h1>{this.state.user.email}</h1> : ""}
         <Container style={{ marginTop: "30px" }}>
           <Form onSubmit={this.handleSubmit}>
             <Form.Group controlId="formBasicEmail">
@@ -101,5 +100,4 @@ class Login extends Component {
     );
   }
 }
-
 export default Login;
