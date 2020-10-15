@@ -34,7 +34,6 @@ export const fetchProperties = () => async dispatch => {
       "offset":"0"
       }
       })
-      // console.log("in thunk creator")
     const properties = res.data.properties
     dispatch(getProperties(properties))
   } catch (err) {

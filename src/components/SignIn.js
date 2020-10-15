@@ -1,24 +1,44 @@
 import React, { Component } from "react";
 import { Form, Button, Container } from "react-bootstrap";
 import { auth } from "./firebase";
-import "../css/style.css";
 
-
-class Signup extends Component {
+class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
       email: "",
       password: "",
       error: "",
+      user: auth().currentUser,
     };
-    this.signUpWithGoogle = this.signUpWithGoogle.bind(this);
+    this.signIn = this.signIn.bind(this);
+    this.signInWithGoogle = this.signInWithGoogle.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.signUp = this.signUp.bind(this)
   }
 
-  async signUpWithGoogle() {
+  handleChange(e) {
+    this.setState({
+      [e.target.name]: e.target.value,
+    });
+  }
+
+  async handleSubmit(e) {
+    e.preventDefault();
+    try {
+      await this.signIn(this.state.email, this.state.password);
+      this.props.history.push("/");
+    } catch (err) {
+      console.log(err.message);
+      this.setState({ error: "Please register before login" });
+    }
+  }
+
+  signIn(email, password) {
+    return auth().signInWithEmailAndPassword(email, password);
+  }
+
+  async signInWithGoogle() {
     try {
       const provider = await new auth.GoogleAuthProvider();
       const result = await auth().signInWithPopup(provider);
@@ -28,34 +48,6 @@ class Signup extends Component {
     }
   }
 
-  handleChange(e) {
-    this.setState({
-      [e.target.name]: e.target.value,
-    });
-  }
-
-  handleSubmit(e) {
-    e.preventDefault();
-    if(this.state.password.length >= 6){
-      try {
-        this.signUp(this.state.email, this.state.password);
-        this.props.history.push("/");
-        this.setState({
-          email: "",
-          password: ""
-        })
-      } catch (err) {
-        this.setState({ error: err.message });
-        console.log(this.state.error)
-      }
-    }else{
-        alert("Please enter 6 digit password")
-        window.location.reload();
-    }
-  }
-  signUp(email, password) {
-    return auth().createUserWithEmailAndPassword(email, password);
-  }
   render() {
     return (
       <div>
@@ -63,11 +55,14 @@ class Signup extends Component {
           <Form onSubmit={this.handleSubmit}>
             <Form.Group controlId="formBasicEmail">
               <Form.Label>Email address</Form.Label>
+              {this.state.error ? (
+                <p className="text-danger">{this.state.error}</p>
+              ) : null}
               <Form.Control
+                name="email"
                 type="email"
                 placeholder="Enter email"
                 onChange={this.handleChange}
-                name="email"
               />
             </Form.Group>
 
@@ -80,30 +75,29 @@ class Signup extends Component {
                 onChange={this.handleChange}
               />
             </Form.Group>
-            <h6>Minimum 6 characters long</h6>
-            <br/>
+
             <Button
               variant="primary"
               type="submit"
               disabled={!this.state.email || !this.state.password}
             >
-              Sign up
+              Login
             </Button>
           </Form>
           <br />
           <h4>or</h4>
           <br />
+
           <Button
             variant="danger"
             type="submit"
-            onClick={this.signUpWithGoogle}
+            onClick={this.signInWithGoogle}
           >
-            Sign up with Google
+            Login with Google
           </Button>
         </Container>
       </div>
     );
   }
 }
-
-export default Signup;
+export default Login;
