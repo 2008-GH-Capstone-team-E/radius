@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import mapStyle from './mapStyle'
-// import Map from './Map'
 import {connect} from "react-redux"
 import {fetchProperties} from "../store/allProperties"
 import { fetchGooglePlaces } from '../store/allGooglePlaces';
