@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import mapStyle from './mapStyle'
-// import Map from './Map'
 import {connect} from "react-redux"
 import {fetchProperties} from "../store/allProperties"
 import { fetchGooglePlaces } from '../store/allGooglePlaces';
@@ -20,7 +19,7 @@ class Nearby extends Component {
       this.state = {
         placesDetails: [],
         sortedPlacesDetails: [],
-        //lat lng will change when user select a property
+        // lat lng will change when user select a property
         lat: 40.748817,
         lng: -73.985428,
         zoom: 14,
