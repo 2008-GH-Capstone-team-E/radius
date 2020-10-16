@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import mapStyle from './mapStyle'
-// import Map from './Map'
+import SinglePropertyBox from './SinglePropertyBox'
 import {connect} from "react-redux"
 import {fetchProperties} from "../store/allProperties"
 import { fetchGooglePlaces } from '../store/allGooglePlaces';
+import { fetchProperty } from '../store/singleProperty'
 import subwayPic from "../css/subwayLogo.png"
 import restaurantPic from "../css/restaurantLogo.png"
+import { Button, Container, Row, Col } from "react-bootstrap";
 
 const API_KEY =`${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`;
 
@@ -25,7 +27,7 @@ class Nearby extends Component {
         lng: -73.985428,
         zoom: 14,
         selectedProperty:null,
-        property_Id:null,
+        property_id:null,
         markers:[]
     }
     this.createMarker = this.createMarker.bind(this)
@@ -150,10 +152,11 @@ class Nearby extends Component {
     //property marker
     marker.addListener('click', ()=>{
       this.setState({
-        property_Id:property.property_id
+        property_id:property.property_id
       })
-
-      console.log(this.state.markers)
+      console.log("@ Nearby Marker-OnClick: this.state.property_id", this.state.property_id)
+      this.props.getSingleProperty(property.property_id)
+      //console.log(this.state.markers)
       if(this.state.markers.length){
         this.state.markers.forEach(marker=>marker.setMap(null));
         //only push subway & restaurant marker to this array
@@ -224,12 +227,23 @@ class Nearby extends Component {
   const properties = this.props.propertiesInReact
     return (
       <div>
-      <div
-        id="map"
-        style={{width: "80%", height: "80vh"}} >
-        {properties&&properties.length>0&&properties.map(property=>this.createMarker(property))}
-      </div>
-      <div>for single property info box, property id can be accessed from this.state.property_Id</div>
+        <Container fluid>
+          <Row className='mapContainer'>
+            <Col md={8}>
+              <div
+                id="map"
+                style={{width: "100%", height: "80vh", alignSelf: "center"}} >
+                {properties&&properties.length>0&&properties.map(property=>this.createMarker(property))}
+              </div>
+            </Col> 
+            <Col>
+            <div>
+              {this.state.property_id && <SinglePropertyBox/>}
+            </div>
+            </Col>
+            
+          </Row> 
+        </Container>
       </div>
     );
   }
@@ -257,7 +271,8 @@ const mapDispatch = dispatch => {
     },
     getAllPlacesInReact: (lat, lon)=> {
       dispatch(fetchGooglePlaces(lat, lon))
-    }
+    }, 
+    getSingleProperty: id => dispatch(fetchProperty(id))
   }
 }
 
