@@ -1,11 +1,11 @@
 
 import React from 'react';
-import './css/style.css';
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom"
 import store from "./store"
 import Routes from './routes'
 import { Header } from './components/NavBar'
+import Footer from './components/Footer';
 
 function App() {
   return (
@@ -13,6 +13,7 @@ function App() {
       <Provider store={store}>
         <Header/>
         <Routes/>
+        <Footer />
       </Provider>
     </BrowserRouter>
   );

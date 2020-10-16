@@ -16,6 +16,7 @@ export const getProperties = properties => {
 
 //---------- thunk creators ----------//
 export const fetchProperties = (minBeds=1,maxPrice=2500) => async dispatch => {
+
   try {
     //need to get resposne from Real Estate API
     const options = {
@@ -24,7 +25,7 @@ export const fetchProperties = (minBeds=1,maxPrice=2500) => async dispatch => {
       params: {
         city: 'New York City',
         state_code: 'NY',
-        limit: '20',
+        limit: '50',
         offset: '0',
         beds_min: `${minBeds}`,
         price_max: `${maxPrice}`,
@@ -36,15 +37,17 @@ export const fetchProperties = (minBeds=1,maxPrice=2500) => async dispatch => {
         'x-rapidapi-key': process.env.REACT_APP_REALTOR_API_KEY
       }
     };
-    
+
+
     const properties = await axios.request(options)
-   
-    // console.log("properties",properties.data.properties)
+    console.log("properties",properties.data.properties)
     dispatch(getProperties(properties.data.properties))
   } catch (err) {
     console.log(err)
   }
 }
+
+
 
 //----------- initial state ----------//
 const properties = []

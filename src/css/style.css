@@ -50,8 +50,13 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+/*------------------------*/
+/*-----Header design------*/
+.header{
+  background-color: rgb(30, 52, 69);
+}
 
-.header {
+/* .header {
   background-color: rgb(30, 52, 69);
   color: whitesmoke;
   font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
@@ -60,8 +65,11 @@ code {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-  align-items: center;
   height: 4em;
+} */
+
+.Links{
+  float: right;
 }
 
 .headerText {
@@ -86,10 +94,16 @@ code {
   justify-content: space-around;
 }
 
-.imageInPropertyInfoBox {
-  width: 14em;
+.imageContainerPropertyInfoBox {
+  width: 200px;
   align-self: center;
   margin: 1em;
+}
+.imageInInfoBox {
+  width: 260px;
+  /* height: 100px; */
+  align-self: center;
+  object-fit: cover;
 }
 
 .imageInCarouselContainer {
@@ -97,7 +111,8 @@ code {
   height: 400px;
 }
 
-/* .container {
+/* Signup / Login design */
+.container{
   position: relative;
   z-index: 1;
   background: #ffffff;
@@ -106,4 +121,17 @@ code {
   padding: 45px;
   text-align: center;
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
-} */
+} 
+/*------------------------*/
+
+.mapContainer {
+align-content: 'start';
+justify-content: 'center'
+}
+
+.buttonSizer {
+  width: 100px;
+  height: 40px;
+  font-size: small
+}
+
