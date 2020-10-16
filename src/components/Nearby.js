@@ -19,16 +19,16 @@ let service;
 class Nearby extends Component {
   constructor(props){
     super(props)
-      this.state = {
-        placesDetails: [],
-        sortedPlacesDetails: [],
+    this.state = {
+      placesDetails: [],
+      sortedPlacesDetails: [],
         //lat lng will change when user select a property
-        lat: 40.748817,
-        lng: -73.985428,
-        zoom: 14,
-        selectedProperty:null,
-        property_Id:null,
-        markers:[],
+      lat: 40.748817,
+      lng: -73.985428,
+      zoom: 14,
+      selectedProperty:null,
+      property_Id:null,
+      markers:[],
     }
     this.createMarker = this.createMarker.bind(this)
     
@@ -80,7 +80,7 @@ class Nearby extends Component {
     });
 
 
-    const createPlaceMarker = (station) => {
+    const createSubwayMarker = (station) => {
         var marker = new window.google.maps.Marker({
           map: map,
           icon:{
@@ -191,7 +191,7 @@ class Nearby extends Component {
       service.nearbySearch(subwayRequest, (results, status) => {
         if (status === window.google.maps.places.PlacesServiceStatus.OK) {
           for (let i = 0; i < results.length; i++) {
-            createPlaceMarker(results[i])
+            createSubwayMarker(results[i])
           }
         }
       });
