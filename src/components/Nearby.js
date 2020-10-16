@@ -338,7 +338,7 @@ class Nearby extends Component {
     return (
       <div>
         <div>
-          <form>
+          {this.state.selectedProperty ? <form>
             {/* <label>Shopping Mall:
               <input type='checkbox'
                      checked={this.state.shoppingMallCheckbox}
@@ -355,8 +355,7 @@ class Nearby extends Component {
                      onChange={this.onChange} />
             </label>
 
-          </form>
-
+          </form> : ""}
         </div>
 
 
