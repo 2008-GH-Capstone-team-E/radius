@@ -37,10 +37,6 @@
   }
 }
 
-
-
-
-
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -103,6 +99,7 @@ code {
   align-self: center;
   margin: 1em;
 }
+
 .imageInInfoBox {
   width: 260px;
   /* height: 100px; */
@@ -113,6 +110,8 @@ code {
 .imageInCarouselContainer{
   width: 400px;
   height: 400px;
+  object-fit: cover;
+  margin: 1em;
 }
 
 /* Signup / Login design */
@@ -139,4 +138,27 @@ justify-content: 'center'
   font-size: small
 }
 
+.marginTop {
+  margin-top: 1.5em;
+}
+.marginBottomMed {
+  margin-bottom: 3em;
+}
 
+.centerSelf {
+  align-self: center;
+  justify-self: center;
+}
+.propertyPageContainer {
+  align-content: 'start';
+  justify-content: 'center';
+  margin-left: 3em;
+  }
+
+.container .alignContentLeft {
+  justify-content: flex-start;
+}
+
+.row .alignContentLeft {
+  justify-content: flex-start;
+}

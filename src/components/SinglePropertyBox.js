@@ -1,22 +1,26 @@
 
 import React, { Component } from "react";
 import { connect } from 'react-redux'
+import { Link } from "react-router-dom";
 
-import { fetchProperty } from '../store/singleProperty'
 import { Button, Container, Row, Col } from "react-bootstrap";
+
+
 
 var get = require('lodash.get');
 
-const formatTelNum = (num) => {
-  return `(${num.slice(0,3)}) ${num.slice(3,6)} - ${num.slice(6)}`
-}
+// const formatTelNum = (num) => {
+//   return `(${num.slice(0,3)}) ${num.slice(3,6)} - ${num.slice(6)}`
+// }
 
 class SinglePropertyBox extends Component {
   constructor(props) {
     super(props);
     this.state = {
+
     };
   }
+
 
   componentDidMount() {
     // let id = 'O3599084026'
@@ -27,13 +31,13 @@ class SinglePropertyBox extends Component {
   render() {
     let property = this.props.singleProperty || {}
     let price = get(property, 'price', 2050)
-      // if (price.toString().length === 4 || 6) {
+      //  if (price.toString().length === 5) {
       //   price = Math.floor(price/12)
       // }
       // if (price.toString().length === 5 || 7 ) {
       //   price = Math.floor(price/100)
       // }
-    console.log(`|${property.price}|`)
+     console.log(`raw price|${property.price}|`)
     return (
       <div>
         { Object.keys(property).length ? 
@@ -45,18 +49,20 @@ class SinglePropertyBox extends Component {
             </Row>
             <div> 
             
-             <Row><b>Address:</b> {property.address.line}, {property.address.county}, NY  
+             <Row className='alignContentLeft'><b>Address:</b> {property.address.line}, {property.address.county}, NY  
               {property.address.postal_code}</Row> 
-            <Row><b>Monthly: </b>$ {price}</Row>
+              <Row className='alignContentLeft'><b>Monthly: </b>$ {price}</Row>
             {/* <Row> <b>Contact:</b> {property.broker.name}</Row>
             <Row>{formatTelNum(property.broker.phone1.number)}</Row> */}
-            <Row>
-              <Col> 
-                <Button className='buttonSizer' variant="outline-info" size="sm">
-                See All Info
-                </Button>
+            <Row className='marginTop'>
+              <Col>
+                <Link to={`/properties/${property.property_id}`}>
+                  <Button className='buttonSizer' variant="outline-info" size="sm">
+                  See All Info
+                  </Button>
+                </Link>
               </Col>
-              <Col></Col>
+              {/* <Col></Col> */}
               <Col>
                 <Button className='buttonSizer' variant="outline-info" size="sm">
                 Add To Favs
@@ -67,7 +73,7 @@ class SinglePropertyBox extends Component {
           </div>
         </Container>
         : 
-        <h4> loading property details...</h4>
+        <div className='centerSelf'> loading property details...</div>
         }
       </div>
     );
@@ -81,11 +87,11 @@ const mapState = state => {
   }
 }
 
-const mapDispatch = dispatch => ({
-  //getSingleProperty: id => dispatch(fetchProperty(id))
-})
+// const mapDispatch = dispatch => ({
+//   //getSingleProperty: id => dispatch(fetchProperty(id))
+// })
 
-export default connect(mapState, mapDispatch)(SinglePropertyBox)
+export default connect(mapState)(SinglePropertyBox)
 
 
 // FOR investigating the API https://rapidapi.com/apidojo/api/realtor/endpoints

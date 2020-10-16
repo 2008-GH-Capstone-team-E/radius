@@ -4,6 +4,8 @@ import AllProperties from './components/AllProperties'
 import SignUp from './components/SignUp'
 import SignIn from './components/SignIn'
 import Nearby from './components/Nearby'
+import SinglePropertyPage from './components/SinglePropertyPage'
+
 
 
 class Routes extends Component {
@@ -13,7 +15,7 @@ class Routes extends Component {
           <Route exact path="/" component={Nearby} />
           <Route exact path="/signup" component={SignUp} />
           <Route exact path="/login" component={SignIn} />
-          {/* <Route exact path="/properties/:id" component={SingleProperties} /> */}
+          <Route exact path="/properties/:id" component={SinglePropertyPage} />
         </Switch>
       )
   }
