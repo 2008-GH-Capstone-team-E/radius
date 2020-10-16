@@ -22,7 +22,7 @@ class Nearby extends Component {
       this.state = {
         placesDetails: [],
         sortedPlacesDetails: [],
-        //lat lng will change when user select a property
+        // lat lng will change when user select a property
         lat: 40.748817,
         lng: -73.985428,
         zoom: 14,
