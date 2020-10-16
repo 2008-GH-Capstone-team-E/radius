@@ -80,7 +80,7 @@ code {
   display: flex;
   height: 200px;
   flex-direction: column;
-  border-color: rgb(30, 52, 69);
+  border-color:rgb(30, 52, 69);
   border-width: 1px;
   border-radius: 10;
   padding: 2em;
@@ -92,6 +92,7 @@ code {
   flex-direction: column;
   font-size: x-small;
   justify-content: space-around;
+
 }
 
 .imageContainerPropertyInfoBox {
@@ -107,12 +108,13 @@ code {
   object-fit: cover;
 }
 
-.imageInCarouselContainer {
+.imageInCarouselContainer{
   width: 400px;
   height: 400px;
   object-fit: cover;
   margin: 1em;
 }
+
 
 /* Signup / Login design */
 .container{
@@ -127,42 +129,44 @@ code {
 } 
 /*------------------------*/
 
+
 .mapContainer {
-align-content: 'start';
-justify-content: 'center'
-}
-
-.buttonSizer {
-  width: 100px;
-  height: 40px;
-  font-size: small
-}
-
-.marginTop {
-  margin-top: 1.5em;
-}
-.marginBottomMed {
-  margin-bottom: 3em;
-}
-
-.centerSelf {
-  align-self: center;
-  justify-self: center;
-}
-.propertyPageContainer {
   align-content: 'start';
-  justify-content: 'center';
-  margin-left: 3em;
+  justify-content: 'center'
   }
-
-.container .alignContentLeft {
-  justify-content: flex-start;
-}
-
-.row .alignContentLeft {
-  justify-content: flex-start;
-}
-
-.holdPageOpen {
- height: 40em;
-}
+  
+  .buttonSizer {
+    width: 100px;
+    height: 40px;
+    font-size: small
+  }
+  
+  .marginTop {
+    margin-top: 1.5em;
+  }
+  .marginBottomMed {
+    margin-bottom: 3em;
+  }
+  
+  .centerSelf {
+    align-self: center;
+    justify-self: center;
+  }
+  .propertyPageContainer {
+    align-content: 'start';
+    justify-content: 'center';
+    margin-left: 3em;
+    }
+  
+  .container .alignContentLeft {
+    justify-content: flex-start;
+  }
+  
+  .row .alignContentLeft {
+    justify-content: flex-start;
+  }
+  
+  .holdPageOpen {
+   height: 40em;
+  }
+  
