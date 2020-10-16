@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from 'react-redux'
 import { fetchProperty } from '../store/singleProperty'
 import { Button, Row, Col, Container, Carousel } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 var get = require('lodash.get');
 
@@ -70,9 +71,11 @@ class SinglePropertyPage extends Component {
               <Row className='alignContentLeft marginBottomMed'>
                 <Col></Col>
                 <Col>
+                <Link to='/'>
                   <Button variant="outline-info" size="sm">
                   back to search
                   </Button>
+                </Link>
                 </Col>    
               </Row>            
             
