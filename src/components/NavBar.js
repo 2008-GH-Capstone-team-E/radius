@@ -9,7 +9,7 @@ export const Header = () => {
       <Navbar collapseOnSelect expand="lg" variant="dark">
      <Navbar.Brand>
         <a href="/">
-        <img src="https://github.com/2008-GH-Capstone-team-E/radius/blob/main/public/logo.png?raw=true"  width="50" height="50"/>
+        <img src="https://github.com/2008-GH-Capstone-team-E/radius/blob/main/public/logo_radius.png?raw=true"/>
         </a>
       </Navbar.Brand>
       <Navbar.Toggle aria-controls="responsive-navbar-nav" />
