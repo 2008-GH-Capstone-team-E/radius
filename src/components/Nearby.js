@@ -11,8 +11,8 @@ import { Button, Container, Row, Col } from "react-bootstrap";
 
 import PropertyFilter from "./PropertyFilter"
 
-const API_KEY =`${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`;
-
+// const API_KEY =`${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`;
+const API_KEY = "AIzaSyAodlqJbUbT6KFaJMNK7pY3NyW8Ki-9sGc"
 
 let map;
 let infowindow;
@@ -35,7 +35,7 @@ class Nearby extends Component {
         restaurantCheckbox: false,
         // shoppingMallCheckbox: false
 
-        property_id:null,
+        //property_id:null,
 
 
     }
@@ -281,13 +281,13 @@ class Nearby extends Component {
 
     // }
 
-    //property marker
+         //// ** property marker ** ////
     marker.addListener('click', ()=>{
       // console.log(property.photos[0].href)
       this.setState({
         property_Id:property.property_id,
         selectedProperty: property,
-        property_id:property.property_id
+        //property_id:property.property_id
       })
       // if(this.state.markers.length){
       //   this.state.markers.forEach(marker=>marker.setMap(null));
@@ -295,9 +295,6 @@ class Nearby extends Component {
 
       // console.log("this.state.selectedProperty",this.state.selectedProperty)
 
-
-
-      console.log("@ Nearby Marker-OnClick: this.state.property_id", this.state.property_id)
       this.props.getSingleProperty(property.property_id)
       //console.log(this.state.markers)
       if(this.state.restaurantMarkers.length){
@@ -425,7 +422,7 @@ class Nearby extends Component {
             </Col>
             <Col>
             <div>
-              {this.state.property_id && <SinglePropertyBox/>}
+              {this.state.property_Id && <SinglePropertyBox/>}
             </div>
             </Col>
 
