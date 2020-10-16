@@ -25,9 +25,10 @@ class Nearby extends Component {
         zoom: 14,
         selectedProperty:null,
         property_Id:null,
-        markers:[],
+        restaurantMarkers:[],
+        subwayMarkers: [],
         restaurantCheckbox: false,
-        subwayCheckbox: false
+        // shoppingMallCheckbox: false
     }
     this.createMarker = this.createMarker.bind(this);
     this.onChange = this.onChange.bind(this);
@@ -67,72 +68,8 @@ class Nearby extends Component {
   }
 
 
-  onChange(e) {
-    console.log("this.state.restaurantCheckbox before",this.state.restaurantCheckbox)
-    console.log('e.target.checked', e.target.checked)
-    console.log('e.target.name', e.target.name)
+  onChange = (e) => {
     this.setState({[e.target.name] : e.target.checked});
-
-    console.log("this.state.restaurantCheckbox after",this.state.restaurantCheckbox)
-    // console.log("this.state.subwayCheckbox",this.state.subwayCheckbox)
-
-    // console.log("this.state.selectedProperty",this.state.selectedProperty)
-
-
-
-
-
-    const createSubwayMarker = (station) => {
-      var marker = new window.google.maps.Marker({
-        map: map,
-        icon:{
-          url:subwayPic,
-          scaledSize:new window.google.maps.Size(20, 20)
-        },
-        title: station.name,
-        position: {
-          lat: station.geometry.viewport.Ya.i,
-          lng: station.geometry.viewport.Sa.i
-        },
-    });
-    this.setState({
-      markers:[...this.state.markers,marker]
-    })
-
-    marker.addListener('click',function(){
-      let pic = station.photos[0].getUrl({"maxWidth": 400, "maxHeight": 256})
-      let content = `
-      <h1>Subway</h1>
-      <h2>${station.name}</h2>
-      <img src="${pic}" alt="subway image" />
-    `;
-    infowindow.setContent(content);
-    infowindow.open(map, marker);
-    })
-
-    const subwayRequest = {
-      type: ['subway_station'],
-      location: new window.google.maps.LatLng(this.state.selectedProperty.address.lat,this.state.selectedProperty.address.lon),
-      radius: 500,
-    };
-
-    service = new window.google.maps.places.PlacesService(map);
-
-    service.nearbySearch(subwayRequest, (results, status) => {
-      if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-        for (let i = 0; i < results.length; i++) {
-          if(this.state.subwayCheckbox) {
-            createSubwayMarker(results[i])
-          } else {
-            this.state.markers.forEach(marker=>marker.setMap(null));
-            this.setState({
-              markers: []
-            })
-          }
-        }
-      }
-    });
-
 
     const createRestaurantMarker = (restaurant) => {
       var marker = new window.google.maps.Marker({
@@ -149,7 +86,7 @@ class Nearby extends Component {
       });
 
       this.setState({
-        markers:[...this.state.markers,marker]
+        restaurantMarkers:[...this.state.restaurantMarkers,marker]
       })
 
       marker.addListener('click',function(){
@@ -181,9 +118,9 @@ class Nearby extends Component {
           if(this.state.restaurantCheckbox) {
             createRestaurantMarker(results[i])
           } else {
-          this.state.markers.forEach(marker=>marker.setMap(null));
+          this.state.restaurantMarkers.forEach(marker=>marker.setMap(null));
           this.setState({
-            markers: []
+            restaurantMarkers: []
             })
           }
         }
@@ -191,13 +128,61 @@ class Nearby extends Component {
     });
 
 
+    // const createShoppingMallMarker = (shoppingMall) => {
+    //   var marker = new window.google.maps.Marker({
+    //       map: map,
+    //       icon:{
+    //         url:subwayPic,
+    //         scaledSize:new window.google.maps.Size(20, 20)
+    //       },
+    //       title: shoppingMall.name,
+    //       position: {
+    //         lat: shoppingMall.geometry.viewport.Ya.i,
+    //         lng: shoppingMall.geometry.viewport.Sa.i
+    //       },
+    //   });
+
+    //   this.setState({
+    //     markers:[...this.state.markers,marker]
+    //   })
+
+    //   marker.addListener('click',function(){
+    //     let pic = shoppingMall.photos[0].getUrl({"maxWidth": 400, "maxHeight": 256})
+    //     let content = `
+    //     <h3>Shopping Mall</h3>
+    //     <h4>${shoppingMall.name}</h4>
+    //     <img src="${pic}" alt="shoppingMall image" />
+    //     <h5>Address: ${shoppingMall.vicinity}</h5>
+    //     <h6>Rating: ${shoppingMall.rating}/5 from ${shoppingMall.user_ratings_total} customers</h6>
+    //   `;
+    //   infowindow.setContent(content);
+    //   infowindow.open(map, marker);
+    //   })
+    // }
 
 
+    // const shoppingMallRequest = {
+    //   type: ['shopping_mall'],
+    //   location: new window.google.maps.LatLng(this.state.selectedProperty.address.lat,this.state.selectedProperty.address.lon),
+    //   radius: 500,
+    // };
 
-  }
+    // service = new window.google.maps.places.PlacesService(map);
 
-
-
+    // service.nearbySearch(shoppingMallRequest, (results, status) => {
+    //   if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+    //     for (let i = 0; i < results.length; i++) {
+    //       if(this.state.shoppingMallCheckbox) {
+    //         createShoppingMallMarker(results[i])
+    //       } else {
+    //       this.state.markers.forEach(marker=>marker.setMap(null));
+    //       this.setState({
+    //         markers: []
+    //         })
+    //       }
+    //     }
+    //   }
+    // });
 
   }
 
@@ -214,34 +199,34 @@ class Nearby extends Component {
     });
 
 
-    // const createSubwayMarker = (station) => {
-    //     var marker = new window.google.maps.Marker({
-    //       map: map,
-    //       icon:{
-    //         url:subwayPic,
-    //         scaledSize:new window.google.maps.Size(20, 20)
-    //       },
-    //       title: station.name,
-    //       position: {
-    //         lat: station.geometry.viewport.Ya.i,
-    //         lng: station.geometry.viewport.Sa.i
-    //       },
-    //   });
-    //   this.setState({
-    //     markers:[...this.state.markers,marker]
-    //   })
+    const createSubwayMarker = (station) => {
+        var marker = new window.google.maps.Marker({
+          map: map,
+          icon:{
+            url:subwayPic,
+            scaledSize:new window.google.maps.Size(20, 20)
+          },
+          title: station.name,
+          position: {
+            lat: station.geometry.viewport.Ya.i,
+            lng: station.geometry.viewport.Sa.i
+          },
+      });
+      this.setState({
+        subwayMarkers:[...this.state.subwayMarkers,marker]
+      })
 
-    //   marker.addListener('click',function(){
-    //     let pic = station.photos[0].getUrl({"maxWidth": 400, "maxHeight": 256})
-    //     let content = `
-    //     <h1>Subway</h1>
-    //     <h2>${station.name}</h2>
-    //     <img src="${pic}" alt="subway image" />
-    //   `;
-    //   infowindow.setContent(content);
-    //   infowindow.open(map, marker);
-    //   })
-    // }
+      marker.addListener('click',function(){
+        let pic = station.photos[0].getUrl({"maxWidth": 400, "maxHeight": 256})
+        let content = `
+        <h1>Subway</h1>
+        <h2>${station.name}</h2>
+        <img src="${pic}" alt="subway image" />
+      `;
+      infowindow.setContent(content);
+      infowindow.open(map, marker);
+      })
+    }
 
     // const createRestaurantMarker = (restaurant) => {
     //   var marker = new window.google.maps.Marker({
@@ -307,23 +292,21 @@ class Nearby extends Component {
       infowindow.setContent(content);
       infowindow.open(map, marker);
 
-      // const subwayRequest = {
-      //   type: ['subway_station'],
-      //   location: new window.google.maps.LatLng(property.address.lat,property.address.lon),
-      //   radius: 500,
-      // };
+      const subwayRequest = {
+        type: ['subway_station'],
+        location: new window.google.maps.LatLng(property.address.lat,property.address.lon),
+        radius: 500,
+      };
 
-      // service = new window.google.maps.places.PlacesService(map);
+      service = new window.google.maps.places.PlacesService(map);
 
-      // service.nearbySearch(subwayRequest, (results, status) => {
-      //   if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-      //     for (let i = 0; i < results.length; i++) {
-      //       if(this.state.subwayCheckbox) {
-      //         createSubwayMarker(results[i])
-      //       }
-      //     }
-      //   }
-      // });
+      service.nearbySearch(subwayRequest, (results, status) => {
+        if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+          for (let i = 0; i < results.length; i++) {
+              createSubwayMarker(results[i])
+          }
+        }
+      });
 
       //maybe filter to grab more accurate result, from query?
       //since google limit 20 each call
@@ -356,19 +339,19 @@ class Nearby extends Component {
       <div>
         <div>
           <form>
-            <label>Subways:
+            {/* <label>Shopping Mall:
               <input type='checkbox'
-                     checked={this.state.subwayCheckbox}
-                     name='subwayCheckbox'
-                    //  value={this.state.subwayCheckbox}
+                     checked={this.state.shoppingMallCheckbox}
+                     name='shoppingMallCheckbox'
+                     value={this.state.shoppingMallCheckbox}
                      onChange={this.onChange} />
-            </label>
+            </label> */}
 
             <label>Restaurants:
               <input type='checkbox'
                      checked={this.state.restaurantCheckbox}
                      name='restaurantCheckbox'
-                    //  value={this.state.restaurantCheckbox}
+                     value={this.state.restaurantCheckbox}
                      onChange={this.onChange} />
             </label>
 
