@@ -6,12 +6,12 @@ import { Link } from "react-router-dom";
 
 var get = require('lodash.get');
 
-const formatTelNum = (num) => {
-  return `(${num.slice(0,3)}) ${num.slice(3,6)} - ${num.slice(6)}`
-}
-const formatPropType = (prop_type) => {
-  return `${prop_type.split('_').join(' ')}`
-}
+// const formatTelNum = (num) => {
+//   return `(${num.slice(0,3)}) ${num.slice(3,6)} - ${num.slice(6)}`
+// }
+// const formatPropType = (prop_type) => {
+//   return `${prop_type.split('_').join(' ')}`
+// }
 
 class SinglePropertyPage extends Component {
   constructor(props) {
