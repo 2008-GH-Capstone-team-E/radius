@@ -11,8 +11,8 @@ import { Button, Container, Row, Col } from "react-bootstrap";
 
 import PropertyFilter from "./PropertyFilter"
 
-// const API_KEY =`${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`;
-const API_KEY = "AIzaSyAodlqJbUbT6KFaJMNK7pY3NyW8Ki-9sGc"
+const API_KEY =`${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`;
+
 
 let map;
 let infowindow;
