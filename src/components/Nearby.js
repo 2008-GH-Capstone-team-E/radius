@@ -9,6 +9,8 @@ import subwayPic from "../css/subwayLogo.png"
 import restaurantPic from "../css/restaurantLogo.png"
 import { Button, Container, Row, Col } from "react-bootstrap";
 
+import PropertyFilter from "./PropertyFilter"
+
 const API_KEY =`${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`;
 
 
@@ -44,9 +46,9 @@ class Nearby extends Component {
 
   async componentDidMount() {
     await this.renderMap();
-    await this.props.getAllPropertiesInReact();
-
   }
+
+  
 
   renderMap = () => {
     loadScript(`https://maps.googleapis.com/maps/api/js?key=${API_KEY}&libraries=places&callback=initMap`);
@@ -277,6 +279,18 @@ class Nearby extends Component {
         property_id:property.property_id
       })
 
+    }
+
+    //property marker
+    marker.addListener('click', ()=>{
+      // console.log(property.photos[0].href)
+      this.setState({
+        property_Id:property.property_id
+      })
+      if(this.state.markers.length){
+        this.state.markers.forEach(marker=>marker.setMap(null));
+
+
       // console.log("this.state.selectedProperty",this.state.selectedProperty)
 
 
@@ -320,6 +334,7 @@ class Nearby extends Component {
 
       let content = `
         <h2>${property.address.line}</h2>
+        <img src=${property.photos[0].href} alt="property image" />
       `;
       infowindow.setContent(content);
       infowindow.open(map, marker);
@@ -335,7 +350,8 @@ class Nearby extends Component {
       service.nearbySearch(subwayRequest, (results, status) => {
         if (status === window.google.maps.places.PlacesServiceStatus.OK) {
           for (let i = 0; i < results.length; i++) {
-              createSubwayMarker(results[i])
+            createSubwayMarker(results[i])
+
           }
         }
       });
@@ -369,6 +385,7 @@ class Nearby extends Component {
   const properties = this.props.propertiesInReact
     return (
       <div>
+        <PropertyFilter />
 
         <div>
           {this.state.selectedProperty ? <form>
@@ -390,15 +407,11 @@ class Nearby extends Component {
 
           </form> : ""}
         </div>
-
-
         <div
           id="map"
           style={{width: "80%", height: "80vh"}} >
           {properties&&properties.length>0&&properties.map(property=>this.createMarker(property))}
         </div>
-        <div>for single property info box, property id can be accessed from this.state.property_Id</div>
-
         <Container fluid>
           <Row className='mapContainer'>
             <Col md={8}>
@@ -416,7 +429,6 @@ class Nearby extends Component {
 
           </Row>
         </Container>
-
       </div>
     );
   }
@@ -439,8 +451,8 @@ const mapState = state =>{
 
 const mapDispatch = dispatch => {
   return {
-    getAllPropertiesInReact : ()=>{
-      dispatch(fetchProperties())
+    getAllPropertiesInReact : (minBeds=0,maxPrice=10000,zipCode=10019)=>{
+      dispatch(fetchProperties(minBeds,maxPrice,zipCode))
     },
     getAllPlacesInReact: (lat, lon)=> {
       dispatch(fetchGooglePlaces(lat, lon))
