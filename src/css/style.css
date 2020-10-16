@@ -162,3 +162,7 @@ justify-content: 'center'
 .row .alignContentLeft {
   justify-content: flex-start;
 }
+
+.holdPageOpen {
+ height: 40em;
+}
