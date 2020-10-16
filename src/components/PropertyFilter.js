@@ -38,7 +38,7 @@ class PropertyFilter extends Component{
 
     render(){
         return (
-            <Container style={{padding:"20px"}}>
+            <Container fluid style={{padding:"20px"}}>
                 <Form onSubmit={this.handleSubmit}>
                     <Row>   
                         <Col>
