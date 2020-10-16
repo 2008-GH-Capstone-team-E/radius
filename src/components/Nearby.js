@@ -34,7 +34,7 @@ class Nearby extends Component {
         // shoppingMallCheckbox: false
 
         property_id:null,
-        
+
 
     }
     this.createMarker = this.createMarker.bind(this);
@@ -279,16 +279,24 @@ class Nearby extends Component {
 
       // console.log("this.state.selectedProperty",this.state.selectedProperty)
 
-       
-     
+
+
       console.log("@ Nearby Marker-OnClick: this.state.property_id", this.state.property_id)
       this.props.getSingleProperty(property.property_id)
       //console.log(this.state.markers)
-      if(this.state.markers.length){
-        this.state.markers.forEach(marker=>marker.setMap(null));
+      if(this.state.restaurantMarkers.length){
+        this.state.restaurantMarkers.forEach(marker=>marker.setMap(null));
         //only push subway & restaurant marker to this array
         this.setState({
-          markers:[]
+          restaurantMarkers:[]
+        })
+      }
+
+      if(this.state.subwayMarkers.length){
+        this.state.subwayMarkers.forEach(marker=>marker.setMap(null));
+        //only push subway & restaurant marker to this array
+        this.setState({
+          subwayMarkers:[]
         })
       }
 
@@ -399,14 +407,14 @@ class Nearby extends Component {
                 style={{width: "100%", height: "80vh", alignSelf: "center"}} >
                 {properties&&properties.length>0&&properties.map(property=>this.createMarker(property))}
               </div>
-            </Col> 
+            </Col>
             <Col>
             <div>
               {this.state.property_id && <SinglePropertyBox/>}
             </div>
             </Col>
-            
-          </Row> 
+
+          </Row>
         </Container>
 
       </div>
@@ -436,7 +444,7 @@ const mapDispatch = dispatch => {
     },
     getAllPlacesInReact: (lat, lon)=> {
       dispatch(fetchGooglePlaces(lat, lon))
-    }, 
+    },
     getSingleProperty: id => dispatch(fetchProperty(id))
   }
 }
