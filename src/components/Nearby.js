@@ -7,6 +7,8 @@ import { fetchGooglePlaces } from '../store/allGooglePlaces';
 import subwayPic from "../css/subwayLogo.png"
 import restaurantPic from "../css/restaurantLogo.png"
 
+import PropertyFilter from "./PropertyFilter"
+
 const API_KEY =`${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`;
 
 
@@ -26,17 +28,18 @@ class Nearby extends Component {
         zoom: 14,
         selectedProperty:null,
         property_Id:null,
-        markers:[]
+        markers:[],
     }
     this.createMarker = this.createMarker.bind(this)
+    
   }
 
 
   async componentDidMount() {
     await this.renderMap();
-    await this.props.getAllPropertiesInReact();
-
   }
+
+  
 
   renderMap = () => {
     loadScript(`https://maps.googleapis.com/maps/api/js?key=${API_KEY}&libraries=places&callback=initMap`);
@@ -142,18 +145,15 @@ class Nearby extends Component {
       infowindow.setContent(content);
       infowindow.open(map, marker);
       })
-
-
     }
 
 
     //property marker
     marker.addListener('click', ()=>{
+      // console.log(property.photos[0].href)
       this.setState({
         property_Id:property.property_id
       })
-
-      console.log(this.state.markers)
       if(this.state.markers.length){
         this.state.markers.forEach(marker=>marker.setMap(null));
         //only push subway & restaurant marker to this array
@@ -173,6 +173,7 @@ class Nearby extends Component {
 
       let content = `
         <h2>${property.address.line}</h2>
+        <img src=${property.photos[0].href} alt="property image" />
       `;
       infowindow.setContent(content);
       infowindow.open(map, marker);
@@ -224,12 +225,13 @@ class Nearby extends Component {
   const properties = this.props.propertiesInReact
     return (
       <div>
-      <div
-        id="map"
-        style={{width: "80%", height: "80vh"}} >
-        {properties&&properties.length>0&&properties.map(property=>this.createMarker(property))}
-      </div>
-      <div>for single property info box, property id can be accessed from this.state.property_Id</div>
+        <PropertyFilter />
+        <div
+          id="map"
+          style={{width: "80%", height: "80vh"}} >
+          {properties&&properties.length>0&&properties.map(property=>this.createMarker(property))}
+        </div>
+        <div>for single property info box, property id can be accessed from this.state.property_Id</div>
       </div>
     );
   }
@@ -252,8 +254,8 @@ const mapState = state =>{
 
 const mapDispatch = dispatch => {
   return {
-    getAllPropertiesInReact : ()=>{
-      dispatch(fetchProperties())
+    getAllPropertiesInReact : (minBeds=0,maxPrice=10000,zipCode=10019)=>{
+      dispatch(fetchProperties(minBeds,maxPrice,zipCode))
     },
     getAllPlacesInReact: (lat, lon)=> {
       dispatch(fetchGooglePlaces(lat, lon))

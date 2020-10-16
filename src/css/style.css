@@ -37,28 +37,25 @@
   }
 }
 
-
-
-
-
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
 
 .header {
   background-color: rgb(30, 52, 69);
   color: whitesmoke;
-  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
   font-weight: 300;
   display: flex;
   flex-direction: row;
@@ -68,14 +65,14 @@ code {
 }
 
 .headerText {
-  padding-left: 1em ;
+  padding-left: 1em;
 }
 
 .propertyinfoBoxContainer {
   display: flex;
   height: 200px;
   flex-direction: column;
-  border-color:rgb(30, 52, 69);
+  border-color: rgb(30, 52, 69);
   border-width: 1px;
   border-radius: 10;
   padding: 2em;
@@ -87,7 +84,6 @@ code {
   flex-direction: column;
   font-size: x-small;
   justify-content: space-around;
-
 }
 
 .imageInPropertyInfoBox {
@@ -96,26 +92,18 @@ code {
   margin: 1em;
 }
 
-.imageInCarouselContainer{
+.imageInCarouselContainer {
   width: 400px;
   height: 400px;
 }
 
-
-
-
-}
-
-
-.container{
+/* .container {
   position: relative;
   z-index: 1;
-  background: #FFFFFF;
+  background: #ffffff;
   max-width: 360px;
   margin: 0 auto 100px;
   padding: 45px;
   text-align: center;
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
-}
-
-
+} */

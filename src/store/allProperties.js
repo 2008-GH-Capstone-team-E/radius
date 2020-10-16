@@ -15,27 +15,32 @@ export const getProperties = properties => {
 
 
 //---------- thunk creators ----------//
-export const fetchProperties = () => async dispatch => {
+export const fetchProperties = (minBeds=1,maxPrice=2500) => async dispatch => {
   try {
     //need to get resposne from Real Estate API
-    const res = await axios({
-      "method":"GET",
-      "url":"https://realtor.p.rapidapi.com/properties/v2/list-for-rent",
-      "headers":{
-      "content-type":"application/octet-stream",
-      "x-rapidapi-host":"realtor.p.rapidapi.com",
-      "x-rapidapi-key":process.env.REACT_APP_REALTOR_API_KEY,
-      "useQueryString":true
-      },"params":{
-      "sort":"relevance",
-      "city":"New York City",
-      "state_code":"NY",
-      "limit":"20",
-      "offset":"0"
+    const options = {
+      method: 'GET',
+      url: 'https://rapidapi.p.rapidapi.com/properties/v2/list-for-rent',
+      params: {
+        city: 'New York City',
+        state_code: 'NY',
+        limit: '20',
+        offset: '0',
+        beds_min: `${minBeds}`,
+        price_max: `${maxPrice}`,
+        sort: 'relevance',
+        prop_type: 'condo,townhome,single_family,coop'
+      },
+      headers: {
+        'x-rapidapi-host': 'realtor.p.rapidapi.com',
+        'x-rapidapi-key': process.env.REACT_APP_REALTOR_API_KEY
       }
-      })
-    const properties = res.data.properties
-    dispatch(getProperties(properties))
+    };
+    
+    const properties = await axios.request(options)
+   
+    // console.log("properties",properties.data.properties)
+    dispatch(getProperties(properties.data.properties))
   } catch (err) {
     console.log(err)
   }
