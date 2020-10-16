@@ -270,26 +270,28 @@ class Nearby extends Component {
     // }
 
     //property marker
-    marker.addListener('click', ()=>{
-      this.setState({
+    // marker.addListener('click', ()=>{
+    //   this.setState({
 
-        property_Id:property.property_id,
-        selectedProperty: property,
-        //property_Id or property_id?
-        property_id:property.property_id
-      })
+    //     property_Id:property.property_id,
+        
+    //     //property_Id or property_id?
+        
+    //   })
 
-    }
+    // }
 
     //property marker
     marker.addListener('click', ()=>{
       // console.log(property.photos[0].href)
       this.setState({
-        property_Id:property.property_id
+        property_Id:property.property_id,
+        selectedProperty: property,
+        property_id:property.property_id
       })
-      if(this.state.markers.length){
-        this.state.markers.forEach(marker=>marker.setMap(null));
-
+      // if(this.state.markers.length){
+      //   this.state.markers.forEach(marker=>marker.setMap(null));
+      // }
 
       // console.log("this.state.selectedProperty",this.state.selectedProperty)
 
