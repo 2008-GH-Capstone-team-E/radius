@@ -2,37 +2,39 @@ import React, { Component } from "react";
 import { connect } from 'react-redux'
 import { fetchProperty } from '../store/singleProperty'
 import { Button, Row, Col, Container, Carousel } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
-let dummyProperyDetailObj = {
+var get = require('lodash.get');
 
-}
-
-const formatTelNum = (num) => {
-  return `(${num.slice(0,3)}) ${num.slice(3,6)} - ${num.slice(6)}`
-}
-const formatPropType = (prop_type) => {
-  return `${prop_type.split('_').join(' ')}`
-}
+// const formatTelNum = (num) => {
+//   return `(${num.slice(0,3)}) ${num.slice(3,6)} - ${num.slice(6)}`
+// }
+// const formatPropType = (prop_type) => {
+//   return `${prop_type.split('_').join(' ')}`
+// }
 
 class SinglePropertyPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
+
     };
   }
 
   async componentDidMount() {
-    let id = 'O3599084026'
-    console.log(id)
-    // this.props.getSingleProperty(id)
+    //console.log(typeof this.props.singleProperty.property_id, typeof this.props.match.params.id )
+      if (this.props.singleProperty.property_id !== this.props.match.params.id) {
+      this.props.getSingleProperty(this.props.match.params.id)
+      }
   }
 
   render() {
     let property = this.props.singleProperty || {}
+    let price = get(property, 'price', 2050)
     return (
       <div>
         { Object.keys(property).length ? 
-        <Container>
+        <Container fluid className='propertyPageContainer marginTop'>
           <Row><h4>Property Details</h4></Row>
             <Row>
               <Carousel>
@@ -48,30 +50,38 @@ class SinglePropertyPage extends Component {
                     </div>
                   </Carousel.Item> )
                 })}
-                
               </Carousel>
             </Row>
-            <div> 
+              <Row className='alignContentLeft'>
+                <Col md={5}>
+                  <Row className='alignContentLeft'><b>Address: </b> {property.address.line}, {property.address.county}, NY 
+                  {property.address.postal_code}</Row>
+                  <Row className='alignContentLeft'><b>Monthly: </b>$ {price}</Row>
+                  <Row className='alignContentLeft'><b>Rental Type: </b>{property.prop_type}</Row>
+                  <Row className='alignContentLeft'><b>Bedrooms:</b>{property.beds}</Row>
+                  <Row className='alignContentLeft'><b>Bathrooms:</b>{property.baths}</Row>
+                  <Row className='alignContentLeft'><b>Year Built:  </b>{property.year_built}</Row>
+                  
+                  {/* <Row> <b>Contact:</b> {property.broker.name}</Row>
+                  <Row>{formatTelNum(property.broker.phone1.number)}</Row> */}
+                </Col>
+                <Col></Col>
+              </Row>
+              
+              <Row className='alignContentLeft marginBottomMed'>
+                <Col></Col>
+                <Col>
+                <Link to='/'>
+                  <Button variant="outline-info" size="sm">
+                  back to search
+                  </Button>
+                </Link>
+                </Col>    
+              </Row>            
             
-            <Row><b>Address:</b> {property.address.line},{property.address.county}, NY
-              {property.address.postal_code}</Row>
-            <Row><b>Monthly: </b>$ {property.price/100}</Row>
-            <Row> <b>Contact:</b> {property.broker.name}</Row>
-            <Row>{formatTelNum(property.broker.phone1.number)}</Row>
-            <Row>
-              <Col></Col>
-              <Col></Col>
-              <Col>
-                <Button variant="outline-info" size="sm">
-                back to search
-                </Button>
-              </Col>
-            </Row>
-           
-          </div>
         </Container>
         : 
-        <h4> loading property details...</h4>
+        <div className='holdPageOpen'> loading property details...</div>
         }
       </div>
     );
