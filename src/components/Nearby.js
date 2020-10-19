@@ -335,8 +335,8 @@ class Nearby extends Component {
         <h2>${property.address.line}</h2>
         <img src=${property.photos[0].href} alt="property image" />
       `;
-      infowindow.setContent(content);
-      infowindow.open(map, marker);
+      // infowindow.setContent(content);
+      // infowindow.open(map, marker);
 
       const subwayRequest = {
         type: ['subway_station'],
@@ -405,11 +405,6 @@ class Nearby extends Component {
             </label>
 
           </form> : ""}
-        </div>
-        <div
-          id="map"
-          style={{width: "80%", height: "80vh"}} >
-          {properties&&properties.length>0&&properties.map(property=>this.createMarker(property))}
         </div>
         <Container fluid>
           <Row className='mapContainer'>

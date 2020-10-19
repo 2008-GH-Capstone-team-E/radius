@@ -6,9 +6,12 @@ import { Link } from "react-router-dom";
 
 var get = require('lodash.get');
 
-// const formatTelNum = (num) => {
-//   return `(${num.slice(0,3)}) ${num.slice(3,6)} - ${num.slice(6)}`
-// }
+const altPropertyImage = "https://github.com/2008-GH-Capstone-team-E/radius/blob/main/public/Property_Image_PlaceHolder.png?raw=true"
+
+const formatTelNum = (num) => {
+  return `(${num.slice(0,3)}) ${num.slice(3,6)} - ${num.slice(6)}`
+}
+
 // const formatPropType = (prop_type) => {
 //   return `${prop_type.split('_').join(' ')}`
 // }
@@ -22,7 +25,6 @@ class SinglePropertyPage extends Component {
   }
 
   async componentDidMount() {
-    //console.log(typeof this.props.singleProperty.property_id, typeof this.props.match.params.id )
       if (this.props.singleProperty.property_id !== this.props.match.params.id) {
       this.props.getSingleProperty(this.props.match.params.id)
       }
@@ -30,7 +32,17 @@ class SinglePropertyPage extends Component {
 
   render() {
     let property = this.props.singleProperty || {}
-    let price = get(property, 'price', 2050)
+    const price = get(property, 'price', 'unavailable')
+    const brokerName = get(property, 'broker.name', 'unavailable')
+    const brokerTel = get(property, 'broker.phone1.number', 'unavailable')
+    const address = get(property, 'address.line', 'unavailable')
+    const county = get(property, 'address.county', 'unavailable')
+    const zip = get(property, 'address.postal_code', 'unavailable')
+    const prop_type = get(property, 'prop_type')
+    const yearBuilt = get(property, 'year_built', 'unavailable')
+    const beds = get(property, 'beds', 'unavailable')
+    const baths = get(property, 'baths', 'unavailable')
+
     return (
       <div>
         { Object.keys(property).length ? 
@@ -38,14 +50,14 @@ class SinglePropertyPage extends Component {
           <Row><h4>Property Details</h4></Row>
             <Row>
               <Carousel>
-                {property.photos.map(photo => {
+                {property.photos.map((photo, i) => {
                   return (
-                  <Carousel.Item>
+                  <Carousel.Item key={`photo${i}`} >
                     <div className='imageInCarouselContainer'>
                       <img
                         className="d-block w-100 carouselImage"
                         src={photo.href}
-                        alt=''
+                        alt='property photo'
                       />
                     </div>
                   </Carousel.Item> )
@@ -54,16 +66,16 @@ class SinglePropertyPage extends Component {
             </Row>
               <Row className='alignContentLeft'>
                 <Col md={5}>
-                  <Row className='alignContentLeft'><b>Address: </b> {property.address.line}, {property.address.county}, NY 
-                  {property.address.postal_code}</Row>
-                  <Row className='alignContentLeft'><b>Monthly: </b>$ {price}</Row>
-                  <Row className='alignContentLeft'><b>Rental Type: </b>{property.prop_type}</Row>
-                  <Row className='alignContentLeft'><b>Bedrooms:</b>{property.beds}</Row>
-                  <Row className='alignContentLeft'><b>Bathrooms:</b>{property.baths}</Row>
-                  <Row className='alignContentLeft'><b>Year Built:  </b>{property.year_built}</Row>
                   
-                  {/* <Row> <b>Contact:</b> {property.broker.name}</Row>
-                  <Row>{formatTelNum(property.broker.phone1.number)}</Row> */}
+                  <Row className='alignContentLeft'><b>Address:</b> &nbsp; {address}, {county}, NY,  
+                  {zip}</Row>
+                  <Row className='alignContentLeft'><b>Monthly: </b> &nbsp; ${price}</Row>
+                  <Row className='alignContentLeft'><b>Rental Type:</b> &nbsp; {prop_type}</Row>
+                  <Row className='alignContentLeft'><b>Bedrooms:</b> &nbsp; {beds}</Row>
+                  <Row className='alignContentLeft'><b>Bathrooms:</b> &nbsp;{baths}</Row>
+                  <Row className='alignContentLeft'><b>Year Built:</b>&nbsp; {yearBuilt}</Row>
+                  <Row className='alignContentLeft'> <b>Broker:</b> &nbsp;{brokerName}</Row>
+                  <Row className='alignContentLeft'><b>Contact:</b>&nbsp;{brokerTel}</Row> 
                 </Col>
                 <Col></Col>
               </Row>
@@ -81,7 +93,7 @@ class SinglePropertyPage extends Component {
             
         </Container>
         : 
-        <div className='holdPageOpen'> loading property details...</div>
+        <div className='holdPageOpen marginTopMed'> loading property details...</div>
         }
       </div>
     );
@@ -101,6 +113,3 @@ const mapDispatch = dispatch => ({
 })
 
 export default connect(mapState, mapDispatch)(SinglePropertyPage)
-
-
-// FOR investigating the API https://rapidapi.com/apidojo/api/realtor/endpoints
