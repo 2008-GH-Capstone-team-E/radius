@@ -1,17 +1,12 @@
-
 import React, { Component } from "react";
 import { connect } from 'react-redux'
 import { Link } from "react-router-dom";
-
 import { Button, Container, Row, Col } from "react-bootstrap";
-
-
 
 var get = require('lodash.get');
 
-// const formatTelNum = (num) => {
-//   return `(${num.slice(0,3)}) ${num.slice(3,6)} - ${num.slice(6)}`
-// }
+//const altPropertyImage = "https://github.com/2008-GH-Capstone-team-E/radius/blob/main/public/Property_Image_PlaceHolder.png?raw=true"
+
 
 class SinglePropertyBox extends Component {
   constructor(props) {
@@ -21,23 +16,13 @@ class SinglePropertyBox extends Component {
     };
   }
 
-
-  componentDidMount() {
-    // let id = 'O3599084026'
-    //console.log("FIRED @ SinglePropBox CompDidMount, this.props.property_id: ", this.props.property_id)
-    //await this.props.getSingleProperty(this.props.property_id)
-  }
-
   render() {
     let property = this.props.singleProperty || {}
-    let price = get(property, 'price', 2050)
-      //  if (price.toString().length === 5) {
-      //   price = Math.floor(price/12)
-      // }
-      // if (price.toString().length === 5 || 7 ) {
-      //   price = Math.floor(price/100)
-      // }
-     console.log(`raw price|${property.price}|`)
+    const price = get(property, 'price', 'unavailable')
+    const address = get(property, 'address.line', 'unavailable')
+    const county = get(property, 'address.county', 'unavailable')
+    const zip = get(property, 'address.postal_code', 'unavailable')
+
     return (
       <div>
         { Object.keys(property).length ? 
@@ -45,15 +30,13 @@ class SinglePropertyBox extends Component {
           <Row><h4>The Basics</h4></Row>
           
             <Row className='imageContainerPropertyInfoBox'>
-              <img src={property.photos[0].href} alt="property pic" className='imageInInfoBox'/>
+              <img src={property.photos[0].href} alt="property photo" className='imageInInfoBox'/>
             </Row>
             <div> 
             
-             <Row className='alignContentLeft'><b>Address:</b> {property.address.line}, {property.address.county}, NY  
-              {property.address.postal_code}</Row> 
+             <Row className='alignContentLeft'><b>Address:</b> {address}, {county}, NY,   
+              {zip}</Row> 
               <Row className='alignContentLeft'><b>Monthly: </b>$ {price}</Row>
-            {/* <Row> <b>Contact:</b> {property.broker.name}</Row>
-            <Row>{formatTelNum(property.broker.phone1.number)}</Row> */}
             <Row className='marginTop'>
               <Col>
                 <Link to={`/properties/${property.property_id}`}>
@@ -62,7 +45,6 @@ class SinglePropertyBox extends Component {
                   </Button>
                 </Link>
               </Col>
-              {/* <Col></Col> */}
               <Col>
                 <Button className='buttonSizer' variant="outline-info" size="sm">
                 Add To Favs
@@ -73,26 +55,18 @@ class SinglePropertyBox extends Component {
           </div>
         </Container>
         : 
-        <div className='centerSelf'> loading property details...</div>
+        <div className='centerSelf marginTopMed'> loading property details...</div>
         }
       </div>
     );
   }
 }
   
-
 const mapState = state => {
   return {
     singleProperty: state.singleProperty
   }
 }
 
-// const mapDispatch = dispatch => ({
-//   //getSingleProperty: id => dispatch(fetchProperty(id))
-// })
-
 export default connect(mapState)(SinglePropertyBox)
-
-
-// FOR investigating the API https://rapidapi.com/apidojo/api/realtor/endpoints
 

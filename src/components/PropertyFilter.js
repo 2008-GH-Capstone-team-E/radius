@@ -53,7 +53,7 @@ class PropertyFilter extends Component{
                         </Col>
                         <Col>
                             <Button
-                                variant="primary"
+                                variant="outline-info"
                                 type="submit"
                             >
                             get properties

@@ -75,7 +75,8 @@ code {
 .headerText {
   padding-left: 1em;
 }
-
+ 
+/* Property Info Box */
 .propertyinfoBoxContainer {
   display: flex;
   height: 200px;
@@ -107,14 +108,16 @@ code {
   align-self: center;
   object-fit: cover;
 }
+/* ^^^ Property Info Box ^^^  */
 
+/* Property Page */
 .imageInCarouselContainer{
   width: 400px;
   height: 400px;
   object-fit: cover;
   margin: 1em;
 }
-
+/* ^^Property Page ^^ */
 
 /* Signup / Login design */
 .container{
@@ -144,6 +147,11 @@ code {
   .marginTop {
     margin-top: 1.5em;
   }
+
+  .marginTopMed {
+    margin-top: 4em;
+  }  
+
   .marginBottomMed {
     margin-bottom: 3em;
   }
@@ -152,11 +160,12 @@ code {
     align-self: center;
     justify-self: center;
   }
+
   .propertyPageContainer {
     align-content: 'start';
     justify-content: 'center';
     margin-left: 3em;
-    }
+  }
   
   .container .alignContentLeft {
     justify-content: flex-start;
@@ -166,6 +175,7 @@ code {
     justify-content: flex-start;
   }
   
+  /* For Property Page when Loading */
   .holdPageOpen {
    height: 40em;
   }

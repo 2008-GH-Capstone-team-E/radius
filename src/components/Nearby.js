@@ -374,9 +374,7 @@ class Nearby extends Component {
           schoolMarkers:[]
         })
       }
-
-
-
+      
       if(this.state.subwayMarkers.length){
         this.state.subwayMarkers.forEach(marker=>marker.setMap(null));
         this.setState({
@@ -395,8 +393,8 @@ class Nearby extends Component {
         <h2>${property.address.line}</h2>
         <img src=${property.photos[0].href} alt="property image" />
       `;
-      infowindow.setContent(content);
-      infowindow.open(map, marker);
+      // infowindow.setContent(content);
+      // infowindow.open(map, marker);
 
       const subwayRequest = {
         type: ['subway_station'],
@@ -420,13 +418,10 @@ class Nearby extends Component {
   }
 
   render() {
-
-
   const properties = this.props.propertiesInReact
     return (
       <div>
         <PropertyFilter />
-
         <div>
           {this.state.selectedProperty ? <form>
             <label>Schools:
@@ -455,7 +450,6 @@ class Nearby extends Component {
 
           </form> : ""}
         </div>
-
         <div>
 
           <Container fluid>
@@ -470,6 +464,7 @@ class Nearby extends Component {
               <Col>
               <div>
                 {this.state.property_Id && <SinglePropertyBox/>}
+
               </div>
               </Col>
 
