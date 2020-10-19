@@ -34,14 +34,13 @@ export const fetchProperties = (minBeds=1,maxPrice=2500) => async dispatch => {
       },
       headers: {
         'x-rapidapi-host': 'realtor.p.rapidapi.com',
-        'x-rapidapi-key': '08d93ff541msh186c9b0de8a3b42p151a2ajsne2048fe7c6d9'
-        // 'x-rapidapi-key': process.env.REACT_APP_REALTOR_API_KEY
+        'x-rapidapi-key': process.env.REACT_APP_REALTOR_API_KEY
       }
     };
 
 
     const properties = await axios.request(options)
-    console.log("properties",properties.data.properties)
+    // console.log("properties",properties.data.properties)
     dispatch(getProperties(properties.data.properties))
   } catch (err) {
     console.log(err)
