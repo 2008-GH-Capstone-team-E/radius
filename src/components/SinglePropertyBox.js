@@ -71,8 +71,6 @@ class SinglePropertyBox extends Component {
                 </Button>
              </Col>
             </Row>
-
-          </div>
         </Container>
         : 
         <div className='centerSelf marginTopMed'> loading property details...</div>
