@@ -2,9 +2,12 @@ import React, { Component } from "react";
 import { connect } from 'react-redux'
 import { Link } from "react-router-dom";
 import { Button, Container, Row, Col } from "react-bootstrap";
+
 import firebase, { auth, db } from "./firebase";
 
 var get = require('lodash.get');
+
+//const altPropertyImage = "https://github.com/2008-GH-Capstone-team-E/radius/blob/main/public/Property_Image_PlaceHolder.png?raw=true"
 
 class SinglePropertyBox extends Component {
   constructor(props) {
@@ -16,7 +19,6 @@ class SinglePropertyBox extends Component {
     this.addToFavs = this.addToFavs.bind(this)
   }
   componentDidMount() {}
-
 
   handleOnClick(property_id) {
     const currentUser = auth().currentUser;
@@ -35,10 +37,13 @@ class SinglePropertyBox extends Component {
     }
   }
 
-
   render() {
     let property = this.props.singleProperty || {}
-    let price = get(property, 'price', 2050)
+    const price = get(property, 'price', 'unavailable')
+    const address = get(property, 'address.line', 'unavailable')
+    const county = get(property, 'address.county', 'unavailable')
+    const zip = get(property, 'address.postal_code', 'unavailable')
+
     return (
       <div>
         { Object.keys(property).length ?
@@ -46,12 +51,10 @@ class SinglePropertyBox extends Component {
           <Row><h4>The Basics</h4></Row>
 
             <Row className='imageContainerPropertyInfoBox'>
-              <img src={property.photos[0].href} alt="property pic" className='imageInInfoBox'/>
-            </Row>
-            <div>
-
-             <Row className='alignContentLeft'><b>Address:</b> {property.address.line}, {property.address.county}, NY
-              {property.address.postal_code}</Row>
+              <img src={property.photos[0].href} alt="property photo" className='imageInInfoBox'/>
+            </Row>     
+             <Row className='alignContentLeft'><b>Address:</b> {address}, {county}, NY,   
+              {zip}</Row> 
               <Row className='alignContentLeft'><b>Monthly: </b>$ {price}</Row>
             <Row className='marginTop'>
               <Col>
@@ -71,14 +74,13 @@ class SinglePropertyBox extends Component {
 
           </div>
         </Container>
-        :
-        <div className='centerSelf'> loading property details...</div>
+        : 
+        <div className='centerSelf marginTopMed'> loading property details...</div>
         }
       </div>
     );
   }
 }
-
 
 const mapState = state => {
   return {
@@ -86,12 +88,5 @@ const mapState = state => {
   }
 }
 
-// const mapDispatch = dispatch => ({
-//   //getSingleProperty: id => dispatch(fetchProperty(id))
-// })
-
 export default connect(mapState)(SinglePropertyBox)
-
-
-// FOR investigating the API https://rapidapi.com/apidojo/api/realtor/endpoints
 

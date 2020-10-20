@@ -40,7 +40,7 @@ export const fetchProperties = (minBeds=1,maxPrice=2500) => async dispatch => {
 
 
     const properties = await axios.request(options)
-    console.log("properties",properties.data.properties)
+    // console.log("properties",properties.data.properties)
     dispatch(getProperties(properties.data.properties))
   } catch (err) {
     console.log(err)
