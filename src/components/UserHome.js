@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import firebase, { auth, db } from "./firebase";
+import { Link } from "react-router-dom";
+import { Button, Row, Col, Container } from "react-bootstrap";
 import axios from 'axios'
 
 class UserFavorites extends Component {
@@ -8,6 +10,8 @@ class UserFavorites extends Component {
     this.state = {
       moreInfoOnProperties: []
     };
+    this.handleRemove = this.handleRemove.bind(this)
+    this.removeFromFavs = this.removeFromFavs.bind(this)
   }
 
   componentDidMount() {
@@ -36,27 +40,73 @@ class UserFavorites extends Component {
           moreInfoOnProperties: newArray
         })
     });
-
     } catch (error) {
       console.log(error);
     }
   }
 
+  handleRemove(property_id) {
+    const currentUser = auth().currentUser;
+    const uid = currentUser.uid
+    this.removeFromFavs(uid, property_id);
+  }
 
+  async removeFromFavs(uid, property_id) {
+    try {
+      const removedFromFavs = await db.collection("favorites").doc(uid);
+      removedFromFavs.update({
+        propertyIds: firebase.firestore.FieldValue.arrayRemove(property_id)
+      });
+      const newArray = this.state.moreInfoOnProperties.filter(elem => elem.property_id !== property_id)
+      this.setState({
+        moreInfoOnProperties: newArray
+      })
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   render() {
     const properties = this.state.moreInfoOnProperties
-    console.log("this.state.moreInfoOnProperties", this.state.moreInfoOnProperties)
     return(
       <div>
-          {properties.map(property => {
-              return (
-                <div key={property.property_id}>
-                    <h1>{property.address.city}</h1>
-                 </div>
-                )}
-              )
-        }
+         {properties.length
+         ?  properties.map(property => {
+          return (
+             <Container key={property.property_id}>
+               <Row className='imageContainerPropertyInfoBox'>
+                 <img src={property.photos[0].href}
+                 alt="property photo"
+                 className='imageInInfoBox'
+                 style={{width: 250, height: 300}}
+                 />
+               </Row>
+               <Row className='alignContentLeft'><b>Address:</b> {property.address.line}, {property.address.county}, NY,
+               {property.address.postal_code}
+              </Row>
+                 <Row className='alignContentLeft'><b>Monthly: </b>$ {property.community.price_max}</Row>
+               <Row className='marginTop'>
+                 <Col>
+                   <Link to={`/properties/${property.property_id}`}>
+                     <Button className='buttonSizer' variant="outline-info" size="sm">
+                     See More Info
+                     </Button>
+                   </Link>
+                 </Col>
+                 <Col>
+                <Button className='buttonSizer' variant="outline-info" size="sm"
+                onClick={() => {this.handleRemove(property.property_id)}}>
+                Remove From Favs
+                </Button>
+             </Col>
+               </Row>
+           </Container>
+            )}
+          )
+         : <div className="holdPageOpen marginTopMed">
+           Getting your favorite properties ...
+           </div>
+         }
       </div>
     )
   }

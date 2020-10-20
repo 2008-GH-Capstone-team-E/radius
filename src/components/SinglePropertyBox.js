@@ -52,9 +52,9 @@ class SinglePropertyBox extends Component {
 
             <Row className='imageContainerPropertyInfoBox'>
               <img src={property.photos[0].href} alt="property photo" className='imageInInfoBox'/>
-            </Row>     
-             <Row className='alignContentLeft'><b>Address:</b> {address}, {county}, NY,   
-              {zip}</Row> 
+            </Row>
+             <Row className='alignContentLeft'><b>Address:</b> {address}, {county}, NY,
+              {zip}</Row>
               <Row className='alignContentLeft'><b>Monthly: </b>$ {price}</Row>
             <Row className='marginTop'>
               <Col>
@@ -72,7 +72,7 @@ class SinglePropertyBox extends Component {
              </Col>
             </Row>
         </Container>
-        : 
+        :
         <div className='centerSelf marginTopMed'> loading property details...</div>
         }
       </div>
