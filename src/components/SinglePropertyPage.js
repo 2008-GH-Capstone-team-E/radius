@@ -47,23 +47,24 @@ class SinglePropertyPage extends Component {
       <div>
         { Object.keys(property).length ? 
         <Container fluid className='propertyPageContainer marginTop'>
-          <Row><h4>Property Details</h4></Row>
-            <Row>
-              <Carousel>
-                {property.photos.map((photo, i) => {
-                  return (
-                  <Carousel.Item key={`photo${i}`} >
-                    <div className='imageInCarouselContainer'>
-                      <img
-                        className="d-block w-100 carouselImage"
-                        src={photo.href}
-                        alt='property photo'
-                      />
-                    </div>
-                  </Carousel.Item> )
-                })}
-              </Carousel>
-            </Row>
+          <Col>
+            <Row><h4>Property Details</h4></Row>
+              <Row>
+                <Carousel>
+                  {property.photos.map((photo, i) => {
+                    return (
+                    <Carousel.Item key={`photo${i}`} >
+                      <div className='imageInCarouselContainer'>
+                        <img
+                          className="d-block w-100 carouselImage"
+                          src={photo.href}
+                          alt='property photo'
+                        />
+                      </div>
+                    </Carousel.Item> )
+                  })}
+                </Carousel>
+              </Row>
               <Row className='alignContentLeft'>
                 <Col md={5}>
                   
@@ -90,10 +91,10 @@ class SinglePropertyPage extends Component {
                 </Link>
                 </Col>    
               </Row>            
-            
+          </Col> 
         </Container>
         : 
-        <div className='holdPageOpen marginTopMed'> loading property details...</div>
+        <Row className='holdPageOpen marginTopMed propertyPageContainer'> loading property details...</Row>
         }
       </div>
     );

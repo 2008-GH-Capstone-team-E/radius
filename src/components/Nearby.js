@@ -422,60 +422,70 @@ class Nearby extends Component {
     return (
       <div>
         <PropertyFilter />
-        <div>
-          {this.state.selectedProperty ? <form>
-            <label>Schools:
-              <input type='checkbox'
-                     checked={this.state.schoolCheckbox}
-                     name='schoolCheckbox'
-                     value={this.state.schoolCheckbox}
-                     onChange={this.onChange} />
-            </label>
-            {" "}
-            <label>Restaurants:
-              <input type='checkbox'
-                     checked={this.state.restaurantCheckbox}
-                     name='restaurantCheckbox'
-                     value={this.state.restaurantCheckbox}
-                     onChange={this.onChange} />
-            </label>
-            {" "}
-            <label>Supermarket:
-              <input type='checkbox'
-                     checked={this.state.supermarketCheckbox}
-                     name='supermarketCheckbox'
-                     value={this.state.supermarketCheckbox}
-                     onChange={this.onChange} />
-            </label>
-            {" "}
-            <label>Park:
-              <input type='checkbox'
-                     checked={this.state.parkCheckbox}
-                     name='parkCheckbox'
-                     value={this.state.parkCheckbox}
-                     onChange={this.onChange} />
-            </label>
-            {" "}
-            <label>Gas Station:
-              <input type='checkbox'
-                     checked={this.state.gasStationCheckbox}
-                     name='gasStationCheckbox'
-                     value={this.state.gasStationCheckbox}
-                     onChange={this.onChange} />
-            </label>
-            {" "}
-            <label>Gym:
-              <input type='checkbox'
-                     checked={this.state.gymCheckbox}
-                     name='gymCheckbox'
-                     value={this.state.gymCheckbox}
-                     onChange={this.onChange} />
-            </label>
-
-          </form> : ""}
-        </div>
-        <div>
-          <Container fluid>
+        
+        <Container fluid>
+          {this.state.selectedProperty ? 
+          <form>
+            <Row>
+              <Col> 
+              <label>Schools:&nbsp;
+                <input type='checkbox'
+                      checked={this.state.schoolCheckbox}
+                      name='schoolCheckbox'
+                      value={this.state.schoolCheckbox}
+                      onChange={this.onChange} />
+              </label>
+              </Col>
+              <Col>
+                <label>Restaurants:&nbsp;
+                  <input type='checkbox'
+                        checked={this.state.restaurantCheckbox}
+                        name='restaurantCheckbox'
+                        value={this.state.restaurantCheckbox}
+                        onChange={this.onChange} />
+                </label>
+              </Col>
+              <Col>
+                <label>Supermarket:&nbsp;
+                  <input type='checkbox'
+                        checked={this.state.supermarketCheckbox}
+                        name='supermarketCheckbox'
+                        value={this.state.supermarketCheckbox}
+                        onChange={this.onChange} />
+                </label>
+              </Col>
+              <Col>
+                <label>Park:&nbsp;
+                  <input type='checkbox'
+                        checked={this.state.parkCheckbox}
+                        name='parkCheckbox'
+                        value={this.state.parkCheckbox}
+                        onChange={this.onChange} />
+                </label>
+              </Col>
+              <Col>
+                <label>Gas Station:&nbsp;
+                  <input type='checkbox'
+                        checked={this.state.gasStationCheckbox}
+                        name='gasStationCheckbox'
+                        value={this.state.gasStationCheckbox}
+                        onChange={this.onChange} />
+                </label>
+              </Col>
+              <Col>
+                <label>Gym:&nbsp;
+                  <input type='checkbox'
+                        checked={this.state.gymCheckbox}
+                        name='gymCheckbox'
+                        value={this.state.gymCheckbox}
+                        onChange={this.onChange} />
+                </label>
+              </Col>
+              <Col></Col>
+              <Col></Col>
+            </Row>
+          </form> 
+          : ""}
             <Row className='mapContainer'>
               <Col md={8}>
                 <div
@@ -491,9 +501,7 @@ class Nearby extends Component {
               </Col>
 
             </Row>
-          </Container>
-
-        </div>
+        </Container>
       </div>
     );
   }

@@ -38,6 +38,7 @@ class SinglePropertyBox extends Component {
   }
 
   render() {
+    console.log('This is auth() in InfoBox:' , auth())
     let property = this.props.singleProperty || {}
     const price = get(property, 'price', 'unavailable')
     const address = get(property, 'address.line', 'unavailable')
@@ -56,21 +57,34 @@ class SinglePropertyBox extends Component {
              <Row className='alignContentLeft'><b>Address:</b> {address}, {county}, NY,   
               {zip}</Row> 
               <Row className='alignContentLeft'><b>Monthly: </b>$ {price}</Row>
-            <Row className='marginTop'>
-              <Col>
-                <Link to={`/properties/${property.property_id}`}>
-                  <Button className='buttonSizer' variant="outline-info" size="sm">
-                  See All Info
-                  </Button>
-                </Link>
-              </Col>
-              <Col>
-                <Button className='buttonSizer' variant="outline-info" size="sm"
-                onClick={() => {this.handleOnClick(property.property_id)}}>
-                Add To Favs
-                </Button>
-             </Col>
-            </Row>
+              {auth().currentUser ?  
+                <Row className='marginTop'>
+                  <Col>
+                    <Link to={`/properties/${property.property_id}`}>
+                      <Button className='buttonSizer' variant="outline-info" size="sm">
+                      See All Info
+                      </Button>
+                    </Link>
+                  </Col>
+                  <Col>
+                  
+                    <Button className='buttonSizer' variant="outline-info" size="sm"
+                    onClick={() => {this.handleOnClick(property.property_id)}}>
+                    Add To Favs
+                    </Button>
+                </Col>
+              </Row> 
+              :
+              <Row className='marginTop'>
+                <Col>
+                  <Link to={`/properties/${property.property_id}`}>
+                    <Button className='buttonSizer' variant="outline-info" size="sm">
+                    See All Info
+                    </Button>
+                  </Link>
+                </Col>
+              </Row>
+              }
         </Container>
         : 
         <div className='centerSelf marginTopMed'> loading property details...</div>

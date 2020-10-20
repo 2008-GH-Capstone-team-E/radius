@@ -164,12 +164,13 @@ code {
   .propertyPageContainer {
     align-content: 'start';
     justify-content: 'center';
-    margin-left: 3em;
+    margin-left: 5em;
   }
   
   .container .alignContentLeft {
     justify-content: flex-start;
   }
+  
   
   .row .alignContentLeft {
     justify-content: flex-start;

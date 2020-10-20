@@ -27,6 +27,7 @@ class Login extends Component {
     e.preventDefault();
     try {
       await this.signIn(this.state.email, this.state.password);
+
       this.props.history.push("/");
     } catch (err) {
       console.log(err.message);
@@ -77,7 +78,7 @@ class Login extends Component {
             </Form.Group>
 
             <Button
-              variant="primary"
+              variant="info"
               type="submit"
               disabled={!this.state.email || !this.state.password}
             >
