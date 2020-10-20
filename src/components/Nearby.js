@@ -10,6 +10,7 @@ import schoolPic from "../css/school.png";
 import groceryPic from "../css/groceries.png"
 import restaurantPic from "../css/restaurantLogo.png"
 import { Button, Container, Row, Col } from "react-bootstrap";
+import axios from "axios"
 
 import PropertyFilter from "./PropertyFilter"
 
@@ -36,7 +37,8 @@ class Nearby extends Component {
         subwayMarkers: [],
         restaurantCheckbox: false,
         schoolCheckbox: false,
-        supermarketCheckbox: false
+        supermarketCheckbox: false,
+        travelTime:null
     }
     this.createMarker = this.createMarker.bind(this);
     this.onChange = this.onChange.bind(this);
@@ -97,17 +99,60 @@ class Nearby extends Component {
         restaurantMarkers:[...this.state.restaurantMarkers,marker]
       })
 
-      marker.addListener('click',function(){
-        let pic = restaurant.photos[0].getUrl({"maxWidth": 400, "maxHeight": 256})
-        let content = `
-        <h3>Restaurant</h3>
-        <h4>${restaurant.name}</h4>
-        <img src="${pic}" alt="restaurant image" />
-        <h5>Address: ${restaurant.vicinity}</h5>
-        <h6>Rating: ${restaurant.rating}/5 from ${restaurant.user_ratings_total} customers</h6>
-      `;
-      infowindow.setContent(content);
-      infowindow.open(map, marker);
+      marker.addListener('click',()=>{
+
+        const selectedProperty = this.state.selectedProperty
+        // console.log("property lat,lon?",property)
+        let origin = new window.google.maps.LatLng(selectedProperty.address.lat,selectedProperty.address.lon)
+        // console.log("subway lat lon?",station)
+        let destination = new window.google.maps.LatLng(restaurant.geometry.viewport.Ya.i,restaurant.geometry.viewport.Sa.i)
+        
+        service = new window.google.maps.DistanceMatrixService()
+        service.getDistanceMatrix({
+          origins:[origin],
+          destinations:[destination],
+          travelMode:'WALKING'
+        },(response,status)=>{
+          if(status==="OK"){
+            let origins = response.originAddresses;
+            let destinations = response.destinationAddresses;
+
+            for (let i = 0; i < origins.length; i++) {
+              let results = response.rows[i].elements;
+              for (let j = 0; j < results.length; j++) {
+                let element = results[j];
+                console.log("distance",element.distance.text) ;
+                let distance=element.distance.text
+                console.log("duration",element.duration.text) ;
+                let travelTime=element.duration.text
+                console.log("from",origins[i]);
+                console.log("to",destinations[j]);
+
+
+                let pic = restaurant.photos[0].getUrl({"maxWidth": 400, "maxHeight": 256})
+                let content = `
+                <h3>Restaurant</h3>
+                <h4>${restaurant.name}</h4>
+                <img src="${pic}" alt="restaurant image" />
+                <h5>Address: ${restaurant.vicinity}</h5>
+                <h6>Rating: ${restaurant.rating}/5 from ${restaurant.user_ratings_total} customers</h6>
+                <h6>Distance from selected property: ${distance}</h6>
+                <h6>Walking time from selected property: ${travelTime}</h6>
+
+              `;
+              infowindow.setContent(content);
+              infowindow.open(map, marker);
+              }
+            }
+          }else{
+            console.log("status:",status)
+          }
+        })
+
+
+
+
+       
       })
     }
 
@@ -154,17 +199,55 @@ class Nearby extends Component {
         supermarketMarkers:[...this.state.supermarketMarkers,marker]
       })
 
-      marker.addListener('click',function(){
-        let pic = supermarket.photos[0].getUrl({"maxWidth": 400, "maxHeight": 256})
-        let content = `
-        <h3>Supermarket</h3>
-        <h4>${supermarket.name}</h4>
-        <img src="${pic}" alt="supermarket image" />
-        <h5>Address: ${supermarket.vicinity}</h5>
-        <h6>Rating: ${supermarket.rating}/5 from ${supermarket.user_ratings_total} customers</h6>
-      `;
-      infowindow.setContent(content);
-      infowindow.open(map, marker);
+      marker.addListener('click',()=>{
+
+
+        const selectedProperty = this.state.selectedProperty
+        // console.log("property lat,lon?",property)
+        let origin = new window.google.maps.LatLng(selectedProperty.address.lat,selectedProperty.address.lon)
+        // console.log("subway lat lon?",station)
+        let destination = new window.google.maps.LatLng(supermarket.geometry.viewport.Ya.i,supermarket.geometry.viewport.Sa.i)
+        
+        service = new window.google.maps.DistanceMatrixService()
+        service.getDistanceMatrix({
+          origins:[origin],
+          destinations:[destination],
+          travelMode:'WALKING'
+        },(response,status)=>{
+          if(status==="OK"){
+            let origins = response.originAddresses;
+            let destinations = response.destinationAddresses;
+
+            for (let i = 0; i < origins.length; i++) {
+              let results = response.rows[i].elements;
+              for (let j = 0; j < results.length; j++) {
+                let element = results[j];
+                console.log("distance",element.distance.text) ;
+                let distance=element.distance.text
+                console.log("duration",element.duration.text) ;
+                let travelTime=element.duration.text
+                console.log("from",origins[i]);
+                console.log("to",destinations[j]);
+
+
+                let pic = supermarket.photos[0].getUrl({"maxWidth": 400, "maxHeight": 256})
+                let content = `
+                  <h3>Supermarket</h3>
+                  <h4>${supermarket.name}</h4>
+                  <img src="${pic}" alt="supermarket image" />
+                  <h5>Address: ${supermarket.vicinity}</h5>
+                  <h6>Rating: ${supermarket.rating}/5 from ${supermarket.user_ratings_total} customers</h6>
+                  <h6>Distance from selected property: ${distance}</h6>
+                  <h6>Walking time from selected property: ${travelTime}</h6>
+                `;
+                infowindow.setContent(content);
+                infowindow.open(map, marker);
+              }
+            }
+          }else{
+            console.log("status:",status)
+          }
+        })
       })
     }
 
@@ -260,17 +343,60 @@ class Nearby extends Component {
         schoolMarkers:[...this.state.schoolMarkers,marker]
       })
 
-      marker.addListener('click',function(){
-        let pic = school.photos[0].getUrl({"maxWidth": 400, "maxHeight": 256})
-        let content = `
-        <h3>School</h3>
-        <h4>${school.name}</h4>
-        <img src="${pic}" alt="sschool image" />
-        <h5>Address: ${school.vicinity}</h5>
-        <h6>Rating: ${school.rating}/5 from ${school.user_ratings_total} customers</h6>
-      `;
-      infowindow.setContent(content);
-      infowindow.open(map, marker);
+      marker.addListener('click',()=>{
+        // console.log(school)
+        const selectedProperty = this.state.selectedProperty
+        // console.log("property lat,lon?",property)
+        let origin = new window.google.maps.LatLng(selectedProperty.address.lat,selectedProperty.address.lon)
+        // console.log("subway lat lon?",station)
+        let destination = new window.google.maps.LatLng(school.geometry.viewport.Ya.i,school.geometry.viewport.Sa.i)
+        
+        service = new window.google.maps.DistanceMatrixService()
+        service.getDistanceMatrix({
+          origins:[origin],
+          destinations:[destination],
+          travelMode:'WALKING'
+        },(response,status)=>{
+          if(status==="OK"){
+            let origins = response.originAddresses;
+            let destinations = response.destinationAddresses;
+
+            for (let i = 0; i < origins.length; i++) {
+              let results = response.rows[i].elements;
+              for (let j = 0; j < results.length; j++) {
+                let element = results[j];
+                console.log("distance",element.distance.text) ;
+                let distance=element.distance.text
+                console.log("duration",element.duration.text) ;
+                let travelTime=element.duration.text
+                console.log("from",origins[i]);
+                console.log("to",destinations[j]);
+
+
+                // let pic = school.photos[0].getUrl({"maxWidth": 400, "maxHeight": 256})
+                let content = `
+                  <h3>School</h3>
+                  <h4>${school.name}</h4>
+                  
+                  <h6>Address: ${school.vicinity}</h6>
+                  <h6>Rating: ${school.rating}/5 from ${school.user_ratings_total} customers</h6>
+                  <h6>Distance from selected property: ${distance}</h6>
+                  <h6>Walking time from selected property: ${travelTime}</h6>
+                `;
+                infowindow.setContent(content);
+                infowindow.open(map, marker);
+              }
+            }
+          }else{
+            console.log("status:",status)
+          }
+        })
+
+
+
+
+
+        
       })
     }
 
@@ -303,6 +429,7 @@ class Nearby extends Component {
 
 
   createMarker = (property) => {
+    // console.log(property)
     var marker = new window.google.maps.Marker({
         map: map,
         title: property.address.line,
@@ -314,6 +441,7 @@ class Nearby extends Component {
 
 
     const createSubwayMarker = (station) => {
+      
         var marker = new window.google.maps.Marker({
           map: map,
           icon:{
@@ -330,15 +458,57 @@ class Nearby extends Component {
         subwayMarkers:[...this.state.subwayMarkers,marker]
       })
 
-      marker.addListener('click',function(){
-        let pic = station.photos[0].getUrl({"maxWidth": 400, "maxHeight": 256})
-        let content = `
-        <h1>Subway</h1>
-        <h2>${station.name}</h2>
-        <img src="${pic}" alt="subway image" />
-      `;
-      infowindow.setContent(content);
-      infowindow.open(map, marker);
+      //this is subway marker
+      marker.addListener('click',async function(){
+          
+        
+          // console.log("property lat,lon?",property)
+          let origin = new window.google.maps.LatLng(property.address.lat,property.address.lon)
+          // console.log("subway lat lon?",station)
+          let destination = new window.google.maps.LatLng(station.geometry.viewport.Ya.i,station.geometry.viewport.Sa.i)
+          
+          service = new window.google.maps.DistanceMatrixService()
+          service.getDistanceMatrix({
+            origins:[origin],
+            destinations:[destination],
+            travelMode:'WALKING'
+          },(response,status)=>{
+            if(status==="OK"){
+              let origins = response.originAddresses;
+              let destinations = response.destinationAddresses;
+
+              for (let i = 0; i < origins.length; i++) {
+                let results = response.rows[i].elements;
+                for (let j = 0; j < results.length; j++) {
+                  let element = results[j];
+                  // console.log("distance",element.distance.text) ;
+                  let distance=element.distance.text
+                  // console.log("duration",element.duration.text) ;
+                  let travelTime=element.duration.text
+                  // console.log("from",origins[i]);
+                  // console.log("to",destinations[j]);
+
+
+                  let pic = station.photos[0].getUrl({"maxWidth": 300, "maxHeight": 192})
+                  let content = `
+                    <h3>Subway</h3>
+                    <h4>${station.name}</h4>
+                    <img src="${pic}" alt="subway image" />
+                    <h5>Distance from selected property: ${distance}</h5>
+                    <h5>Walking time from selected property: ${travelTime}</h5>
+                   `;
+                  infowindow.setContent(content);
+                  infowindow.open(map, marker);
+                }
+              }
+            }else{
+              console.log("status:",status)
+            }
+          })
+
+
+
+        
       })
     }
 
@@ -389,10 +559,10 @@ class Nearby extends Component {
         lng:property.address.lon
       });
 
-      let content = `
-        <h2>${property.address.line}</h2>
-        <img src=${property.photos[0].href} alt="property image" />
-      `;
+      // let content = `
+      //   <h2>${property.address.line}</h2>
+      //   <img src=${property.photos[0].href} alt="property image" />
+      // `;
       // infowindow.setContent(content);
       // infowindow.open(map, marker);
 
@@ -408,13 +578,15 @@ class Nearby extends Component {
         if (status === window.google.maps.places.PlacesServiceStatus.OK) {
           for (let i = 0; i < results.length; i++) {
             createSubwayMarker(results[i])
-
           }
         }
       });
 
-    })
+      
 
+
+
+    })
   }
 
   render() {

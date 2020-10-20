@@ -25,7 +25,7 @@ export const fetchProperties = (minBeds=1,maxPrice=2500) => async dispatch => {
       params: {
         city: 'New York City',
         state_code: 'NY',
-        limit: '50',
+        limit: '20',
         offset: '0',
         beds_min: `${minBeds}`,
         price_max: `${maxPrice}`,
