@@ -46,9 +46,10 @@ class Nearby extends Component {
 
   async componentDidMount() {
     await this.renderMap();
+    await this.props.getAllPropertiesInReact();
   }
 
-  
+
 
   renderMap = () => {
     loadScript(`https://maps.googleapis.com/maps/api/js?key=${API_KEY}&libraries=places&callback=initMap`);
@@ -274,9 +275,9 @@ class Nearby extends Component {
     //   this.setState({
 
     //     property_Id:property.property_id,
-        
+
     //     //property_Id or property_id?
-        
+
     //   })
 
     // }
@@ -405,11 +406,6 @@ class Nearby extends Component {
             </label>
 
           </form> : ""}
-        </div>
-        <div
-          id="map"
-          style={{width: "80%", height: "80vh"}} >
-          {properties&&properties.length>0&&properties.map(property=>this.createMarker(property))}
         </div>
         <Container fluid>
           <Row className='mapContainer'>

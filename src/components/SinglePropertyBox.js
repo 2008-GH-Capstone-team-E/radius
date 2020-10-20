@@ -1,59 +1,58 @@
-
 import React, { Component } from "react";
 import { connect } from 'react-redux'
 import { Link } from "react-router-dom";
-
 import { Button, Container, Row, Col } from "react-bootstrap";
-
-
+import firebase, { auth, db } from "./firebase";
 
 var get = require('lodash.get');
-
-// const formatTelNum = (num) => {
-//   return `(${num.slice(0,3)}) ${num.slice(3,6)} - ${num.slice(6)}`
-// }
 
 class SinglePropertyBox extends Component {
   constructor(props) {
     super(props);
     this.state = {
-
     };
+
+    this.handleOnClick = this.handleOnClick.bind(this)
+    this.addToFavs = this.addToFavs.bind(this)
   }
+  componentDidMount() {}
 
 
-  componentDidMount() {
-    // let id = 'O3599084026'
-    //console.log("FIRED @ SinglePropBox CompDidMount, this.props.property_id: ", this.props.property_id)
-    //await this.props.getSingleProperty(this.props.property_id)
+  handleOnClick(property_id) {
+    const currentUser = auth().currentUser;
+    const uid = currentUser.uid
+    this.addToFavs(uid, property_id);
   }
+
+  async addToFavs(uid, property_id) {
+    try {
+      const addedToFavs = await db.collection("favorites").doc(uid);
+      addedToFavs.update({
+        propertyIds: firebase.firestore.FieldValue.arrayUnion(property_id)
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
 
   render() {
     let property = this.props.singleProperty || {}
     let price = get(property, 'price', 2050)
-      //  if (price.toString().length === 5) {
-      //   price = Math.floor(price/12)
-      // }
-      // if (price.toString().length === 5 || 7 ) {
-      //   price = Math.floor(price/100)
-      // }
-     console.log(`raw price|${property.price}|`)
     return (
       <div>
-        { Object.keys(property).length ? 
+        { Object.keys(property).length ?
         <Container>
           <Row><h4>The Basics</h4></Row>
-          
+
             <Row className='imageContainerPropertyInfoBox'>
               <img src={property.photos[0].href} alt="property pic" className='imageInInfoBox'/>
             </Row>
-            <div> 
-            
-             <Row className='alignContentLeft'><b>Address:</b> {property.address.line}, {property.address.county}, NY  
-              {property.address.postal_code}</Row> 
+            <div>
+
+             <Row className='alignContentLeft'><b>Address:</b> {property.address.line}, {property.address.county}, NY
+              {property.address.postal_code}</Row>
               <Row className='alignContentLeft'><b>Monthly: </b>$ {price}</Row>
-            {/* <Row> <b>Contact:</b> {property.broker.name}</Row>
-            <Row>{formatTelNum(property.broker.phone1.number)}</Row> */}
             <Row className='marginTop'>
               <Col>
                 <Link to={`/properties/${property.property_id}`}>
@@ -62,24 +61,24 @@ class SinglePropertyBox extends Component {
                   </Button>
                 </Link>
               </Col>
-              {/* <Col></Col> */}
               <Col>
-                <Button className='buttonSizer' variant="outline-info" size="sm">
+                <Button className='buttonSizer' variant="outline-info" size="sm"
+                onClick={() => {this.handleOnClick(property.property_id)}}>
                 Add To Favs
                 </Button>
              </Col>
             </Row>
-           
+
           </div>
         </Container>
-        : 
+        :
         <div className='centerSelf'> loading property details...</div>
         }
       </div>
     );
   }
 }
-  
+
 
 const mapState = state => {
   return {

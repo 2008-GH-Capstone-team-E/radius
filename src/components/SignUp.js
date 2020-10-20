@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Form, Button, Container } from "react-bootstrap";
-import { auth } from "./firebase";
+import { auth, db } from "./firebase";
 import "../css/style.css";
 
 
@@ -21,8 +21,13 @@ class Signup extends Component {
   async signUpWithGoogle() {
     try {
       const provider = await new auth.GoogleAuthProvider();
-      const result = await auth().signInWithPopup(provider);
-      return result;
+      await auth().signInWithPopup(provider);
+      const currentUser = await auth().currentUser
+      const userUid = await currentUser.uid
+      await db.collection('favorites').doc(userUid).set({
+        propertyIds: []
+      })
+      this.props.history.push("/");
     } catch (err) {
       console.log(err);
     }
@@ -53,9 +58,15 @@ class Signup extends Component {
         window.location.reload();
     }
   }
-  signUp(email, password) {
-    return auth().createUserWithEmailAndPassword(email, password);
+  async signUp(email, password) {
+    await auth().createUserWithEmailAndPassword(email, password);
+    const currentUser = await auth().currentUser
+    const userUid = await currentUser.uid
+    await db.collection('favorites').doc(userUid).set({
+      propertyIds: []
+    })
   }
+
   render() {
     return (
       <div>
