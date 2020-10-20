@@ -427,16 +427,16 @@ class Nearby extends Component {
           {this.state.selectedProperty ? 
           <form>
             <Row>
-              <Col> 
-              <label>Schools:&nbsp;
-                <input type='checkbox'
-                      checked={this.state.schoolCheckbox}
-                      name='schoolCheckbox'
-                      value={this.state.schoolCheckbox}
-                      onChange={this.onChange} />
-              </label>
-              </Col>
-              <Col>
+              <Col sm={7} > 
+              <Row className='spaceAround marginLeft'>
+                <label>Schools:&nbsp;
+                  <input type='checkbox'
+                        checked={this.state.schoolCheckbox}
+                        name='schoolCheckbox'
+                        value={this.state.schoolCheckbox}
+                        onChange={this.onChange} />
+                </label>
+              
                 <label>Restaurants:&nbsp;
                   <input type='checkbox'
                         checked={this.state.restaurantCheckbox}
@@ -444,8 +444,7 @@ class Nearby extends Component {
                         value={this.state.restaurantCheckbox}
                         onChange={this.onChange} />
                 </label>
-              </Col>
-              <Col>
+              
                 <label>Supermarket:&nbsp;
                   <input type='checkbox'
                         checked={this.state.supermarketCheckbox}
@@ -453,8 +452,7 @@ class Nearby extends Component {
                         value={this.state.supermarketCheckbox}
                         onChange={this.onChange} />
                 </label>
-              </Col>
-              <Col>
+                
                 <label>Park:&nbsp;
                   <input type='checkbox'
                         checked={this.state.parkCheckbox}
@@ -462,8 +460,7 @@ class Nearby extends Component {
                         value={this.state.parkCheckbox}
                         onChange={this.onChange} />
                 </label>
-              </Col>
-              <Col>
+                
                 <label>Gas Station:&nbsp;
                   <input type='checkbox'
                         checked={this.state.gasStationCheckbox}
@@ -471,8 +468,6 @@ class Nearby extends Component {
                         value={this.state.gasStationCheckbox}
                         onChange={this.onChange} />
                 </label>
-              </Col>
-              <Col>
                 <label>Gym:&nbsp;
                   <input type='checkbox'
                         checked={this.state.gymCheckbox}
@@ -480,9 +475,9 @@ class Nearby extends Component {
                         value={this.state.gymCheckbox}
                         onChange={this.onChange} />
                 </label>
+                </Row>
               </Col>
-              <Col></Col>
-              <Col></Col>
+              <Col sm={5}></Col>
             </Row>
           </form> 
           : ""}

@@ -72,10 +72,7 @@ code {
   float: right;
 }
 
-.headerText {
-  padding-left: 1em;
-}
- 
+
 /* Property Info Box */
 .propertyinfoBoxContainer {
   display: flex;
@@ -136,48 +133,61 @@ code {
 .mapContainer {
   align-content: 'start';
   justify-content: 'center'
-  }
+}
   
-  .buttonSizer {
-    width: 100px;
-    height: 40px;
-    font-size: small
-  }
-  
-  .marginTop {
-    margin-top: 1.5em;
-  }
+.buttonSizer {
+  width: 100px;
+  height: 40px;
+  font-size: small
+}
 
-  .marginTopMed {
-    margin-top: 4em;
-  }  
+.marginTop {
+  margin-top: 1.5em;
+}
 
-  .marginBottomMed {
-    margin-bottom: 3em;
-  }
-  
-  .centerSelf {
-    align-self: center;
-    justify-self: center;
-  }
+.marginTopMed {
+  margin-top: 4em;
+}  
 
-  .propertyPageContainer {
-    align-content: 'start';
-    justify-content: 'center';
-    margin-left: 5em;
-  }
-  
-  .container .alignContentLeft {
-    justify-content: flex-start;
-  }
-  
-  
-  .row .alignContentLeft {
-    justify-content: flex-start;
-  }
-  
-  /* For Property Page when Loading */
-  .holdPageOpen {
-   height: 40em;
-  }
-  
+.marginBottomMed {
+  margin-bottom: 3em;
+}
+
+.centerSelf {
+  align-self: center;
+  justify-self: center;
+}
+
+.propertyPageContainer {
+  align-content: 'start';
+  justify-content: 'center';
+  margin-left: 5em;
+}
+
+.container .alignContentLeft {
+  justify-content: flex-start;
+}
+
+
+.row .alignContentLeft {
+  justify-content: flex-start;
+}
+
+/* For Property & Favorities Page when Loading */
+.holdPageOpen {
+  height: 40em;
+}
+
+/* Checkboxes */
+.spaceAround {
+  justify-content: space-around;
+}
+
+.marginLeft {
+margin-left: 1em;
+} 
+
+
+.spaceBtwn {
+  justify-content: space-between;
+}
