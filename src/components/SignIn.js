@@ -41,8 +41,8 @@ class Login extends Component {
   async signInWithGoogle() {
     try {
       const provider = await new auth.GoogleAuthProvider();
-      const result = await auth().signInWithPopup(provider);
-      return result;
+      await auth().signInWithPopup(provider);
+      this.props.history.push("/");
     } catch (err) {
       console.log(err);
     }

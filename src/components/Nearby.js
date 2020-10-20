@@ -45,6 +45,7 @@ class Nearby extends Component {
 
   async componentDidMount() {
     await this.renderMap();
+    await this.props.getAllPropertiesInReact();
   }
 
 
@@ -342,6 +343,7 @@ class Nearby extends Component {
       })
     }
 
+
          //// ** property marker ** ////
     marker.addListener('click', ()=>{
       this.setState({
@@ -451,7 +453,6 @@ class Nearby extends Component {
           </form> : ""}
         </div>
         <div>
-
           <Container fluid>
             <Row className='mapContainer'>
               <Col md={8}>
@@ -464,7 +465,6 @@ class Nearby extends Component {
               <Col>
               <div>
                 {this.state.property_Id && <SinglePropertyBox/>}
-
               </div>
               </Col>
 
