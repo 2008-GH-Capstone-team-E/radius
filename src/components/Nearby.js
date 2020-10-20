@@ -7,8 +7,11 @@ import { fetchGooglePlaces } from '../store/allGooglePlaces';
 import { fetchProperty } from '../store/singleProperty'
 import subwayPic from "../css/subwayLogo.png"
 import schoolPic from "../css/school.png";
+import parkPic from "../css/park.png"
 import groceryPic from "../css/groceries.png"
 import restaurantPic from "../css/restaurantLogo.png"
+import gasStationPic from "../css/gas-station.png"
+import gymPic from "../css/weightlift.png"
 import { Button, Container, Row, Col } from "react-bootstrap";
 
 import PropertyFilter from "./PropertyFilter"
@@ -34,9 +37,15 @@ class Nearby extends Component {
         schoolMarkers:[],
         supermarketMarkers:[],
         subwayMarkers: [],
+        parkMarkers: [],
+        gasStationMarkers: [],
+        gymMarkers: [],
         restaurantCheckbox: false,
         schoolCheckbox: false,
-        supermarketCheckbox: false
+        supermarketCheckbox: false,
+        parkCheckbox: false,
+        gasStationCheckbox: false,
+        gymCheckbox: false
     }
     this.createMarker = this.createMarker.bind(this);
     this.onChange = this.onChange.bind(this);
@@ -80,38 +89,64 @@ class Nearby extends Component {
   onChange = (e) => {
     this.setState({[e.target.name] : e.target.checked});
 
-    const createRestaurantMarker = (restaurant) => {
+    const createPlaceMarker = (place, placePic) => {
       var marker = new window.google.maps.Marker({
           map: map,
           icon:{
-            url:restaurantPic,
+            url:placePic,
             scaledSize:new window.google.maps.Size(20, 20)
           },
-          title: restaurant.name,
+          title: place.name,
           position: {
-            lat: restaurant.geometry.viewport.Ya.i,
-            lng: restaurant.geometry.viewport.Sa.i
+            lat: place.geometry.viewport.Ya.i,
+            lng: place.geometry.viewport.Sa.i
           },
       });
 
-      this.setState({
-        restaurantMarkers:[...this.state.restaurantMarkers,marker]
-      })
+      if(place.types.includes('restaurant')) {
+        this.setState({
+          restaurantMarkers:[...this.state.restaurantMarkers,marker]
+        })
+      } else if (place.types.includes('school')) {
+        this.setState({
+          schoolMarkers:[...this.state.schoolMarkers,marker]
+        })
+      } else if(place.types.includes('supermarket')) {
+        this.setState({
+          supermarketMarkers:[...this.state.supermarketMarkers,marker]
+        })
+      } else if(place.types.includes('gym')) {
+        this.setState({
+          gymMarkers:[...this.state.gymMarkers,marker]
+        })
+      } else if(place.types.includes('park')) {
+        this.setState({
+          parkMarkers:[...this.state.parkMarkers,marker]
+        })
+      } else if(place.types.includes('gas_station')) {
+        this.setState({
+          gasStationMarkers:[...this.state.gasStationMarkers,marker]
+        })
+      }
+
+
+
 
       marker.addListener('click',function(){
-        let pic = restaurant.photos[0].getUrl({"maxWidth": 400, "maxHeight": 256})
+        let pic = place.photos[0].getUrl({"maxWidth": 400, "maxHeight": 256})
         let content = `
-        <h3>Restaurant</h3>
-        <h4>${restaurant.name}</h4>
-        <img src="${pic}" alt="restaurant image" />
-        <h5>Address: ${restaurant.vicinity}</h5>
-        <h6>Rating: ${restaurant.rating}/5 from ${restaurant.user_ratings_total} customers</h6>
+        <h3>${place.types[0]}</h3>
+        <h4>${place.name}</h4>
+        <img src="${pic}" alt="${place} image" />
+        <h5>Address: ${place.vicinity}</h5>
+        <h6>Rating: ${place.rating}/5 from ${place.user_ratings_total} customers</h6>
       `;
       infowindow.setContent(content);
       infowindow.open(map, marker);
       })
     }
 
+    service = new window.google.maps.places.PlacesService(map);
 
     const restaurantRequest = {
       type: ['restaurant'],
@@ -119,13 +154,11 @@ class Nearby extends Component {
       radius: 500,
     };
 
-    service = new window.google.maps.places.PlacesService(map);
-
     service.nearbySearch(restaurantRequest, (results, status) => {
       if (status === window.google.maps.places.PlacesServiceStatus.OK) {
         for (let i = 0; i < results.length; i++) {
           if(this.state.restaurantCheckbox) {
-            createRestaurantMarker(results[i])
+            createPlaceMarker(results[i], restaurantPic)
           } else {
           this.state.restaurantMarkers.forEach(marker=>marker.setMap(null));
           this.setState({
@@ -136,102 +169,17 @@ class Nearby extends Component {
       }
     });
 
-
-    const createSupermarketMarker = (supermarket) => {
-      var marker = new window.google.maps.Marker({
-          map: map,
-          icon:{
-            url:groceryPic,
-            scaledSize:new window.google.maps.Size(20, 20)
-          },
-          title: supermarket.name,
-          position: {
-            lat: supermarket.geometry.viewport.Ya.i,
-            lng: supermarket.geometry.viewport.Sa.i
-          },
-      });
-
-      this.setState({
-        supermarketMarkers:[...this.state.supermarketMarkers,marker]
-      })
-
-      marker.addListener('click',function(){
-        let pic = supermarket.photos[0].getUrl({"maxWidth": 400, "maxHeight": 256})
-        let content = `
-        <h3>Supermarket</h3>
-        <h4>${supermarket.name}</h4>
-        <img src="${pic}" alt="supermarket image" />
-        <h5>Address: ${supermarket.vicinity}</h5>
-        <h6>Rating: ${supermarket.rating}/5 from ${supermarket.user_ratings_total} customers</h6>
-      `;
-      infowindow.setContent(content);
-      infowindow.open(map, marker);
-      })
-    }
-
-    // const createPlaceMarker = (place, placePic) => {
-    //   console.log("place", place)
-    //   var marker = new window.google.maps.Marker({
-    //       map: map,
-    //       icon:{
-    //         url:placePic,
-    //         scaledSize:new window.google.maps.Size(20, 20)
-    //       },
-    //       title: place.name,
-    //       position: {
-    //         lat: place.geometry.viewport.Ya.i,
-    //         lng: place.geometry.viewport.Sa.i
-    //       },
-    //   });
-
-      // console.log("marker", marker)
-
-      // if(place === 'restaurant') {
-      //   this.setState({
-      //     restaurantMarkers:[...this.state.restaurantMarkers,marker]
-      //   })
-      // } else if (place === 'school') {
-      //   this.setState({
-      //     schoolMarkers:[...this.state.schoolMarkers,marker]
-      //   })
-      // } else if(place === 'supermarket') {
-      //   console.log("we are in the if statement")
-      //   this.setState({
-      //     supermarketMarkers:[...this.state.supermarketMarkers,marker]
-      //   })
-      // }
-
-      // this.setState({
-      //   stateName:[...this.state[`${place}Markers`],marker]
-      // })
-
-    //   marker.addListener('click',function(){
-    //     let pic = place.photos[0].getUrl({"maxWidth": 400, "maxHeight": 256})
-    //     let content = `
-    //     <h3>${place}</h3>
-    //     <h4>${place.name}</h4>
-    //     <img src="${pic}" alt="${place} image" />
-    //     <h5>Address: ${place.vicinity}</h5>
-    //     <h6>Rating: ${place.rating}/5 from ${place.user_ratings_total} customers</h6>
-    //   `;
-    //   infowindow.setContent(content);
-    //   infowindow.open(map, marker);
-    //   })
-    // }
-
     const supermarketRequest = {
       type: ['supermarket'],
       location: new window.google.maps.LatLng(this.state.selectedProperty.address.lat,this.state.selectedProperty.address.lon),
       radius: 500,
     };
 
-    service = new window.google.maps.places.PlacesService(map);
-
     service.nearbySearch(supermarketRequest, (results, status) => {
       if (status === window.google.maps.places.PlacesServiceStatus.OK) {
         for (let i = 0; i < results.length; i++) {
           if(this.state.supermarketCheckbox) {
-            createSupermarketMarker(results[i], groceryPic)
+            createPlaceMarker(results[i], groceryPic)
           } else {
           this.state.supermarketMarkers.forEach(marker=>marker.setMap(null));
           this.setState({
@@ -242,57 +190,86 @@ class Nearby extends Component {
       }
     });
 
-
-    const createSchoolMarker = (school) => {
-      var marker = new window.google.maps.Marker({
-          map: map,
-          icon:{
-            url:schoolPic,
-            scaledSize:new window.google.maps.Size(20, 20)
-          },
-          title: school.name,
-          position: {
-            lat: school.geometry.viewport.Ya.i,
-            lng: school.geometry.viewport.Sa.i
-          },
-      });
-
-      this.setState({
-        schoolMarkers:[...this.state.schoolMarkers,marker]
-      })
-
-      marker.addListener('click',function(){
-        let pic = school.photos[0].getUrl({"maxWidth": 400, "maxHeight": 256})
-        let content = `
-        <h3>School</h3>
-        <h4>${school.name}</h4>
-        <img src="${pic}" alt="sschool image" />
-        <h5>Address: ${school.vicinity}</h5>
-        <h6>Rating: ${school.rating}/5 from ${school.user_ratings_total} customers</h6>
-      `;
-      infowindow.setContent(content);
-      infowindow.open(map, marker);
-      })
-    }
-
-
     const schoolRequest = {
       type: ['school'],
       location: new window.google.maps.LatLng(this.state.selectedProperty.address.lat,this.state.selectedProperty.address.lon),
       radius: 500,
     };
 
-    service = new window.google.maps.places.PlacesService(map);
-
     service.nearbySearch(schoolRequest, (results, status) => {
       if (status === window.google.maps.places.PlacesServiceStatus.OK) {
         for (let i = 0; i < results.length; i++) {
           if(this.state.schoolCheckbox) {
-            createSchoolMarker(results[i])
+            createPlaceMarker(results[i], schoolPic)
           } else {
           this.state.schoolMarkers.forEach(marker=>marker.setMap(null));
           this.setState({
             schoolMarkers: []
+            })
+          }
+        }
+      }
+    });
+
+
+    const parkRequest = {
+      type: ['park'],
+      location: new window.google.maps.LatLng(this.state.selectedProperty.address.lat,this.state.selectedProperty.address.lon),
+      radius: 500,
+    };
+
+    service.nearbySearch(parkRequest, (results, status) => {
+      if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+        for (let i = 0; i < results.length; i++) {
+          if(this.state.parkCheckbox) {
+            createPlaceMarker(results[i], parkPic)
+          } else {
+          this.state.parkMarkers.forEach(marker=>marker.setMap(null));
+          this.setState({
+            parkMarkers: []
+            })
+          }
+        }
+      }
+    });
+
+
+    const gasStationRequest = {
+      type: ['gas_station'],
+      location: new window.google.maps.LatLng(this.state.selectedProperty.address.lat,this.state.selectedProperty.address.lon),
+      radius: 500,
+    };
+
+    service.nearbySearch(gasStationRequest, (results, status) => {
+      if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+        for (let i = 0; i < results.length; i++) {
+          if(this.state.gasStationCheckbox) {
+            createPlaceMarker(results[i], gasStationPic)
+          } else {
+          this.state.gasStationMarkers.forEach(marker=>marker.setMap(null));
+          this.setState({
+            gasStationMarkers: []
+            })
+          }
+        }
+      }
+    });
+
+    const gymRequest = {
+      type: ['gym'],
+      location: new window.google.maps.LatLng(this.state.selectedProperty.address.lat,this.state.selectedProperty.address.lon),
+      radius: 500,
+    };
+
+    service.nearbySearch(gymRequest, (results, status) => {
+      if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+        for (let i = 0; i < results.length; i++) {
+          if(this.state.gymCheckbox) {
+            createPlaceMarker(results[i], gymPic)
+          } else {
+          this.state.gymMarkers.forEach(marker=>marker.setMap(null));
+          this.setState({
+            gymMarkers: []
             })
           }
         }
@@ -312,7 +289,6 @@ class Nearby extends Component {
           lng:property.address.lon
         }
     });
-
 
     const createSubwayMarker = (station) => {
         var marker = new window.google.maps.Marker({
@@ -351,7 +327,10 @@ class Nearby extends Component {
         selectedProperty: property,
         restaurantCheckbox: false,
         schoolCheckbox: false,
-        supermarketCheckbox: false
+        supermarketCheckbox: false,
+        gymCheckbox: false,
+        parkCheckbox: false,
+        gasStationCheckbox: false
       })
 
       this.props.getSingleProperty(property.property_id)
@@ -376,11 +355,32 @@ class Nearby extends Component {
           schoolMarkers:[]
         })
       }
-      
+
       if(this.state.subwayMarkers.length){
         this.state.subwayMarkers.forEach(marker=>marker.setMap(null));
         this.setState({
           subwayMarkers:[]
+        })
+      }
+
+      if(this.state.parkMarkers.length){
+        this.state.parkMarkers.forEach(marker=>marker.setMap(null));
+        this.setState({
+          parkMarkers:[]
+        })
+      }
+
+      if(this.state.gymMarkers.length){
+        this.state.gymMarkers.forEach(marker=>marker.setMap(null));
+        this.setState({
+          gymMarkers:[]
+        })
+      }
+
+      if(this.state.gasStationMarkers.length){
+        this.state.gasStationMarkers.forEach(marker=>marker.setMap(null));
+        this.setState({
+          gasStationMarkers:[]
         })
       }
 
@@ -433,7 +433,7 @@ class Nearby extends Component {
                      value={this.state.schoolCheckbox}
                      onChange={this.onChange} />
             </label>
-
+            {" "}
             <label>Restaurants:
               <input type='checkbox'
                      checked={this.state.restaurantCheckbox}
@@ -441,12 +441,36 @@ class Nearby extends Component {
                      value={this.state.restaurantCheckbox}
                      onChange={this.onChange} />
             </label>
-
+            {" "}
             <label>Supermarket:
               <input type='checkbox'
                      checked={this.state.supermarketCheckbox}
                      name='supermarketCheckbox'
                      value={this.state.supermarketCheckbox}
+                     onChange={this.onChange} />
+            </label>
+            {" "}
+            <label>Park:
+              <input type='checkbox'
+                     checked={this.state.parkCheckbox}
+                     name='parkCheckbox'
+                     value={this.state.parkCheckbox}
+                     onChange={this.onChange} />
+            </label>
+            {" "}
+            <label>Gas Station:
+              <input type='checkbox'
+                     checked={this.state.gasStationCheckbox}
+                     name='gasStationCheckbox'
+                     value={this.state.gasStationCheckbox}
+                     onChange={this.onChange} />
+            </label>
+            {" "}
+            <label>Gym:
+              <input type='checkbox'
+                     checked={this.state.gymCheckbox}
+                     name='gymCheckbox'
+                     value={this.state.gymCheckbox}
                      onChange={this.onChange} />
             </label>
 
