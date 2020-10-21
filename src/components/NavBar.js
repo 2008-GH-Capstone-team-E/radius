@@ -13,12 +13,12 @@ export class Header extends Component {
     super(props)
     this.state = { }
   }
-  
+
   render() {
     let signedInUser
     let setUserInRedux = this.props.setUserInRedux
     console.log('this.props', this.props)
-    auth().onAuthStateChanged(() => { 
+    auth().onAuthStateChanged(() => {
     signedInUser = firebase.auth().currentUser;
     setUserInRedux(signedInUser)
     })
@@ -37,10 +37,10 @@ export class Header extends Component {
           </Nav>
           <div>
             {this.props.currentUser ?
-                <Nav>  
-                  <Nav.Link onClick={console.log(this.props.currentUser)}>Favorites</Nav.Link>
+                <Nav>
+                  <Nav.Link href="/favorites">Favorites</Nav.Link>
                   <Nav.Link href="/" onClick={async ()=> await firebase.auth().signOut()}>Sign Out</Nav.Link>
-                </Nav>  
+                </Nav>
               :
                 <Nav>
                   <Nav.Link href="/login">Log In</Nav.Link>

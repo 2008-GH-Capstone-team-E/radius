@@ -126,7 +126,7 @@ code {
   padding: 45px;
   text-align: center;
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
-} 
+}
 /*------------------------*/
 
 
@@ -134,7 +134,7 @@ code {
   align-content: 'start';
   justify-content: 'center'
 }
-  
+
 .buttonSizer {
   width: 100px;
   height: 40px;
@@ -147,7 +147,7 @@ code {
 
 .marginTopMed {
   margin-top: 4em;
-}  
+}
 
 .marginBottomMed {
   margin-bottom: 3em;
@@ -185,9 +185,28 @@ code {
 
 .marginLeft {
 margin-left: 1em;
-} 
+}
 
 
 .spaceBtwn {
   justify-content: space-between;
+}
+
+
+.favsContainer{
+  max-width: 100%;
+  max-height: 100%;
+  position: relative;
+  z-index: 1;
+  background: #ffffff;
+  margin: 20px 20px 20px 20px;
+  padding: 20px 20px 20px 20px;
+  box-shadow: none;
+}
+
+.favsCol{
+  margin: 20px 20px 20px 20px;
+  padding: 20px 20px 20px 20px;
+  text-align: center;
+
 }
