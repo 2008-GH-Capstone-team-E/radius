@@ -12,7 +12,7 @@ import restaurantPic from "../css/restaurantLogo.png"
 import gasStationPic from "../css/gas-station.png"
 import gymPic from "../css/weightlift.png"
 import { Button, Container, Row, Col } from "react-bootstrap";
-
+import defaultPic from "../css/Property_Image_PlaceHolder.png"
 import PropertyFilter from "./PropertyFilter"
 
 const API_KEY =`${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`;
@@ -27,8 +27,8 @@ class Nearby extends Component {
       this.state = {
         placesDetails: [],
         sortedPlacesDetails: [],
-        lat: 40.748817,
-        lng: -73.985428,
+        // lat: 40.748817,
+        // lng: -73.985428,
         zoom: 14,
         selectedProperty:null,
         property_Id:null,
@@ -44,7 +44,8 @@ class Nearby extends Component {
         supermarketCheckbox: false,
         parkCheckbox: false,
         gasStationCheckbox: false,
-        gymCheckbox: false
+        gymCheckbox: false,
+        travelRouteArr:[]
     }
     this.createMarker = this.createMarker.bind(this);
     this.onChange = this.onChange.bind(this);
@@ -56,7 +57,6 @@ class Nearby extends Component {
   }
 
 
-
   renderMap = () => {
     loadScript(`https://maps.googleapis.com/maps/api/js?key=${API_KEY}&libraries=places&callback=initMap`);
     window.initMap = this.initMap;
@@ -66,8 +66,8 @@ class Nearby extends Component {
 
     // Default Location
     var location = {
-      lat: this.state.lat,
-      lng: this.state.lng
+      lat: 40.748817,
+      lng: -73.985428
     };
 
     // Initialize Map
@@ -78,8 +78,8 @@ class Nearby extends Component {
     });
 
     infowindow = new window.google.maps.InfoWindow({
-      maxWidth:300,
-      maxHeight:225
+      maxWidth:250,
+      maxHeight:150
     });
   }
 
@@ -129,18 +129,90 @@ class Nearby extends Component {
 
 
 
+      //filtered place marker
+      marker.addListener('click',()=>{
+       
 
-      marker.addListener('click',function(){
-        let pic = place.photos[0].getUrl({"maxWidth": 400, "maxHeight": 256})
-        let content = `
-        <h3>${place.types[0]}</h3>
-        <h4>${place.name}</h4>
-        <img src="${pic}" alt="${place} image" />
-        <h5>Address: ${place.vicinity}</h5>
-        <h6>Rating: ${place.rating}/5 from ${place.user_ratings_total} customers</h6>
-      `;
-      infowindow.setContent(content);
-      infowindow.open(map, marker);
+        let directionsService = new window.google.maps.DirectionsService();
+        let directionsRenderer = new window.google.maps.DirectionsRenderer();
+       
+
+        const selectedProperty = this.state.selectedProperty
+        // console.log("property lat,lon?",property)
+        let origin = new window.google.maps.LatLng(selectedProperty.address.lat,selectedProperty.address.lon)
+        // console.log("subway lat lon?",station)
+        let destination = new window.google.maps.LatLng(place.geometry.viewport.Ya.i,place.geometry.viewport.Sa.i)
+        let travelService = new window.google.maps.DistanceMatrixService()
+
+        //for drawing routes on map
+        directionsRenderer.setMap(map)
+
+        var distanceRequest = {
+          origin: origin,
+          destination: destination,
+          travelMode: window.google.maps.TravelMode.WALKING
+        };
+ 
+
+        directionsService.route(distanceRequest, (response, status)=> {
+            if (status === "OK") {
+               //clear preious routes on map
+           
+              this.state.travelRouteArr.forEach(marker=>marker.setMap(null))
+              this.setState({
+                travelRouteArr:[]
+              })
+              directionsRenderer.setDirections(response)
+              // showSteps(response)
+            } else {
+              window.alert("Directions request failed due to " + status);
+            }
+          });
+        
+
+        travelService.getDistanceMatrix({
+          origins:[origin],
+          destinations:[destination],
+          travelMode:'WALKING'
+        },(response,status)=>{
+          if(status==="OK"){
+            let origins = response.originAddresses;
+            let destinations = response.destinationAddresses;
+
+            for (let i = 0; i < origins.length; i++) {
+              let results = response.rows[i].elements;
+              for (let j = 0; j < results.length; j++) {
+                let element = results[j];
+                // console.log("distance",element.distance.text) ;
+                let distance=element.distance.text
+                // console.log("duration",element.duration.text) ;
+                let travelTime=element.duration.text
+                // console.log("from",origins[i]);
+                // console.log("to",destinations[j]);
+
+
+                let pic = defaultPic
+                if(place.photos){
+                  pic = place.photos[0].getUrl({"maxWidth": 300, "maxHeight": 192})
+                }
+                let content = `
+                <h6>${place.name}</h6>
+                <p>Distance: ${distance}</p>
+                <p>Walking time: ${travelTime}</p>
+                <img src="${pic}" alt="${place} image" />
+                <p>Address: ${place.vicinity}</p>
+                <p>Rating: ${place.rating}/5 from ${place.user_ratings_total} customers</p>
+                
+              `;
+              infowindow.setContent(content);
+              infowindow.open(map, marker);
+              }
+            }
+          }else{
+            console.log("status:",status)
+          }
+        })
+
       })
     }
 
@@ -278,6 +350,7 @@ class Nearby extends Component {
 
 
 
+  //for propeties marker
   createMarker = (property) => {
     var marker = new window.google.maps.Marker({
         map: map,
@@ -305,15 +378,90 @@ class Nearby extends Component {
         subwayMarkers:[...this.state.subwayMarkers,marker]
       })
 
-      marker.addListener('click',function(){
-        let pic = station.photos[0].getUrl({"maxWidth": 400, "maxHeight": 256})
-        let content = `
-        <h1>Subway</h1>
-        <h2>${station.name}</h2>
-        <img src="${pic}" alt="subway image" />
-      `;
-      infowindow.setContent(content);
-      infowindow.open(map, marker);
+
+
+      let directionsService = new window.google.maps.DirectionsService();
+      let directionsRenderer = new window.google.maps.DirectionsRenderer();
+      marker.addListener('click',()=>{
+        const directions = this.state.travelRouteArr
+        if (directions && directions.length > 0) {
+          for (var i = 0; i < directions.length; i++)
+            directions[i].setMap(null);
+        }
+       
+        this.setState({
+          travelRouteArr:[]
+        })
+        // console.log("after",this.state.travelRouteArr)
+  
+        const selectedProperty = this.state.selectedProperty
+        // console.log("property lat,lon?",property)
+        let origin = new window.google.maps.LatLng(selectedProperty.address.lat,selectedProperty.address.lon)
+        // console.log("subway lat lon?",station)
+        let destination = new window.google.maps.LatLng(station.geometry.viewport.Ya.i,station.geometry.viewport.Sa.i)
+        let travelService = new window.google.maps.DistanceMatrixService()
+
+        //for drawing routes on map
+        directionsRenderer.setMap(map)
+
+        var distanceRequest = {
+          origin: origin,
+          destination: destination,
+          travelMode: window.google.maps.TravelMode.WALKING
+        };
+
+
+        directionsService.route(distanceRequest, (response, status)=> {
+            if (status === "OK") {
+              directionsRenderer.setDirections(response)
+            } else {
+              window.alert("Directions request failed due to " + status);
+            }
+          });
+        
+
+        travelService.getDistanceMatrix({
+          origins:[origin],
+          destinations:[destination],
+          travelMode:'WALKING'
+        },(response,status)=>{
+          if(status==="OK"){
+            let origins = response.originAddresses;
+            let destinations = response.destinationAddresses;
+
+            for (let i = 0; i < origins.length; i++) {
+              let results = response.rows[i].elements;
+              for (let j = 0; j < results.length; j++) {
+                let element = results[j];
+                // console.log("distance",element.distance.text) ;
+                let distance=element.distance.text
+                // console.log("duration",element.duration.text) ;
+                let travelTime=element.duration.text
+                // console.log("from",origins[i]);
+                // console.log("to",destinations[j]);
+
+
+                let pic = defaultPic
+                if(station.photos){
+                  pic = station.photos[0].getUrl({"maxWidth": 300, "maxHeight": 192})
+                }
+                let content = `
+                <h6>${station.name}</h6>
+                <p>Distance: ${distance}</p>
+                <p>Walking time: ${travelTime}</p>
+                <img src="${pic}" alt="${station} image" />
+                <p>Address: ${station.vicinity}</p>
+                <p>Rating: ${station.rating}/5 from ${station.user_ratings_total} customers</p>
+                
+              `;
+              infowindow.setContent(content);
+              infowindow.open(map, marker);
+              }
+            }
+          }else{
+            console.log("status:",status)
+          }
+        })
       })
     }
 
