@@ -168,9 +168,12 @@ code {
   justify-content: flex-start;
 }
 
-
 .row .alignContentLeft {
   justify-content: flex-start;
+}
+
+.col .alignContentLeft {
+  align-content: left;
 }
 
 /* For Property & Favorities Page when Loading */
@@ -187,7 +190,35 @@ code {
 margin-left: 1em;
 } 
 
-
 .spaceBtwn {
   justify-content: space-between;
+}
+
+/* Welcome Page */
+
+.card .text {
+  color: rgb(30, 52, 69);
+}
+
+.container .noPadding  {
+  padding: 0px;
+  border: 0px;
+  border-radius: 0%;
+}
+
+.card .noPadding  {
+  padding: 0px;
+  border: 0px;
+  border-radius: 0%;
+}
+
+.card .centerCenter {
+  align-content: center;
+  justify-content: center;
+}
+
+#killBorder {
+  padding: 0px;
+  border: 0px;
+  border-radius: 0%;
 }
