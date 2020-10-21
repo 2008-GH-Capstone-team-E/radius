@@ -11,7 +11,7 @@ import groceryPic from "../css/groceries.png"
 import restaurantPic from "../css/restaurantLogo.png"
 import gasStationPic from "../css/gas-station.png"
 import gymPic from "../css/weightlift.png"
-import { Button, Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col } from "react-bootstrap";
 import defaultPic from "../css/Property_Image_PlaceHolder.png"
 import PropertyFilter from "./PropertyFilter"
 
@@ -21,14 +21,13 @@ let map;
 let infowindow;
 let service;
 
+
 class Nearby extends Component {
   constructor(props){
     super(props)
       this.state = {
         placesDetails: [],
         sortedPlacesDetails: [],
-        // lat: 40.748817,
-        // lng: -73.985428,
         zoom: 14,
         selectedProperty:null,
         property_Id:null,
@@ -45,10 +44,11 @@ class Nearby extends Component {
         parkCheckbox: false,
         gasStationCheckbox: false,
         gymCheckbox: false,
-        travelRouteArr:[]
+        travelRouteArr:[],
     }
     this.createMarker = this.createMarker.bind(this);
     this.onChange = this.onChange.bind(this);
+    this.directionOnMap=this.directionOnMap.bind(this)
   }
 
 
@@ -83,6 +83,38 @@ class Nearby extends Component {
     });
   }
 
+  directionOnMap=(origin,destination)=>{
+    let directionsService = new window.google.maps.DirectionsService();
+    let directionsRenderer = new window.google.maps.DirectionsRenderer();
+
+    if(this.state.travelRouteArr.length>0){
+      this.state.travelRouteArr.forEach(direction=>{
+        direction.setMap(null);
+      });
+      this.setState({
+        travelRouteArr:[]
+      })
+  }
+ 
+  var distanceRequest = {
+    origin: origin,
+    destination: destination,
+    travelMode: window.google.maps.TravelMode.WALKING
+  };
+
+
+  directionsService.route(distanceRequest, (response, status)=> {
+      if (status === "OK") {
+        directionsRenderer.setMap(map)
+        directionsRenderer.setDirections(response)
+        this.setState({
+          travelRouteArr:[...this.state.travelRouteArr,directionsRenderer]
+        })
+      } else {
+        window.alert("Directions request failed due to " + status);
+      }
+    });
+  }
 
   onChange = (e) => {
     this.setState({[e.target.name] : e.target.checked});
@@ -128,48 +160,17 @@ class Nearby extends Component {
       }
 
 
-
       //filtered place marker
       marker.addListener('click',()=>{
-       
-
-        let directionsService = new window.google.maps.DirectionsService();
-        let directionsRenderer = new window.google.maps.DirectionsRenderer();
-       
-
         const selectedProperty = this.state.selectedProperty
-        // console.log("property lat,lon?",property)
         let origin = new window.google.maps.LatLng(selectedProperty.address.lat,selectedProperty.address.lon)
-        // console.log("subway lat lon?",station)
         let destination = new window.google.maps.LatLng(place.geometry.viewport.Ya.i,place.geometry.viewport.Sa.i)
         let travelService = new window.google.maps.DistanceMatrixService()
 
-        //for drawing routes on map
-        directionsRenderer.setMap(map)
-
-        var distanceRequest = {
-          origin: origin,
-          destination: destination,
-          travelMode: window.google.maps.TravelMode.WALKING
-        };
- 
-
-        directionsService.route(distanceRequest, (response, status)=> {
-            if (status === "OK") {
-               //clear preious routes on map
-           
-              this.state.travelRouteArr.forEach(marker=>marker.setMap(null))
-              this.setState({
-                travelRouteArr:[]
-              })
-              directionsRenderer.setDirections(response)
-              // showSteps(response)
-            } else {
-              window.alert("Directions request failed due to " + status);
-            }
-          });
+        //draw route on map
+        this.directionOnMap(origin,destination)
         
-
+        //calculate the travel time
         travelService.getDistanceMatrix({
           origins:[origin],
           destinations:[destination],
@@ -183,12 +184,9 @@ class Nearby extends Component {
               let results = response.rows[i].elements;
               for (let j = 0; j < results.length; j++) {
                 let element = results[j];
-                // console.log("distance",element.distance.text) ;
                 let distance=element.distance.text
-                // console.log("duration",element.duration.text) ;
                 let travelTime=element.duration.text
-                // console.log("from",origins[i]);
-                // console.log("to",destinations[j]);
+
 
 
                 let pic = defaultPic
@@ -212,7 +210,6 @@ class Nearby extends Component {
             console.log("status:",status)
           }
         })
-
       })
     }
 
@@ -348,8 +345,6 @@ class Nearby extends Component {
 
   }
 
-
-
   //for propeties marker
   createMarker = (property) => {
     var marker = new window.google.maps.Marker({
@@ -377,48 +372,17 @@ class Nearby extends Component {
       this.setState({
         subwayMarkers:[...this.state.subwayMarkers,marker]
       })
-
-
-
-      let directionsService = new window.google.maps.DirectionsService();
-      let directionsRenderer = new window.google.maps.DirectionsRenderer();
+ 
+      //subway icon onClick
       marker.addListener('click',()=>{
-        const directions = this.state.travelRouteArr
-        if (directions && directions.length > 0) {
-          for (var i = 0; i < directions.length; i++)
-            directions[i].setMap(null);
-        }
-       
-        this.setState({
-          travelRouteArr:[]
-        })
-        // console.log("after",this.state.travelRouteArr)
-  
-        const selectedProperty = this.state.selectedProperty
-        // console.log("property lat,lon?",property)
+
+        const selectedProperty = this.state.selectedProperty;
         let origin = new window.google.maps.LatLng(selectedProperty.address.lat,selectedProperty.address.lon)
-        // console.log("subway lat lon?",station)
         let destination = new window.google.maps.LatLng(station.geometry.viewport.Ya.i,station.geometry.viewport.Sa.i)
         let travelService = new window.google.maps.DistanceMatrixService()
 
-        //for drawing routes on map
-        directionsRenderer.setMap(map)
-
-        var distanceRequest = {
-          origin: origin,
-          destination: destination,
-          travelMode: window.google.maps.TravelMode.WALKING
-        };
-
-
-        directionsService.route(distanceRequest, (response, status)=> {
-            if (status === "OK") {
-              directionsRenderer.setDirections(response)
-            } else {
-              window.alert("Directions request failed due to " + status);
-            }
-          });
-        
+        //draw route on the map
+        this.directionOnMap(origin,destination)
 
         travelService.getDistanceMatrix({
           origins:[origin],
@@ -433,13 +397,8 @@ class Nearby extends Component {
               let results = response.rows[i].elements;
               for (let j = 0; j < results.length; j++) {
                 let element = results[j];
-                // console.log("distance",element.distance.text) ;
                 let distance=element.distance.text
-                // console.log("duration",element.duration.text) ;
                 let travelTime=element.duration.text
-                // console.log("from",origins[i]);
-                // console.log("to",destinations[j]);
-
 
                 let pic = defaultPic
                 if(station.photos){
@@ -465,8 +424,7 @@ class Nearby extends Component {
       })
     }
 
-
-         //// ** property marker ** ////
+    //// ** property marker listener** ////
     marker.addListener('click', ()=>{
       this.setState({
         property_Id:property.property_id,
@@ -537,12 +495,6 @@ class Nearby extends Component {
         lng:property.address.lon
       });
 
-      let content = `
-        <h2>${property.address.line}</h2>
-        <img src=${property.photos[0].href} alt="property image" />
-      `;
-      // infowindow.setContent(content);
-      // infowindow.open(map, marker);
 
       const subwayRequest = {
         type: ['subway_station'],
