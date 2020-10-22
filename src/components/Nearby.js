@@ -15,6 +15,8 @@ import { Container, Row, Col } from "react-bootstrap";
 import defaultPic from "../css/Property_Image_PlaceHolder.png"
 import PropertyFilter from "./PropertyFilter"
 
+var get = require('lodash.get');
+
 const API_KEY =`${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`;
 
 let map;
@@ -183,9 +185,16 @@ class Nearby extends Component {
               let results = response.rows[i].elements;
               for (let j = 0; j < results.length; j++) {
                 let element = results[j];
-                let distance=element.distance.text
-                let travelTime=element.duration.text
+                //let distance=element.distance.text
+                //let travelTime=element.duration.text
 
+                let distance = get(element, 'distance.text', 'unavailable')
+                let travelTime = get(element, 'duration.text', 'unavailable')
+
+                let name = get(place, 'name', 'unavailable')
+                let vicinity = get(place, 'vicinity', 'unavailable')
+                let rating = get(place, 'rating','unavailable')
+                let ratingsTotal = get(place, 'user_ratings_total','unavailable')
 
 
                 let pic = defaultPic
@@ -193,12 +202,12 @@ class Nearby extends Component {
                   pic = place.photos[0].getUrl({"maxWidth": 300, "maxHeight": 192})
                 }
                 let content = `
-                <h6>${place.name}</h6>
+                <h6>${name}</h6>
                 <p>Distance: ${distance}</p>
                 <p>Walking time: ${travelTime}</p>
                 <img src="${pic}" alt="${place} image" />
-                <p>Address: ${place.vicinity}</p>
-                <p>Rating: ${place.rating}/5 from ${place.user_ratings_total} customers</p>
+                <p>Address: ${vicinity}</p>
+                <p>Rating: ${rating}/5 from ${ratingsTotal} customers</p>
                 
               `;
               infowindow.setContent(content);

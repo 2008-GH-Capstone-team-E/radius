@@ -6,15 +6,8 @@ import { Link } from "react-router-dom";
 
 var get = require('lodash.get');
 
-const altPropertyImage = "https://github.com/2008-GH-Capstone-team-E/radius/blob/main/public/Property_Image_PlaceHolder.png?raw=true"
+//const altPropertyImage = "https://github.com/2008-GH-Capstone-team-E/radius/blob/main/public/Property_Image_PlaceHolder.png?raw=true"
 
-const formatTelNum = (num) => {
-  return `(${num.slice(0,3)}) ${num.slice(3,6)} - ${num.slice(6)}`
-}
-
-// const formatPropType = (prop_type) => {
-//   return `${prop_type.split('_').join(' ')}`
-// }
 
 class SinglePropertyPage extends Component {
   constructor(props) {
@@ -32,7 +25,7 @@ class SinglePropertyPage extends Component {
 
   render() {
     let property = this.props.singleProperty || {}
-    const price = get(property, 'price', 'unavailable')
+    const price = get(property, 'floor_plans[0].price', 'unavailable')
     const brokerName = get(property, 'broker.name', 'unavailable')
     const brokerTel = get(property, 'broker.phone1.number', 'unavailable')
     const address = get(property, 'address.line', 'unavailable')
@@ -70,7 +63,7 @@ class SinglePropertyPage extends Component {
                   
                   <Row className='alignContentLeft'><b>Address:</b> &nbsp; {address}, {county}, NY,  
                   {zip}</Row>
-                  <Row className='alignContentLeft'><b>Monthly: </b> &nbsp; ${price}</Row>
+                  <Row className='alignContentLeft'><b>Monthly: </b> &nbsp; $ &nbsp;{price}</Row>
                   <Row className='alignContentLeft'><b>Rental Type:</b> &nbsp; {prop_type}</Row>
                   <Row className='alignContentLeft'><b>Bedrooms:</b> &nbsp; {beds}</Row>
                   <Row className='alignContentLeft'><b>Bathrooms:</b> &nbsp;{baths}</Row>
