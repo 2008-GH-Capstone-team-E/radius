@@ -3,6 +3,8 @@ import firebase, { auth, db } from "./firebase";
 import { Link } from "react-router-dom";
 import { Button, Row, Col, Container } from "react-bootstrap";
 import axios from 'axios'
+import "../css/style.css";
+
 
 class UserFavorites extends Component {
   constructor(props) {
@@ -69,45 +71,51 @@ class UserFavorites extends Component {
   render() {
     const properties = this.state.moreInfoOnProperties
     return(
-      <div>
+      <Container fluid className="favsContainer">
+        <Row md={4}>
          {properties.length
          ?  properties.map(property => {
           return (
-             <Container key={property.property_id}>
-               <Row className='imageContainerPropertyInfoBox'>
-                 <img src={property.photos[0].href}
-                 alt="property photo"
-                 className='imageInInfoBox'
-                 style={{width: 250, height: 300}}
-                 />
-               </Row>
-               <Row className='alignContentLeft'><b>Address:</b> {property.address.line}, {property.address.county}, NY,
-               {property.address.postal_code}
-              </Row>
-                 <Row className='alignContentLeft'><b>Monthly: </b>$ {property.community.price_max}</Row>
-               <Row className='marginTop'>
-                 <Col>
-                   <Link to={`/properties/${property.property_id}`}>
-                     <Button className='buttonSizer' variant="outline-info" size="sm">
-                     See More Info
+            <Col  className="favsCol"
+                  key={property.property_id}>
+                  <img src={property.photos[0].href}
+                  alt="property photo"
+                  style={{width: 250, height: 300}}
+                  />
+                  <b>Address:</b>
+                  {property.address.line},
+                  {property.address.county}, NY,
+                  {property.address.postal_code}
+                  <br></br>
+                  <b>Monthly: </b>$
+                  {property.community.price_max}
+                  <br></br>
+                  <Row className='marginTop'>
+                  <Col>
+                  <Link to={`/properties/${property.property_id}`}>
+                     <Button className='buttonSizer'
+                      variant="outline-info" size="sm">
+                      See More Info
                      </Button>
                    </Link>
-                 </Col>
-                 <Col>
-                <Button className='buttonSizer' variant="outline-info" size="sm"
-                onClick={() => {this.handleRemove(property.property_id)}}>
-                Remove From Favs
-                </Button>
-             </Col>
-               </Row>
-           </Container>
+                  </Col>
+                  <Col>
+                   <Button className='buttonSizer'
+                    variant="outline-info" size="sm"
+                    onClick={() => {this.handleRemove(property.property_id)}}>
+                    Remove From Favs
+                    </Button>
+                    </Col>
+                    </Row>
+              </Col>
             )}
           )
          : <div className="holdPageOpen marginTopMed">
            Getting your favorite properties ...
            </div>
          }
-      </div>
+          </Row>
+      </Container>
     )
   }
 }
