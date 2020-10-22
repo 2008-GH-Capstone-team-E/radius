@@ -5,6 +5,7 @@ import { Button, Container, Row, Col } from "react-bootstrap";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import firebase, { auth, db } from "./firebase";
+import defaultPic from "../css/Property_Image_PlaceHolder.png"
 
 var get = require('lodash.get');
 
@@ -66,12 +67,13 @@ class SinglePropertyBox extends Component {
 
 
   render() {
-    console.log('This is auth() in InfoBox:' , auth())
+    //console.log('This is auth() in InfoBox:' , auth())
     let property = this.props.singleProperty || {}
-    const price = get(property, 'price', 'unavailable')
+    const price = get(property, 'floor_plans[0].price', 'unavailable')
     const address = get(property, 'address.line', 'unavailable')
     const county = get(property, 'address.county', 'unavailable')
     const zip = get(property, 'address.postal_code', 'unavailable')
+    const singlePhoto = get(property, 'photos[0].href', defaultPic) 
 
     return (
       <div>
@@ -80,7 +82,7 @@ class SinglePropertyBox extends Component {
           <Row><h4>The Basics</h4></Row>
 
             <Row className='imageContainerPropertyInfoBox'>
-              <img src={property.photos[0].href} alt="property photo" className='imageInInfoBox'/>
+              <img src={singlePhoto} alt="property photo" className='imageInInfoBox'/>
             </Row>
              <Row className='alignContentLeft'><b>Address:</b> {address}, {county}, NY,
               {zip}</Row>
