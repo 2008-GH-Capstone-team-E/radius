@@ -66,7 +66,7 @@ class SinglePropertyBox extends Component {
 
 
   render() {
-    console.log('This is auth() in InfoBox:' , auth())
+    //console.log('This is auth() in InfoBox:' , auth())
     let property = this.props.singleProperty || {}
     const price = get(property, 'price', 'unavailable')
     const address = get(property, 'address.line', 'unavailable')

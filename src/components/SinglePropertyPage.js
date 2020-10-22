@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux'
 import { fetchProperty } from '../store/singleProperty'
+import { refreshProperties } from '../store/allProperties'
 import { Button, Row, Col, Container, Carousel } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
@@ -22,12 +23,22 @@ class SinglePropertyPage extends Component {
     this.state = {
 
     };
+
+    this.handleReturnToSearch = this.handleReturnToSearch.bind(this)
   }
 
   async componentDidMount() {
-      if (this.props.singleProperty.property_id !== this.props.match.params.id) {
-      this.props.getSingleProperty(this.props.match.params.id)
-      }
+    if (this.props.singleProperty.property_id !== this.props.match.params.id) {
+    this.props.getSingleProperty(this.props.match.params.id)
+    }
+  }
+
+  handleReturnToSearch(e) {
+    e.preventDefault()
+  
+    // this.props.refreshSameProperties(this.props.propertiesInReact)
+    // console.log('@SinglePropPage, Fired this handler')
+    this.props.history.push('/search')
   }
 
   render() {
@@ -84,11 +95,13 @@ class SinglePropertyPage extends Component {
               <Row className='alignContentLeft marginBottomMed'>
                 <Col></Col>
                 <Col>
-                <Link to='/search'>
-                  <Button variant="outline-info" size="sm">
+                {/* <Link to='/search'> */}
+                  <Button variant="outline-info" size="sm"
+                  onClick={this.handleReturnToSearch}
+                  >
                   back to search
                   </Button>
-                </Link>
+                {/* </Link> */}
                 </Col>    
               </Row>            
           </Col> 
@@ -105,12 +118,16 @@ class SinglePropertyPage extends Component {
 
 const mapState = state => {
   return {
-    singleProperty: state.singleProperty
+    singleProperty: state.singleProperty,
+    propertiesInReact: state.allProperties
   }
 }
 
 const mapDispatch = dispatch => ({
-  getSingleProperty: id => dispatch(fetchProperty(id))
+  getSingleProperty: id => dispatch(fetchProperty(id)),
+  refreshSameProperties: (sameProperties) => {
+    dispatch(refreshProperties(sameProperties))
+  }
 })
 
 export default connect(mapState, mapDispatch)(SinglePropertyPage)

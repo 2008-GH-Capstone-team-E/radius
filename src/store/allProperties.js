@@ -2,6 +2,7 @@ import axios from 'axios'
 
 //----------- action types ------------//
 export const GET_PROPERTIES = 'GET_PROPERTIES'
+export const REFRESH_SAME_PROPERTIES = 'REFRESH_SAME_PROPERTIES'
 
 
 //----------- action creators -----------//
@@ -10,6 +11,13 @@ export const getProperties = properties => {
   return {
     type: GET_PROPERTIES,
     properties: properties
+  }
+}
+
+export const refreshProperties = (s) => {
+  // console.log('@Reducer, action creator sameProperties:', sameProperties)
+  return {
+    type: REFRESH_SAME_PROPERTIES
   }
 }
 
@@ -57,6 +65,10 @@ export default function propertiesReducer(state = properties, action) {
   switch (action.type) {
     case GET_PROPERTIES:
       return [...action.properties]
+    case REFRESH_SAME_PROPERTIES:
+      // action.sameProperties = action.sameProperties.reverse()
+      // console.log('@Reducer, sorted sameProperties:', action.sameProperties)
+      return [...state.reverse()]
     default:
       return state
   }

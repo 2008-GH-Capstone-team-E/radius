@@ -4,6 +4,7 @@ import SinglePropertyBox from './SinglePropertyBox'
 import {connect} from "react-redux"
 import {fetchProperties} from "../store/allProperties"
 import { fetchProperty } from '../store/singleProperty'
+import { refreshProperties } from '../store/allProperties'
 import subwayPic from "../css/subwayLogo.png"
 import schoolPic from "../css/school.png";
 import parkPic from "../css/park.png"
@@ -54,6 +55,8 @@ class Nearby extends Component {
 
   async componentDidMount() {
     await this.renderMap();
+    console.log('@NearbyCompDidMount after renderMap()')
+    // this.props.refreshSameProperties()
   }
 
 
@@ -282,6 +285,10 @@ class Nearby extends Component {
 
   //for propeties marker
   createMarker = (property) => {
+
+    ////   REMOVE: ////
+    console.log('createMarker is running')
+
     var marker = new window.google.maps.Marker({
         map: map,
         title: property.address.line,
@@ -454,6 +461,8 @@ class Nearby extends Component {
 
   render() {
   const properties = this.props.propertiesInReact
+  // console.log('@ render of Nearby, properties on Store:', this.props.propertiesInReact)
+  
     return (
       <div>
         <PropertyFilter history={this.props.history}/>
@@ -517,7 +526,7 @@ class Nearby extends Component {
                 <div
                   id="map"
                   style={{width: "100%", height: "80vh", alignSelf: "center"}} >
-                  {properties && properties.length>0 && properties.map(property=>this.createMarker(property))}
+                  {properties.length && properties.map(property=>this.createMarker(property))}
                 </div>
               </Col>
               <Col>
@@ -553,7 +562,10 @@ const mapDispatch = dispatch => {
     getAllPropertiesInReact : (minBeds=0,maxPrice=10000,zipCode=10019)=>{
       dispatch(fetchProperties(minBeds,maxPrice,zipCode))
     },
-    getSingleProperty: id => dispatch(fetchProperty(id))
+    getSingleProperty: id => dispatch(fetchProperty(id)),
+    refreshSameProperties: () => {
+      dispatch(refreshProperties())
+    }
   }
 }
 
