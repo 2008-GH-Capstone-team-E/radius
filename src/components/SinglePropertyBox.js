@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { connect } from 'react-redux'
 import { Link } from "react-router-dom";
 import { Button, Container, Row, Col } from "react-bootstrap";
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import firebase, { auth, db } from "./firebase";
 
 var get = require('lodash.get');
@@ -17,8 +18,10 @@ class SinglePropertyBox extends Component {
 
     this.handleOnClick = this.handleOnClick.bind(this)
     this.addToFavs = this.addToFavs.bind(this)
+    this.notifySignedIn = this.notifySignedIn.bind(this)
+    this.notifyNotSignedIn = this.notifyNotSignedIn.bind(this)
+
   }
-  componentDidMount() {}
 
   handleOnClick(property_id) {
     const currentUser = auth().currentUser;
@@ -37,7 +40,33 @@ class SinglePropertyBox extends Component {
     }
   }
 
+  notifySignedIn(){
+    toast("Added to Favorites !", {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    })
+  }
+
+  notifyNotSignedIn(){
+    toast("Please sign in first !", {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    })
+  }
+
+
   render() {
+    console.log('This is auth() in InfoBox:' , auth())
     let property = this.props.singleProperty || {}
     const price = get(property, 'price', 'unavailable')
     const address = get(property, 'address.line', 'unavailable')
@@ -52,27 +81,43 @@ class SinglePropertyBox extends Component {
 
             <Row className='imageContainerPropertyInfoBox'>
               <img src={property.photos[0].href} alt="property photo" className='imageInInfoBox'/>
-            </Row>     
-             <Row className='alignContentLeft'><b>Address:</b> {address}, {county}, NY,   
-              {zip}</Row> 
-              <Row className='alignContentLeft'><b>Monthly: </b>$ {price}</Row>
-            <Row className='marginTop'>
-              <Col>
-                <Link to={`/properties/${property.property_id}`}>
-                  <Button className='buttonSizer' variant="outline-info" size="sm">
-                  See All Info
-                  </Button>
-                </Link>
-              </Col>
-              <Col>
-                <Button className='buttonSizer' variant="outline-info" size="sm"
-                onClick={() => {this.handleOnClick(property.property_id)}}>
-                Add To Favs
-                </Button>
-             </Col>
             </Row>
+             <Row className='alignContentLeft'><b>Address:</b> {address}, {county}, NY,
+              {zip}</Row>
+              <Row className='alignContentLeft'><b>Monthly: </b>$ {price}</Row>
+              <Row className='marginTop'>
+                <Col>
+                  <Link to={`/properties/${property.property_id}`}>
+                    <Button className='buttonSizer' variant="outline-info" size="sm">
+                    See All Info
+                    </Button>
+                  </Link>
+                </Col>
+                {auth().currentUser ?
+                <Col>
+                    <Button className='buttonSizer' variant="outline-info" size="sm"
+                    onClick={() => {
+                      this.handleOnClick(property.property_id)
+                      this.notifySignedIn()
+                      }}>
+                    Add To Favs
+                    </Button>
+                    <ToastContainer />
+                </Col>
+                :
+                <Col>
+                    <Button className='buttonSizer' variant="outline-info" size="sm"
+                    onClick={() => {
+                      this.notifyNotSignedIn()
+                      }}>
+                    Add To Favs
+                    </Button>
+                    <ToastContainer />
+                </Col>
+              }
+              </Row>
         </Container>
-        : 
+        :
         <div className='centerSelf marginTopMed'> loading property details...</div>
         }
       </div>

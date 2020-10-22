@@ -159,7 +159,6 @@ class Nearby extends Component {
         })
       }
 
-
       //filtered place marker
       marker.addListener('click',()=>{
         const selectedProperty = this.state.selectedProperty
@@ -215,134 +214,70 @@ class Nearby extends Component {
 
     service = new window.google.maps.places.PlacesService(map);
 
-    const restaurantRequest = {
-      type: ['restaurant'],
-      location: new window.google.maps.LatLng(this.state.selectedProperty.address.lat,this.state.selectedProperty.address.lon),
-      radius: 500,
+    const placeRequest = (place) => {
+      return {
+        type: [place],
+        location: new window.google.maps.LatLng(this.state.selectedProperty.address.lat,this.state.selectedProperty.address.lon),
+        radius: 500,
+      }
     };
 
-    service.nearbySearch(restaurantRequest, (results, status) => {
-      if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-        for (let i = 0; i < results.length; i++) {
-          if(this.state.restaurantCheckbox) {
-            createPlaceMarker(results[i], restaurantPic)
-          } else {
-          this.state.restaurantMarkers.forEach(marker=>marker.setMap(null));
-          this.setState({
-            restaurantMarkers: []
-            })
+    const serviceNearby = (request, placePic, place) => {
+      return service.nearbySearch(request, (results, status) => {
+        if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+          for (let i = 0; i < results.length; i++) {
+            if(this.state[`${place}Checkbox`]) {
+              createPlaceMarker(results[i], placePic)
+            } else {
+            this.state[`${place}Markers`].forEach(marker=>marker.setMap(null));
+            if(place === 'restaurant') {
+              this.setState({
+                restaurantMarkers:[]
+              })
+            } else if (place === 'school') {
+              this.setState({
+                schoolMarkers:[]
+              })
+            } else if(place === 'supermarket') {
+              this.setState({
+                supermarketMarkers:[]
+              })
+            } else if(place === 'gym') {
+              this.setState({
+                gymMarkers:[]
+              })
+            } else if(place === 'park') {
+              this.setState({
+                parkMarkers:[]
+              })
+            } else if(place === 'gas_station') {
+              this.setState({
+                gasStationMarkers:[]
+              })
+            }
+            }
           }
         }
-      }
-    });
+      });
+    }
 
-    const supermarketRequest = {
-      type: ['supermarket'],
-      location: new window.google.maps.LatLng(this.state.selectedProperty.address.lat,this.state.selectedProperty.address.lon),
-      radius: 500,
-    };
+    const restaurantRequest = placeRequest('restaurant')
+    serviceNearby(restaurantRequest, restaurantPic, 'restaurant')
 
-    service.nearbySearch(supermarketRequest, (results, status) => {
-      if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-        for (let i = 0; i < results.length; i++) {
-          if(this.state.supermarketCheckbox) {
-            createPlaceMarker(results[i], groceryPic)
-          } else {
-          this.state.supermarketMarkers.forEach(marker=>marker.setMap(null));
-          this.setState({
-            supermarketMarkers: []
-            })
-          }
-        }
-      }
-    });
+    const supermarketRequest = placeRequest('supermarket')
+    serviceNearby(supermarketRequest, groceryPic, 'supermarket')
 
-    const schoolRequest = {
-      type: ['school'],
-      location: new window.google.maps.LatLng(this.state.selectedProperty.address.lat,this.state.selectedProperty.address.lon),
-      radius: 500,
-    };
+    const schoolRequest = placeRequest('school')
+    serviceNearby(schoolRequest, schoolPic, 'school')
 
-    service.nearbySearch(schoolRequest, (results, status) => {
-      if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-        for (let i = 0; i < results.length; i++) {
-          if(this.state.schoolCheckbox) {
-            createPlaceMarker(results[i], schoolPic)
-          } else {
-          this.state.schoolMarkers.forEach(marker=>marker.setMap(null));
-          this.setState({
-            schoolMarkers: []
-            })
-          }
-        }
-      }
-    });
+    const parkRequest = placeRequest('park')
+    serviceNearby(parkRequest, parkPic, 'park')
 
+    const gasStationRequest = placeRequest('gas_station')
+    serviceNearby(gasStationRequest, gasStationPic, 'gasStation')
 
-    const parkRequest = {
-      type: ['park'],
-      location: new window.google.maps.LatLng(this.state.selectedProperty.address.lat,this.state.selectedProperty.address.lon),
-      radius: 500,
-    };
-
-    service.nearbySearch(parkRequest, (results, status) => {
-      if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-        for (let i = 0; i < results.length; i++) {
-          if(this.state.parkCheckbox) {
-            createPlaceMarker(results[i], parkPic)
-          } else {
-          this.state.parkMarkers.forEach(marker=>marker.setMap(null));
-          this.setState({
-            parkMarkers: []
-            })
-          }
-        }
-      }
-    });
-
-
-    const gasStationRequest = {
-      type: ['gas_station'],
-      location: new window.google.maps.LatLng(this.state.selectedProperty.address.lat,this.state.selectedProperty.address.lon),
-      radius: 500,
-    };
-
-    service.nearbySearch(gasStationRequest, (results, status) => {
-      if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-        for (let i = 0; i < results.length; i++) {
-          if(this.state.gasStationCheckbox) {
-            createPlaceMarker(results[i], gasStationPic)
-          } else {
-          this.state.gasStationMarkers.forEach(marker=>marker.setMap(null));
-          this.setState({
-            gasStationMarkers: []
-            })
-          }
-        }
-      }
-    });
-
-    const gymRequest = {
-      type: ['gym'],
-      location: new window.google.maps.LatLng(this.state.selectedProperty.address.lat,this.state.selectedProperty.address.lon),
-      radius: 500,
-    };
-
-    service.nearbySearch(gymRequest, (results, status) => {
-      if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-        for (let i = 0; i < results.length; i++) {
-          if(this.state.gymCheckbox) {
-            createPlaceMarker(results[i], gymPic)
-          } else {
-          this.state.gymMarkers.forEach(marker=>marker.setMap(null));
-          this.setState({
-            gymMarkers: []
-            })
-          }
-        }
-      }
-    });
-
+    const gymRequest = placeRequest('gym')
+    serviceNearby(gymRequest, gymPic, 'gym')
   }
 
   //for propeties marker
@@ -521,67 +456,68 @@ class Nearby extends Component {
   const properties = this.props.propertiesInReact
     return (
       <div>
-        <PropertyFilter />
-        <div>
-          {this.state.selectedProperty ? <form>
-            <label>Schools:
-              <input type='checkbox'
-                     checked={this.state.schoolCheckbox}
-                     name='schoolCheckbox'
-                     value={this.state.schoolCheckbox}
-                     onChange={this.onChange} />
-            </label>
-            {" "}
-            <label>Restaurants:
-              <input type='checkbox'
-                     checked={this.state.restaurantCheckbox}
-                     name='restaurantCheckbox'
-                     value={this.state.restaurantCheckbox}
-                     onChange={this.onChange} />
-            </label>
-            {" "}
-            <label>Supermarket:
-              <input type='checkbox'
-                     checked={this.state.supermarketCheckbox}
-                     name='supermarketCheckbox'
-                     value={this.state.supermarketCheckbox}
-                     onChange={this.onChange} />
-            </label>
-            {" "}
-            <label>Park:
-              <input type='checkbox'
-                     checked={this.state.parkCheckbox}
-                     name='parkCheckbox'
-                     value={this.state.parkCheckbox}
-                     onChange={this.onChange} />
-            </label>
-            {" "}
-            <label>Gas Station:
-              <input type='checkbox'
-                     checked={this.state.gasStationCheckbox}
-                     name='gasStationCheckbox'
-                     value={this.state.gasStationCheckbox}
-                     onChange={this.onChange} />
-            </label>
-            {" "}
-            <label>Gym:
-              <input type='checkbox'
-                     checked={this.state.gymCheckbox}
-                     name='gymCheckbox'
-                     value={this.state.gymCheckbox}
-                     onChange={this.onChange} />
-            </label>
-
-          </form> : ""}
-        </div>
-        <div>
-          <Container fluid>
+        <PropertyFilter history={this.props.history}/>
+        
+        <Container fluid>
+          {this.state.selectedProperty ? 
+          <form>
+            <Row>
+              <Col sm={7} > 
+              <Row className='spaceAround marginLeft'>
+                <label>Schools:&nbsp;
+                  <input type='checkbox'
+                        checked={this.state.schoolCheckbox}
+                        name='schoolCheckbox'
+                        value={this.state.schoolCheckbox}
+                        onChange={this.onChange} />
+                </label>
+                <label>Restaurants:&nbsp;
+                  <input type='checkbox'
+                        checked={this.state.restaurantCheckbox}
+                        name='restaurantCheckbox'
+                        value={this.state.restaurantCheckbox}
+                        onChange={this.onChange} />
+                </label>
+                <label>Supermarket:&nbsp;
+                  <input type='checkbox'
+                        checked={this.state.supermarketCheckbox}
+                        name='supermarketCheckbox'
+                        value={this.state.supermarketCheckbox}
+                        onChange={this.onChange} />
+                </label>
+                <label>Park:&nbsp;
+                  <input type='checkbox'
+                        checked={this.state.parkCheckbox}
+                        name='parkCheckbox'
+                        value={this.state.parkCheckbox}
+                        onChange={this.onChange} />
+                </label>
+                <label>Gas Station:&nbsp;
+                  <input type='checkbox'
+                        checked={this.state.gasStationCheckbox}
+                        name='gasStationCheckbox'
+                        value={this.state.gasStationCheckbox}
+                        onChange={this.onChange} />
+                </label>
+                <label>Gym:&nbsp;
+                  <input type='checkbox'
+                        checked={this.state.gymCheckbox}
+                        name='gymCheckbox'
+                        value={this.state.gymCheckbox}
+                        onChange={this.onChange} />
+                </label>
+                </Row>
+              </Col>
+              <Col sm={5}></Col>
+            </Row>
+          </form> 
+          : ""}
             <Row className='mapContainer'>
               <Col md={8}>
                 <div
                   id="map"
                   style={{width: "100%", height: "80vh", alignSelf: "center"}} >
-                  {properties&&properties.length>0&&properties.map(property=>this.createMarker(property))}
+                  {properties && properties.length>0 && properties.map(property=>this.createMarker(property))}
                 </div>
               </Col>
               <Col>
@@ -591,9 +527,7 @@ class Nearby extends Component {
               </Col>
 
             </Row>
-          </Container>
-
-        </div>
+        </Container>
       </div>
     );
   }

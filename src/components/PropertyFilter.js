@@ -20,6 +20,8 @@ class PropertyFilter extends Component{
         this.handleSubmit = this.handleSubmit.bind(this);
       }
 
+      
+
 
       handleChange(e) {
         this.setState({
@@ -30,13 +32,17 @@ class PropertyFilter extends Component{
       async handleSubmit(e) {
        e.preventDefault();
         try {
-            await this.props.getAllPropertiesInReact(this.state.minBeds,this.state.maxPrice);
+          await this.props.getAllPropertiesInReact(this.state.minBeds,this.state.maxPrice);
+          if (window.location.pathname === "/") {
+            this.props.history.push("/search")
+          }
         } catch (err) {
           console.log(err)
         }
       }
 
     render(){
+
         return (
             <Container fluid style={{padding:"20px"}}>
                 <Form onSubmit={this.handleSubmit}>
@@ -51,16 +57,17 @@ class PropertyFilter extends Component{
                                 <Form.Control name="maxPrice" type="number" placeholder="max rental price" onChange={this.handleChange}/>
                             </Form.Group>
                         </Col>
-                        <Col>
+                        <Col className='alignContentLeft'>
                             <Button
-                                variant="outline-info"
+                                variant="info"
                                 type="submit"
                             >
                             get properties
                             </Button>
                         </Col>
-            </Row>
-            </Form>
+                        
+                    </Row>
+                </Form>
             </Container>
         )}
 }

@@ -56,26 +56,12 @@ code {
   background-color: rgb(30, 52, 69);
 }
 
-/* .header {
-  background-color: rgb(30, 52, 69);
-  color: whitesmoke;
-  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-    "Lucida Sans", Arial, sans-serif;
-  font-weight: 300;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  height: 4em;
-} */
 
 .Links{
   float: right;
 }
 
-.headerText {
-  padding-left: 1em;
-}
- 
+
 /* Property Info Box */
 .propertyinfoBoxContainer {
   display: flex;
@@ -129,54 +115,120 @@ code {
   padding: 45px;
   text-align: center;
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
-} 
+}
 /*------------------------*/
 
 
 .mapContainer {
   align-content: 'start';
   justify-content: 'center'
-  }
-  
-  .buttonSizer {
-    width: 100px;
-    height: 40px;
-    font-size: small
-  }
-  
-  .marginTop {
-    margin-top: 1.5em;
-  }
+}
 
-  .marginTopMed {
-    margin-top: 4em;
-  }  
+.buttonSizer {
+  width: 100px;
+  height: 40px;
+  font-size: small
+}
 
-  .marginBottomMed {
-    margin-bottom: 3em;
-  }
-  
-  .centerSelf {
-    align-self: center;
-    justify-self: center;
-  }
+.marginTop {
+  margin-top: 1.5em;
+}
 
-  .propertyPageContainer {
-    align-content: 'start';
-    justify-content: 'center';
-    margin-left: 3em;
-  }
-  
-  .container .alignContentLeft {
-    justify-content: flex-start;
-  }
-  
-  .row .alignContentLeft {
-    justify-content: flex-start;
-  }
-  
-  /* For Property Page when Loading */
-  .holdPageOpen {
-   height: 40em;
-  }
-  
+.marginTopMed {
+  margin-top: 4em;
+}
+
+.marginBottomMed {
+  margin-bottom: 3em;
+}
+
+.centerSelf {
+  align-self: center;
+  justify-self: center;
+}
+
+.propertyPageContainer {
+  align-content: 'start';
+  justify-content: 'center';
+  margin-left: 5em;
+}
+
+.container .alignContentLeft {
+  justify-content: flex-start;
+}
+
+.row .alignContentLeft {
+  justify-content: flex-start;
+}
+
+.col .alignContentLeft {
+  align-content: left;
+}
+
+/* For Property & Favorities Page when Loading */
+.holdPageOpen {
+  height: 40em;
+}
+
+/* Checkboxes */
+.spaceAround {
+  justify-content: space-around;
+}
+
+.marginLeft {
+margin-left: 1em;
+}
+
+.spaceBtwn {
+  justify-content: space-between;
+}
+
+
+/* Welcome Page */
+
+.card .text {
+  color: rgb(30, 52, 69);
+}
+
+.container .noPadding  {
+  padding: 0px;
+  border: 0px;
+  border-radius: 0%;
+}
+
+.card .noPadding  {
+  padding: 0px;
+  border: 0px;
+  border-radius: 0%;
+}
+
+.card .centerCenter {
+  align-content: center;
+  justify-content: center;
+}
+
+#killBorder {
+  padding: 0px;
+  border: 0px;
+  border-radius: 0%;
+}
+
+
+.favsContainer{
+  max-width: 100%;
+  max-height: 100%;
+  position: relative;
+  z-index: 1;
+  background: #ffffff;
+  margin: 20px 20px 20px 20px;
+  padding: 20px 20px 20px 20px;
+  box-shadow: none;
+}
+
+.favsCol{
+  margin: 20px 20px 20px 20px;
+  padding: 20px 20px 20px 20px;
+  text-align: center;
+
+}
+
