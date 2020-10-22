@@ -68,7 +68,7 @@ export default function propertiesReducer(state = properties, action) {
     case REFRESH_SAME_PROPERTIES:
       // action.sameProperties = action.sameProperties.reverse()
       // console.log('@Reducer, sorted sameProperties:', action.sameProperties)
-      return [...state.reverse()]
+      return [...state]
     default:
       return state
   }
