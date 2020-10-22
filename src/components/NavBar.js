@@ -17,7 +17,7 @@ export class Header extends Component {
   render() {
     let signedInUser
     let setUserInRedux = this.props.setUserInRedux
-    console.log('this.props', this.props)
+  
     auth().onAuthStateChanged(() => {
     signedInUser = firebase.auth().currentUser;
     setUserInRedux(signedInUser)

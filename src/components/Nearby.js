@@ -355,7 +355,7 @@ class Nearby extends Component {
   const properties = this.props.propertiesInReact
     return (
       <div>
-        <PropertyFilter />
+        <PropertyFilter history={this.props.history}/>
         
         <Container fluid>
           {this.state.selectedProperty ? 
@@ -370,7 +370,6 @@ class Nearby extends Component {
                         value={this.state.schoolCheckbox}
                         onChange={this.onChange} />
                 </label>
-              
                 <label>Restaurants:&nbsp;
                   <input type='checkbox'
                         checked={this.state.restaurantCheckbox}
@@ -378,7 +377,6 @@ class Nearby extends Component {
                         value={this.state.restaurantCheckbox}
                         onChange={this.onChange} />
                 </label>
-              
                 <label>Supermarket:&nbsp;
                   <input type='checkbox'
                         checked={this.state.supermarketCheckbox}
@@ -386,7 +384,6 @@ class Nearby extends Component {
                         value={this.state.supermarketCheckbox}
                         onChange={this.onChange} />
                 </label>
-                
                 <label>Park:&nbsp;
                   <input type='checkbox'
                         checked={this.state.parkCheckbox}
@@ -394,7 +391,6 @@ class Nearby extends Component {
                         value={this.state.parkCheckbox}
                         onChange={this.onChange} />
                 </label>
-                
                 <label>Gas Station:&nbsp;
                   <input type='checkbox'
                         checked={this.state.gasStationCheckbox}
@@ -420,7 +416,7 @@ class Nearby extends Component {
                 <div
                   id="map"
                   style={{width: "100%", height: "80vh", alignSelf: "center"}} >
-                  {properties&&properties.length>0&&properties.map(property=>this.createMarker(property))}
+                  {properties && properties.length>0 && properties.map(property=>this.createMarker(property))}
                 </div>
               </Col>
               <Col>

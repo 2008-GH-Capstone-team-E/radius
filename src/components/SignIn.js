@@ -27,8 +27,7 @@ class Login extends Component {
     e.preventDefault();
     try {
       await this.signIn(this.state.email, this.state.password);
-
-      this.props.history.push("/");
+      this.props.history.push("/search");
     } catch (err) {
       console.log(err.message);
       this.setState({ error: "Please register before login" });
@@ -43,7 +42,7 @@ class Login extends Component {
     try {
       const provider = await new auth.GoogleAuthProvider();
       await auth().signInWithPopup(provider);
-      this.props.history.push("/");
+      this.props.history.push("/search");
     } catch (err) {
       console.log(err);
     }
