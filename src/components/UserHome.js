@@ -9,7 +9,6 @@ class UserFavorites extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      inStore: false,
       moreInfoOnProperties: [],
       checking: true,
       resolvedPromise:false,
@@ -34,7 +33,6 @@ class UserFavorites extends Component {
         }else{
           this.setState({
             checking:false,
-            inStore: true,
             fav:arrFromFireStore
           })
           let newArray = await Promise.all(
@@ -85,7 +83,7 @@ class UserFavorites extends Component {
 
   render() {
     const properties = this.state.moreInfoOnProperties
-    
+
     if(this.state.checking){
       return(
         <div className="holdPageOpen" style={({ margin: "50px" , textAlign: "center" })}>
@@ -119,19 +117,19 @@ class UserFavorites extends Component {
                               <b>Bedrooms: </b>
                               {property.price?property.beds:property.community.beds_max}
                               </Card.Text>
-        
+
                               <Row>
                                 <Col>
                                 <Link to={`/properties/${property.property_id}`}>
-                                <Button style={{margin:"5px"}} variant="primary">See More Info</Button>
+                                <Button className="buttonSizer" variant="info">All Info</Button>
                               </Link>
                                 </Col>
-        
+
                                 <Col>
-                                <Button  style={{margin:"5px"}}
+                                <Button  className="buttonSizer"
                               variant="info" size="sm"
                               onClick={() => {this.handleRemove(property.property_id)}}>
-                              Remove From Favs
+                              Remove
                               </Button>
                                 </Col>
                               </Row>
@@ -150,7 +148,7 @@ class UserFavorites extends Component {
             <div className="holdPageOpen" style={({ margin: "50px" , textAlign: "center" })}>
             <h3> loading your favorite properties</h3>
             </div>
-           
+
           )
         }
       }else{
@@ -158,12 +156,12 @@ class UserFavorites extends Component {
           <div className="holdPageOpen" style={({ margin: "50px" , textAlign: "center" })}>
           <h3> No favorites yet ... Please add properties to favorites</h3>
         </div>
-          
+
         )
       }
     }
     }
-  
+
 }
 export default UserFavorites
 

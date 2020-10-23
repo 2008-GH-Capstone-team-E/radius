@@ -28,6 +28,7 @@ class Nearby extends Component {
   constructor(props){
     super(props)
       this.state = {
+        allPropertyPins: [],
         placesDetails: [],
         sortedPlacesDetails: [],
         zoom: 14,
@@ -51,6 +52,7 @@ class Nearby extends Component {
     this.createMarker = this.createMarker.bind(this);
     this.onChange = this.onChange.bind(this);
     this.directionOnMap=this.directionOnMap.bind(this)
+    this.clearPropertyMarker=this.clearPropertyMarker.bind(this)
   }
 
 
@@ -97,7 +99,7 @@ class Nearby extends Component {
         travelRouteArr:[]
       })
   }
- 
+
   var distanceRequest = {
     origin: origin,
     destination: destination,
@@ -116,6 +118,13 @@ class Nearby extends Component {
         window.alert("Directions request failed due to " + status);
       }
     });
+  }
+
+  clearPropertyMarker = () => {
+    this.state.allPropertyPins.map((marker) => marker.setMap(null))
+    this.setState({
+      allPropertyPins: []
+    })
   }
 
   onChange = (e) => {
@@ -171,7 +180,7 @@ class Nearby extends Component {
 
         //draw route on map
         this.directionOnMap(origin,destination)
-        
+
         //calculate the travel time
         travelService.getDistanceMatrix({
           origins:[origin],
@@ -209,7 +218,7 @@ class Nearby extends Component {
                 <img src="${pic}" alt="${place} image" />
                 <p>Address: ${vicinity}</p>
                 <p>Rating: ${rating}/5 from ${ratingsTotal} customers</p>
-                
+
               `;
               infowindow.setContent(content);
               infowindow.open(map, marker);
@@ -301,6 +310,10 @@ class Nearby extends Component {
         }
     });
 
+    this.setState({
+      allPropertyPins: [...this.state.allPropertyPins, marker]
+    })
+
     const createSubwayMarker = (station) => {
       // console.log("subway lines?",station)
         var marker = new window.google.maps.Marker({
@@ -318,7 +331,7 @@ class Nearby extends Component {
       this.setState({
         subwayMarkers:[...this.state.subwayMarkers,marker]
       })
- 
+
       //subway icon onClick
       marker.addListener('click',()=>{
 
@@ -357,7 +370,7 @@ class Nearby extends Component {
                 <img src="${pic}" alt="${station} image" />
                 <p>Address: ${station.vicinity}</p>
                 <p>Rating: ${station.rating}/5 from ${station.user_ratings_total} customers</p>
-                
+
               `;
               infowindow.setContent(content);
               infowindow.open(map, marker);
@@ -467,13 +480,12 @@ class Nearby extends Component {
   const properties = this.props.propertiesInReact
     return (
       <div>
-        <PropertyFilter history={this.props.history}/>
-        
+        <PropertyFilter history={this.props.history} clearPropertyMarker={this.clearPropertyMarker}/>
         <Container fluid>
-          {this.state.selectedProperty ? 
+          {this.state.selectedProperty ?
           <form>
             <Row>
-              <Col sm={7} > 
+              <Col sm={7} >
               <Row className='spaceAround marginLeft'>
                 <label>Schools:&nbsp;
                   <input type='checkbox'
@@ -521,7 +533,7 @@ class Nearby extends Component {
               </Col>
               <Col sm={5}></Col>
             </Row>
-          </form> 
+          </form>
           : ""}
             <Row className='mapContainer'>
               <Col md={8}>
