@@ -116,13 +116,14 @@ class SinglePropertyPage extends Component {
                   <Row className='alignContentLeft'><b>Year Built:</b>&nbsp; {yearBuilt}</Row>
                   <Row className='alignContentLeft'> <b>Broker:</b> &nbsp;{brokerName}</Row>
                   <Row className='alignContentLeft'><b>Contact:</b>&nbsp;{brokerTel}</Row> 
-                  <Row className='alignContentLeft'><b>Description:</b>&nbsp;{description}</Row>
+                  
                 </Col>
                 <Col></Col>
               </Row>
+              <Row style={{marginRight:"20%"}} className='alignContentLeft'><b>Description:</b>&nbsp;{description}</Row>
               
-              <Row className='alignContentLeft marginBottomMed'>
-                <Col></Col>
+              <Row className='alignContentLeft marginBottomMed marginTop'>
+                <Col sm={8}></Col>
                 <Col>
                 <Link to='/search'>
                   <Button variant="outline-info" size="sm">

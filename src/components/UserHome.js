@@ -88,8 +88,8 @@ class UserFavorites extends Component {
     
     if(this.state.checking){
       return(
-        <div style={({ margin: "50px" , textAlign: "center" })}>
-          <h1>Please wait...</h1>
+        <div className="holdPageOpen" style={({ margin: "50px" , textAlign: "center" })}>
+          <h3>Please wait...</h3>
         </div>
       )
     }else{
@@ -147,16 +147,16 @@ class UserFavorites extends Component {
               )
         }else{
           return(
-            <div style={({ margin: "50px" , textAlign: "center" })}>
-            <h1> loading your favourite properties</h1>
+            <div className="holdPageOpen" style={({ margin: "50px" , textAlign: "center" })}>
+            <h3> loading your favorite properties</h3>
             </div>
            
           )
         }
       }else{
         return(
-          <div style={({ margin: "50px" , textAlign: "center" })}>
-          <h1> No favorites yet ... Please add properties to favourite</h1>
+          <div className="holdPageOpen" style={({ margin: "50px" , textAlign: "center" })}>
+          <h3> No favorites yet ... Please add properties to favorites</h3>
         </div>
           
         )

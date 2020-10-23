@@ -109,7 +109,7 @@ class SinglePropertyBox extends Component {
              <Row className='alignContentLeft'><b>Address:</b> {address}, {county}, NY,
               {zip}</Row>
               <Row className='alignContentLeft'><b>Monthly: </b>$ {price}</Row>
-              <Row className='alignContentLeft'><b>bedrooms: </b>{bedroom}</Row>
+              <Row className='alignContentLeft'><b>bedrooms: </b>&nbsp;{bedroom}</Row>
               <Row className='marginTop'>
                 <Col>
                   <Link to={`/properties/${property.property_id}`}>
