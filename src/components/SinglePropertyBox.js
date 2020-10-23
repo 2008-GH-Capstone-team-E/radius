@@ -69,11 +69,33 @@ class SinglePropertyBox extends Component {
   render() {
     //console.log('This is auth() in InfoBox:' , auth())
     let property = this.props.singleProperty || {}
-    const price = get(property, 'floor_plans[0].price', 'unavailable')
+    // console.log("selectedProperty",property)
+
+
+    let price; 
+    let bedroom;
+    // console.log("community?",property.community)   
+    if(property.price){
+      price = property.price
+    }else if(property.community!==undefined){
+      price=property.community.price_max
+    }else{
+      price="unavaliable"
+    }
+
+    if(property.price){
+      bedroom = property.beds
+    }else if(property.community!==undefined){
+      bedroom=property.community.beds_max
+    }else{
+      bedroom="unavaliable"
+    }
+      
     const address = get(property, 'address.line', 'unavailable')
     const county = get(property, 'address.county', 'unavailable')
     const zip = get(property, 'address.postal_code', 'unavailable')
     const singlePhoto = get(property, 'photos[0].href', defaultPic) 
+ 
 
     return (
       <div>
@@ -87,6 +109,7 @@ class SinglePropertyBox extends Component {
              <Row className='alignContentLeft'><b>Address:</b> {address}, {county}, NY,
               {zip}</Row>
               <Row className='alignContentLeft'><b>Monthly: </b>$ {price}</Row>
+              <Row className='alignContentLeft'><b>bedrooms: </b>&nbsp;{bedroom}</Row>
               <Row className='marginTop'>
                 <Col>
                   <Link to={`/properties/${property.property_id}`}>

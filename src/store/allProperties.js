@@ -15,9 +15,16 @@ export const getProperties = properties => {
 
 
 //---------- thunk creators ----------//
-export const fetchProperties = (minBeds=1,maxPrice=2500) => async dispatch => {
+export const fetchProperties = (minBeds,maxPrice) => async dispatch => {
+  if(minBeds===null){
+    minBeds=1
+  }
+  if(maxPrice===null){
+    maxPrice=2500
+  }
 
   try {
+    // console.log("bed price correct?",minBeds,maxPrice)
     //need to get resposne from Real Estate API
     const options = {
       method: 'GET',
@@ -37,6 +44,7 @@ export const fetchProperties = (minBeds=1,maxPrice=2500) => async dispatch => {
         'x-rapidapi-key': process.env.REACT_APP_REALTOR_API_KEY
       }
     };
+    // console.log(options.params.beds_min)
 
 
     const properties = await axios.request(options)

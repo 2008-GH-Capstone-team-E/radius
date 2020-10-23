@@ -81,8 +81,8 @@ const mapState = state =>{
   
   const mapDispatch = dispatch => {
     return {
-      getAllPropertiesInReact : (minBeds=0,maxPrice=10000,zipCode=10019)=>{
-        dispatch(fetchProperties(minBeds,maxPrice,zipCode))
+      getAllPropertiesInReact : (minBeds,maxPrice)=>{
+        dispatch(fetchProperties(minBeds,maxPrice))
       },
     }
   }
