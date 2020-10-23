@@ -25,16 +25,62 @@ class SinglePropertyPage extends Component {
 
   render() {
     let property = this.props.singleProperty || {}
-    const price = get(property, 'floor_plans[0].price', 'unavailable')
+    let price;
+    let beds;
+    let baths;
+    let brokerTel;
+    
+    //for price
+    if(property.price){
+      price = property.price
+    }else if(property.community!==undefined){
+      price=property.community.price_max
+    }else{
+      price="unavaliable"
+    }
+
+    //for bedroom
+    if(property.price){
+      beds = property.beds
+    }else if(property.community!==undefined){
+      beds=property.community.beds_max
+    }else{
+      beds="unavaliable"
+    }
+
+    //for bathroom
+    if(property.price){
+      baths = property.baths
+    }else if(property.community!==undefined){
+      baths=property.community.baths_max
+    }else{
+      baths="unavaliable"
+    }
+
+    //for contact
+    if(property.price){
+      brokerTel = property.baths
+    }else if(property.community!==undefined){
+      brokerTel=property.community.contact_number
+    }else{
+      brokerTel="unavaliable"
+    }
+    
+    // const price = get(property, 'floor_plans[0].price', 'unavailable')
     const brokerName = get(property, 'broker.name', 'unavailable')
-    const brokerTel = get(property, 'broker.phone1.number', 'unavailable')
+    // const brokerTel = get(property, 'broker.phone1.number', 'unavailable')
     const address = get(property, 'address.line', 'unavailable')
     const county = get(property, 'address.county', 'unavailable')
     const zip = get(property, 'address.postal_code', 'unavailable')
     const prop_type = get(property, 'prop_type')
     const yearBuilt = get(property, 'year_built', 'unavailable')
-    const beds = get(property, 'beds', 'unavailable')
-    const baths = get(property, 'baths', 'unavailable')
+    let description = property.description
+    if(description){
+      description=description.split("<br>").join("");
+    }
+    
+    // const beds = get(property, 'beds', 'unavailable')
+    // const baths = get(property, 'baths', 'unavailable')
 
     return (
       <div>
@@ -70,6 +116,7 @@ class SinglePropertyPage extends Component {
                   <Row className='alignContentLeft'><b>Year Built:</b>&nbsp; {yearBuilt}</Row>
                   <Row className='alignContentLeft'> <b>Broker:</b> &nbsp;{brokerName}</Row>
                   <Row className='alignContentLeft'><b>Contact:</b>&nbsp;{brokerTel}</Row> 
+                  <Row className='alignContentLeft'><b>Description:</b>&nbsp;{description}</Row>
                 </Col>
                 <Col></Col>
               </Row>

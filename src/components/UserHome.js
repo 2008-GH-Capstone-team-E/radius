@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import firebase, { auth, db } from "./firebase";
 import { Link } from "react-router-dom";
-import { Button, Row, Col, Container } from "react-bootstrap";
+import { Button, Row, Col, Container ,Card} from "react-bootstrap";
 import axios from 'axios'
 import "../css/style.css";
 
@@ -9,8 +9,11 @@ class UserFavorites extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      inStore: true,
-      moreInfoOnProperties: []
+      inStore: false,
+      moreInfoOnProperties: [],
+      checking: true,
+      resolvedPromise:false,
+      fav:[]
     };
     this.handleRemove = this.handleRemove.bind(this)
     this.removeFromFavs = this.removeFromFavs.bind(this)
@@ -24,11 +27,16 @@ class UserFavorites extends Component {
         const document = await docRef.get()
         const arrFromFireStore = document.data().propertyIds
 
-        if(arrFromFireStore == 0){
+        if(arrFromFireStore === 0){
           this.setState({
-            inStore: false
+            checking: false,
           })
         }else{
+          this.setState({
+            checking:false,
+            inStore: true,
+            fav:arrFromFireStore
+          })
           let newArray = await Promise.all(
             arrFromFireStore.map(async (elem) => {
               let singlePropertyRes = await axios({
@@ -44,6 +52,7 @@ class UserFavorites extends Component {
             })
           )
           this.setState({
+            resolvedPromise:true,
             moreInfoOnProperties: newArray
           })
         }
@@ -76,58 +85,124 @@ class UserFavorites extends Component {
 
   render() {
     const properties = this.state.moreInfoOnProperties
-
-    if(!this.state.inStore){ // inStore = false
+    
+    if(this.state.checking){
       return(
-        <div className="holdPageOpen marginTopMed">
-          No favorites yet ...
+        <div style={({ margin: "50px" , textAlign: "center" })}>
+          <h1>Please wait...</h1>
         </div>
       )
     }else{
-      return(
-        <Container fluid className="favsContainer">
-            <Row md={4}>
-              {properties.map(property => {
-                return(
-                  <Col  className="favsCol"
-                      key={property.property_id}>
-                      <img src={property.photos[0].href}
-                      alt="property photo"
-                      style={{width: 250, height: 300}}
-                      />
-                      <b>Address:</b>
-                      {property.address.line},
-                      {property.address.county}, NY,
-                      {property.address.postal_code}
-                      <br></br>
-                      <b>Monthly: </b>$
-                      {property.community.price_max}
-                      <br></br>
-                      <Row className='marginTop'>
-                      <Col>
-                      <Link to={`/properties/${property.property_id}`}>
-                      <Button className='buttonSizer'
-                      variant="outline-info" size="sm">
-                      See More Info
-                      </Button>
-                      </Link>
-                      </Col>
-                      <Col>
-                      <Button className='buttonSizer'
-                      variant="outline-info" size="sm"
-                      onClick={() => {this.handleRemove(property.property_id)}}>
-                      Remove From Favs
-                      </Button>
-                      </Col>
-                      </Row>
-                      </Col>
-                )
-              })
-              }
-            </Row>
-          </Container>
-      )
+      if(this.state.fav.length){
+        //wait to resolve
+        if(this.state.resolvedPromise){
+          //show fav property
+          return(
+            <div>
+                <Container fluid className="favsContainer" >
+                    <Row >
+                      {properties.map(property => {
+                        return(
+                          <Col key={property.property_id}>
+                          <Card style={{ width: '18rem',margin:"20px "}}>
+                            <Card.Img variant="top" src={property.photos[0].href} />
+                            <Card.Body>
+                              <Card.Text>
+                              <b>Address:</b>
+                              {property.address.line},
+                              {property.address.county}, NY,
+                              {property.address.postal_code}
+                              <br></br>
+                              <b>Monthly: </b>$
+                              {property.price?property.price:property.community.price_max}
+                              <br></br>
+                              <b>Bedrooms: </b>
+                              {property.price?property.beds:property.community.beds_max}
+                              </Card.Text>
+        
+                              <Row>
+                                <Col>
+                                <Link to={`/properties/${property.property_id}`}>
+                                <Button style={{margin:"5px"}} variant="primary">See More Info</Button>
+                              </Link>
+                                </Col>
+        
+                                <Col>
+                                <Button  style={{margin:"5px"}}
+                              variant="info" size="sm"
+                              onClick={() => {this.handleRemove(property.property_id)}}>
+                              Remove From Favs
+                              </Button>
+                                </Col>
+                              </Row>
+                            </Card.Body>
+                          </Card>
+                          </Col>
+                        )
+                      })
+                      }
+                    </Row>
+                  </Container>
+                  </div>
+              )
+        }else{
+          return(
+            <div style={({ margin: "50px" , textAlign: "center" })}>
+            <h1> loading your favourite properties</h1>
+            </div>
+           
+          )
+        }
+      }else{
+        return(
+          <div style={({ margin: "50px" , textAlign: "center" })}>
+          <h1> No favorites yet ... Please add properties to favourite</h1>
+        </div>
+          
+        )
+      }
     }
-  }
+    }
+  
 }
 export default UserFavorites
+
+
+//alternative for using Card
+// (
+//   <Col  className="favsCol"
+//       key={property.property_id}>
+//       <img src={property.photos[0].href}
+//       alt="property photo"
+//       style={{width: 250, height: 300}}
+//       />
+//       <b>Address:</b>
+//       {property.address.line},
+//       {property.address.county}, NY,
+//       {property.address.postal_code}
+//       <br></br>
+//       <b>Monthly: </b>$
+//       {property.price?property.price:property.community.price_max}
+//       <br></br>
+//       <b>Bedrooms: </b>
+//       {property.price?property.beds:property.community.beds_max}
+//       <br></br>
+//       <Row className='marginTop'>
+//       <Col>
+//       <Link to={`/properties/${property.property_id}`}>
+//       <Button className='buttonSizer'
+//       variant="outline-info" size="sm">
+//       See More Info
+//       </Button>
+//       </Link>
+//       </Col>
+//       <Col>
+//       <Button className='buttonSizer'
+//       variant="outline-info" size="sm"
+//       onClick={() => {this.handleRemove(property.property_id)}}>
+//       Remove From Favs
+//       </Button>
+//       </Col>
+//       </Row>
+//       </Col>
+// )

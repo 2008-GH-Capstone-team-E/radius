@@ -122,6 +122,7 @@ class Nearby extends Component {
     this.setState({[e.target.name] : e.target.checked});
 
     const createPlaceMarker = (place, placePic) => {
+      // console.log("geometry.lat()?",place)
       var marker = new window.google.maps.Marker({
           map: map,
           icon:{
@@ -130,8 +131,8 @@ class Nearby extends Component {
           },
           title: place.name,
           position: {
-            lat: place.geometry.viewport.Ya.i,
-            lng: place.geometry.viewport.Sa.i
+            lat: place.geometry.location.lat(),
+            lng: place.geometry.location.lng()
           },
       });
 
@@ -165,7 +166,7 @@ class Nearby extends Component {
       marker.addListener('click',()=>{
         const selectedProperty = this.state.selectedProperty
         let origin = new window.google.maps.LatLng(selectedProperty.address.lat,selectedProperty.address.lon)
-        let destination = new window.google.maps.LatLng(place.geometry.viewport.Ya.i,place.geometry.viewport.Sa.i)
+        let destination = new window.google.maps.LatLng(place.geometry.location.lat(),place.geometry.location.lng())
         let travelService = new window.google.maps.DistanceMatrixService()
 
         //draw route on map
@@ -301,6 +302,7 @@ class Nearby extends Component {
     });
 
     const createSubwayMarker = (station) => {
+      // console.log("subway lines?",station)
         var marker = new window.google.maps.Marker({
           map: map,
           icon:{
@@ -309,8 +311,8 @@ class Nearby extends Component {
           },
           title: station.name,
           position: {
-            lat: station.geometry.viewport.Ya.i,
-            lng: station.geometry.viewport.Sa.i
+            lat: station.geometry.location.lat(),
+            lng: station.geometry.location.lng()
           },
       });
       this.setState({
@@ -322,7 +324,7 @@ class Nearby extends Component {
 
         const selectedProperty = this.state.selectedProperty;
         let origin = new window.google.maps.LatLng(selectedProperty.address.lat,selectedProperty.address.lon)
-        let destination = new window.google.maps.LatLng(station.geometry.viewport.Ya.i,station.geometry.viewport.Sa.i)
+        let destination = new window.google.maps.LatLng(station.geometry.location.lat(),station.geometry.location.lng())
         let travelService = new window.google.maps.DistanceMatrixService()
 
         //draw route on the map
@@ -559,8 +561,8 @@ const mapState = state =>{
 
 const mapDispatch = dispatch => {
   return {
-    getAllPropertiesInReact : (minBeds=0,maxPrice=10000,zipCode=10019)=>{
-      dispatch(fetchProperties(minBeds,maxPrice,zipCode))
+    getAllPropertiesInReact : (minBeds,maxPrice)=>{
+      dispatch(fetchProperties(minBeds,maxPrice))
     },
     getSingleProperty: id => dispatch(fetchProperty(id))
   }
