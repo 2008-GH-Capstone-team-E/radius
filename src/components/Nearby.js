@@ -162,6 +162,61 @@ class Nearby extends Component {
         })
       }
 
+      //mosue over place open info box
+      marker.addListener("mouseover",()=>{
+        const selectedProperty = this.state.selectedProperty
+        let origin = new window.google.maps.LatLng(selectedProperty.address.lat,selectedProperty.address.lon)
+        let destination = new window.google.maps.LatLng(place.geometry.location.lat(),place.geometry.location.lng())
+        let travelService = new window.google.maps.DistanceMatrixService()
+
+        //calculate the travel time
+        travelService.getDistanceMatrix({
+          origins:[origin],
+          destinations:[destination],
+          travelMode:'WALKING'
+        },(response,status)=>{
+          if(status==="OK"){
+            let origins = response.originAddresses;
+            let destinations = response.destinationAddresses;
+
+            for (let i = 0; i < origins.length; i++) {
+              let results = response.rows[i].elements;
+              for (let j = 0; j < results.length; j++) {
+                let element = results[j];
+
+                let distance = get(element, 'distance.text', 'unavailable')
+                let travelTime = get(element, 'duration.text', 'unavailable')
+
+                let name = get(place, 'name', 'unavailable')
+                let vicinity = get(place, 'vicinity', 'unavailable')
+                let rating = get(place, 'rating','unavailable')
+                let ratingsTotal = get(place, 'user_ratings_total','unavailable')
+
+
+                let pic = defaultPic
+                if(place.photos){
+                  pic = place.photos[0].getUrl({"maxWidth": 300, "maxHeight": 192})
+                }
+                let content = `
+                <h6>${name}</h6>
+                <p>Distance: ${distance}</p>
+                <p>Walking time: ${travelTime}</p>
+                <img src="${pic}" alt="${place} image" />
+                <p>Address: ${vicinity}</p>
+                <p>Rating: ${rating}/5 from ${ratingsTotal} customers</p>
+                
+              `;
+              infowindow.setContent(content);
+              infowindow.open(map, marker);
+              }
+            }
+          }else{
+            console.log("status:",status)
+          }
+        })
+      })
+     
+
       //filtered place marker
       marker.addListener('click',()=>{
         const selectedProperty = this.state.selectedProperty
@@ -318,6 +373,52 @@ class Nearby extends Component {
       this.setState({
         subwayMarkers:[...this.state.subwayMarkers,marker]
       })
+
+      marker.addListener('mouseover',()=>{
+        const selectedProperty = this.state.selectedProperty;
+        let origin = new window.google.maps.LatLng(selectedProperty.address.lat,selectedProperty.address.lon)
+        let destination = new window.google.maps.LatLng(station.geometry.location.lat(),station.geometry.location.lng())
+        let travelService = new window.google.maps.DistanceMatrixService()
+
+        travelService.getDistanceMatrix({
+          origins:[origin],
+          destinations:[destination],
+          travelMode:'WALKING'
+        },(response,status)=>{
+          if(status==="OK"){
+            let origins = response.originAddresses;
+            let destinations = response.destinationAddresses;
+
+            for (let i = 0; i < origins.length; i++) {
+              let results = response.rows[i].elements;
+              for (let j = 0; j < results.length; j++) {
+                let element = results[j];
+                let distance=element.distance.text
+                let travelTime=element.duration.text
+
+                let pic = defaultPic
+                if(station.photos){
+                  pic = station.photos[0].getUrl({"maxWidth": 300, "maxHeight": 192})
+                }
+                let content = `
+                <h6>${station.name}</h6>
+                <p>Distance: ${distance}</p>
+                <p>Walking time: ${travelTime}</p>
+                <img src="${pic}" alt="${station} image" />
+                <p>Address: ${station.vicinity}</p>
+                <p>Rating: ${station.rating}/5 from ${station.user_ratings_total} customers</p>
+                
+              `;
+              infowindow.setContent(content);
+              infowindow.open(map, marker);
+              }
+            }
+          }else{
+            console.log("status:",status)
+          }
+        })
+     
+      })
  
       //subway icon onClick
       marker.addListener('click',()=>{
@@ -369,6 +470,8 @@ class Nearby extends Component {
         })
       })
     }
+
+   
 
     //// ** property marker listener** ////
     marker.addListener('click', ()=>{
@@ -489,28 +592,28 @@ class Nearby extends Component {
                         value={this.state.restaurantCheckbox}
                         onChange={this.onChange} />
                 </label>
-                <label>Supermarket:&nbsp;
+                <label>Supermarkets:&nbsp;
                   <input type='checkbox'
                         checked={this.state.supermarketCheckbox}
                         name='supermarketCheckbox'
                         value={this.state.supermarketCheckbox}
                         onChange={this.onChange} />
                 </label>
-                <label>Park:&nbsp;
+                <label>Parks:&nbsp;
                   <input type='checkbox'
                         checked={this.state.parkCheckbox}
                         name='parkCheckbox'
                         value={this.state.parkCheckbox}
                         onChange={this.onChange} />
                 </label>
-                <label>Gas Station:&nbsp;
+                <label>Gas Stations:&nbsp;
                   <input type='checkbox'
                         checked={this.state.gasStationCheckbox}
                         name='gasStationCheckbox'
                         value={this.state.gasStationCheckbox}
                         onChange={this.onChange} />
                 </label>
-                <label>Gym:&nbsp;
+                <label>Gyms:&nbsp;
                   <input type='checkbox'
                         checked={this.state.gymCheckbox}
                         name='gymCheckbox'
