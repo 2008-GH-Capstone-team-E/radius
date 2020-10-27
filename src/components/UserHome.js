@@ -104,7 +104,7 @@ class UserFavorites extends Component {
                       {properties.map(property => {
                         return(
                           <Col key={property.property_id}>
-                          <Card style={{ width: '18rem',margin:"20px "}}>
+                          <Card style={{ width: '18rem', height: '24rem', margin:"20px "}}>
                             <Card.Img variant="top" src={property.photos[0].href} />
                             <Card.Body>
                               <Card.Text>
@@ -123,15 +123,15 @@ class UserFavorites extends Component {
                               <Row>
                                 <Col>
                                 <Link to={`/properties/${property.property_id}`}>
-                                <Button style={{margin:"5px"}} variant="primary">See More Info</Button>
+                                <Button className="buttonSizer" variant="info">More Info</Button>
                               </Link>
                                 </Col>
         
                                 <Col>
-                                <Button  style={{margin:"5px"}}
+                                <Button  className="buttonSizer"
                               variant="info" size="sm"
                               onClick={() => {this.handleRemove(property.property_id)}}>
-                              Remove From Favs
+                              Remove
                               </Button>
                                 </Col>
                               </Row>
