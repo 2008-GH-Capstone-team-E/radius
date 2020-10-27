@@ -84,8 +84,29 @@ class UserFavorites extends Component {
   }
 
   render() {
+
     const properties = this.state.moreInfoOnProperties
-    
+
+    function checkPrice(property) {
+      if(property.price){
+       return property.price
+      }else if(property.community!==undefined){
+        return property.community.price_max
+      }else{
+        return "unavaliable"
+      }
+    }
+
+    function checkBedroom(property) {
+      if(property.price){
+        return property.beds
+      }else if(property.community!==undefined){
+        return property.community.beds_max
+      }else{
+        return "unavaliable"
+      }
+    }
+
     if(this.state.checking){
       return(
         <div className="holdPageOpen" style={({ margin: "50px" , textAlign: "center" })}>
@@ -104,8 +125,8 @@ class UserFavorites extends Component {
                       {properties.map(property => {
                         return(
                           <Col key={property.property_id}>
-                          <Card style={{ width: '18rem', height: '24rem', margin:"20px "}}>
-                            <Card.Img variant="top" src={property.photos[0].href} />
+                          <Card style={{width: "300px", margin:"20px "}}>
+                            <Card.Img variant="top" src={property.photos[0].href} style={{width: 300, height: 300}}/>
                             <Card.Body>
                               <Card.Text>
                               <b>Address:</b>
@@ -114,19 +135,19 @@ class UserFavorites extends Component {
                               {property.address.postal_code}
                               <br></br>
                               <b>Monthly: </b>$
-                              {property.price?property.price:property.community.price_max}
+                              {checkPrice(property)}
                               <br></br>
                               <b>Bedrooms: </b>
-                              {property.price?property.beds:property.community.beds_max}
+                              {checkBedroom(property)}
                               </Card.Text>
-        
+
                               <Row>
                                 <Col>
                                 <Link to={`/properties/${property.property_id}`}>
                                 <Button className="buttonSizer" variant="info">More Info</Button>
                               </Link>
                                 </Col>
-        
+
                                 <Col>
                                 <Button  className="buttonSizer"
                               variant="info" size="sm"
@@ -150,7 +171,7 @@ class UserFavorites extends Component {
             <div className="holdPageOpen" style={({ margin: "50px" , textAlign: "center" })}>
             <h3> loading your favorite properties</h3>
             </div>
-           
+
           )
         }
       }else{
@@ -158,12 +179,12 @@ class UserFavorites extends Component {
           <div className="holdPageOpen" style={({ margin: "50px" , textAlign: "center" })}>
           <h3> No favorites yet ... Please add properties to favorites</h3>
         </div>
-          
+
         )
       }
     }
     }
-  
+
 }
 export default UserFavorites
 
