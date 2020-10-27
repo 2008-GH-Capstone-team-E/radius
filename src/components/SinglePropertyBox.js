@@ -113,14 +113,14 @@ class SinglePropertyBox extends Component {
               <Row className='marginTop'>
                 <Col>
                   <Link to={`/properties/${property.property_id}`}>
-                    <Button className='buttonSizer' variant="outline-info" size="sm">
+                    <Button className='buttonSizer' variant="info" size="sm">
                     See All Info
                     </Button>
                   </Link>
                 </Col>
                 {auth().currentUser ?
                 <Col>
-                    <Button className='buttonSizer' variant="outline-info" size="sm"
+                    <Button className='buttonSizer' variant="info" size="sm"
                     onClick={() => {
                       this.handleOnClick(property.property_id)
                       this.notifySignedIn()
@@ -131,7 +131,7 @@ class SinglePropertyBox extends Component {
                 </Col>
                 :
                 <Col>
-                    <Button className='buttonSizer' variant="outline-info" size="sm"
+                    <Button className='buttonSizer' variant="info" size="sm"
                     onClick={() => {
                       this.notifyNotSignedIn()
                       }}>
