@@ -8,7 +8,7 @@ without navigating to different sites. You can view a video introduction [here](
 - FrontEnd: Javascript, React, Redux, Bootstrap, Google Javascript API, Realtor API
 - BackEnd: Firebase
 
-## Our Team Member
+## Our Team Members
 [Aminat Puebla](https://github.com/AminatP) | [Ioana Medvesan](https://github.com/imedvesan) | [Marta Mozelle](https://github.com/MozMM) | [Shirley Cheung](https://github.com/CTY315)
 
 ## Set Up
